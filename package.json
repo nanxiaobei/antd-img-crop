@@ -4,7 +4,7 @@
   "description": "An image cropper to wrap Upload in Ant Design",
   "license": "MIT",
   "repository": "nanxiaobei/antd-img-crop",
-  "main": "index.js",
+  "main": "src/index.js",
   "keywords": [
     "react",
     "antd",
