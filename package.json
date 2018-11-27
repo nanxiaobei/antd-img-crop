@@ -12,5 +12,8 @@
     "upload",
     "image",
     "crop"
-  ]
+  ],
+  "dependencies": {
+    "react-image-crop": "^6.0.9"
+  }
 }
