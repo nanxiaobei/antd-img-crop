@@ -5,7 +5,7 @@
 An image cropper to wrap Upload in Ant Design
 
 ## Install
-
+``
 ```bash
 yarn add antd-img-crop
 ```
@@ -20,3 +20,15 @@ import { Upload } from 'antd';
   <Upload>+</Upload>
 </ImgCrop>
 ```
+
+## Props
+
+Use `width` and `height` to get ratio for crop area.
+
+#### width (Number)
+
+default 100
+
+#### height (Number)
+
+default 100
