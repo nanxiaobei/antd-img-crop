@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
 import ReactCrop from 'react-image-crop';
+import { Modal } from 'antd';
 import './index.css';
 
 class ImgCrop extends Component {
