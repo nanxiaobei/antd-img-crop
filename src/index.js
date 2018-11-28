@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactCrop from 'react-image-crop';
 import { Modal } from 'antd';
-import './index.css';
+import './index.scss';
 
 class ImgCrop extends Component {
   constructor(props) {

@@ -1,0 +1,8 @@
+@import '~react-image-crop/lib/ReactCrop.scss';
+
+.antd-img-crop-modal {
+  .ant-modal .ant-modal-body {
+    display: flex;
+    justify-content: center;
+  }
+}
