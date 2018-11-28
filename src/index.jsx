@@ -3,10 +3,19 @@ import ReactCrop from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
+const checkNumber = (obj) => {
+  Object.entries(obj).forEach(([name, value]) => {
+    if (typeof value === 'number') return;
+    throw new Error(`\`${name}\` prop to \`ImgCrop\` must be a number`);
+  });
+};
+
 class ImgCrop extends Component {
   constructor(props) {
     super(props);
     const { width = 100, height = 100 } = props;
+    checkNumber({ width, height });
+
     this.aspect = width / height;
     this.initState = {
       // Modal
