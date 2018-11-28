@@ -23,9 +23,7 @@ import { Upload } from 'antd';
 
 ## Props
 
-Use `width` and `height` to get ratio for crop area.
- 
-*(Not use them as the real length)*
+Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
 
 #### width (Number)
 
