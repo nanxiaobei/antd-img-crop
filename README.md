@@ -17,13 +17,15 @@ import ImgCrop from 'antd-img-crop';
 import { Upload } from 'antd';
 
 <ImgCrop>
-  <Upload>+</Upload>
+  <Upload>+ Add image</Upload>
 </ImgCrop>
 ```
 
 ## Props
 
 Use `width` and `height` to get ratio for crop area.
+ 
+**(Not use them as the real length)**
 
 #### width (Number)
 
