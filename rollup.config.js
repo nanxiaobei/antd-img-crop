@@ -6,7 +6,7 @@ import pkg from './package.json';
 
 const env = process.env.NODE_ENV;
 const config = {
-  input: 'src/index.js',
+  input: 'src/index.jsx',
   output: { format: env, indent: false },
   external: [
     ...Object.keys(pkg.peerDependencies || {}),
