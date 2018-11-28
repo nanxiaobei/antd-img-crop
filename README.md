@@ -23,6 +23,10 @@ import { Upload } from 'antd';
 
 ## Props
 
+#### modalTitle (String)
+
+default: `编辑图片`
+
 Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
 
 #### width (Number)
