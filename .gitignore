@@ -4,6 +4,5 @@
 node_modules
 lib
 es
-coverage
 
 yarn-error.log
