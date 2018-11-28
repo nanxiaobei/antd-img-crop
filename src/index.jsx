@@ -31,10 +31,12 @@ class ImgCrop extends Component {
     };
     this.state = this.initState;
   }
-  /**
-   * Upload 组件
-   */
-    // 渲染 Upload 组件
+
+  //
+  // Upload 组件
+  //
+
+  // 渲染 Upload 组件
   renderChildren = () => {
     const { children } = this.props;
     if (children.type.defaultProps.prefixCls !== 'ant-upload') {
@@ -65,10 +67,12 @@ class ImgCrop extends Component {
       this.reject = reject;
     });
   };
-  /**
-   * ReactCrop 组件
-   */
-    // 完成添加图片
+
+  //
+  // ReactCrop 组件
+  //
+
+  // 完成添加图片
   onImageLoaded = (image) => {
     this.imageRef = image;
     const { width: imageWidth, height: imageHeight } = this.imageRef;
@@ -100,10 +104,12 @@ class ImgCrop extends Component {
   onCropChange = (crop, pixelCrop) => {
     this.setState({ crop, pixelCrop });
   };
-  /**
-   * Modal 组件
-   */
-    // 点击确定
+
+  //
+  // Modal 组件
+  //
+
+  // 点击确定
   onOk = async () => {
     const { pixelCrop } = this.state;
     const { x, y, width, height } = pixelCrop;
