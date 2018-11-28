@@ -4,6 +4,10 @@
 
 An image cropper to wrap [Upload](https://ant.design/components/upload/) in Ant Design
 
+## Demo
+
+[https://codesandbox.io/s/n5j3o0x2v0](https://codesandbox.io/s/n5j3o0x2v0)
+
 ## Install
 
 ```bash
