@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactCrop from 'react-image-crop';
+import ReactCrop, { getPixelCrop } from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
@@ -75,28 +75,29 @@ class ImgCrop extends Component {
   // 完成添加图片
   onImageLoaded = (image) => {
     this.imageRef = image;
-    const { width: imageWidth, height: imageHeight } = this.imageRef;
+    const { naturalWidth, naturalHeight } = this.imageRef;
+    const modalWidth = naturalWidth >= naturalHeight ? 640 + 24 * 2 : 320 + 24 * 2;
 
     let ratio = 0.8;
-    let { x, y, width, height } = this.getCropValues(imageWidth, imageHeight, ratio);
+    let { x, y, width, height } = this.getCropValues(naturalWidth, naturalHeight, ratio);
     while (width > 80 || height > 80) {
       ratio -= 0.02;
-      ({ x, y, width, height } = this.getCropValues(imageWidth, imageHeight, ratio));
+      ({ x, y, width, height } = this.getCropValues(naturalWidth, naturalHeight, ratio));
     }
 
-    this.setState({
-      modalWidth: imageWidth >= imageHeight ? 640 : 360,
-      crop: { aspect: this.aspect, x, y, width, height },
-    });
+    const crop = { aspect: this.aspect, x, y, width, height };
+    const pixelCrop = getPixelCrop(this.imageRef, crop);
+
+    this.setState({ modalWidth, crop, pixelCrop });
   };
   // 获取 crop 的值
-  getCropValues = (imageWidth, imageHeight, ratio) => {
+  getCropValues = (naturalWidth, naturalHeight, ratio) => {
     // 注意，此处 width, height, x, y 均为百分比的值，如 "width: 80"，即为占比 "80%"
     // @link: https://github.com/DominicTobias/react-image-crop#crop-required
-    const width = ((imageHeight * ratio * this.aspect) / imageWidth) * 100;
-    const height = ((imageHeight * ratio) / imageHeight) * 100;
-    const x = ((imageWidth * (1 - width / 100)) / 2 / imageWidth) * 100;
-    const y = ((imageHeight * (1 - height / 100)) / 2 / imageHeight) * 100;
+    const width = ((naturalHeight * ratio * this.aspect) / naturalWidth) * 100;
+    const height = ((naturalHeight * ratio) / naturalHeight) * 100;
+    const x = ((naturalWidth * (1 - width / 100)) / 2 / naturalWidth) * 100;
+    const y = ((naturalHeight * (1 - height / 100)) / 2 / naturalHeight) * 100;
 
     return { x, y, width, height };
   };
