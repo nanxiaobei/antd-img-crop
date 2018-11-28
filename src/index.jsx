@@ -77,9 +77,9 @@ class ImgCrop extends Component {
     this.imageRef = image;
     const { width: imageWidth, height: imageHeight } = this.imageRef;
 
-    let ratio = 0.9;
+    let ratio = 0.8;
     let { x, y, width, height } = this.getCropValues(imageWidth, imageHeight, ratio);
-    while (width > 90 || height > 90) {
+    while (width > 80 || height > 80) {
       ratio -= 0.02;
       ({ x, y, width, height } = this.getCropValues(imageWidth, imageHeight, ratio));
     }
