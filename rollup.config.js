@@ -12,14 +12,10 @@ const dependencies = [
 
 const config = {
   input: 'src/index.jsx',
-  output: {
-    format: env,
-    indent: false,
-    intro: 'var regeneratorRuntime = require(\'regenerator-runtime\');\n',
-  },
+  output: { format: env, indent: false },
   external: (id) => {
     if (dependencies.includes(id)) return true;
-    if (id.includes('antd/')) return true;
+    if (id.includes('antd/') || id.includes('@babel/runtime/')) return true;
   },
   plugins: [
     eslint({
@@ -30,6 +26,7 @@ const config = {
     }),
     babel({
       exclude: 'node_modules/**',
+      runtimeHelpers: true,
     }),
     sass({
       insert: true,
