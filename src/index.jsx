@@ -3,20 +3,23 @@ import ReactCrop from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
-const checkNumber = (obj) => {
-  Object.entries(obj).forEach(([name, value]) => {
-    if (typeof value === 'number') return;
-    throw new Error(`\`${name}\` prop to \`ImgCrop\` must be a number`);
+const checkProps = (props, requiredType) => {
+  Object.entries(props).forEach(([name, value]) => {
+    if (typeof value === requiredType) return;
+    throw new Error(`\`${name}\` prop to \`ImgCrop\` must be a ${requiredType}`);
   });
 };
 
 class ImgCrop extends Component {
   constructor(props) {
     super(props);
-    const { width = 100, height = 100 } = props;
-    checkNumber({ width, height });
+    const { modalTitle = '编辑图片', width = 100, height = 100 } = props;
+    checkProps({ modalTitle }, 'string');
+    checkProps({ width, height }, 'number');
 
+    this.modalTitle = modalTitle;
     this.aspect = width / height;
+
     this.initState = {
       // Modal
       modalVisible: false,
@@ -161,7 +164,7 @@ class ImgCrop extends Component {
           onOk={this.onOk}
           onCancel={this.onCancel}
           wrapClassName="antd-img-crop-modal"
-          title="编辑图片"
+          title={this.modalTitle}
           maskClosable={false}
         >
           {src && (
