@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
 
-An image cropper to wrap Upload in Ant Design
+An image cropper to wrap [Upload](https://ant.design/components/upload/) in Ant Design
 
 ## Install
 
@@ -25,7 +25,7 @@ import { Upload } from 'antd';
 
 #### modalTitle (String)
 
-default: `编辑图片`
+default: `"编辑图片"`
 
 Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
 
