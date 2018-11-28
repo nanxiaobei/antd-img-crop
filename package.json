@@ -2,9 +2,6 @@
   "name": "antd-img-crop",
   "version": "0.2.1",
   "description": "An image cropper to wrap Upload in Ant Design",
-  "license": "MIT",
-  "repository": "nanxiaobei/antd-img-crop",
-  "main": "src/index.js",
   "keywords": [
     "react",
     "antd",
@@ -13,7 +10,44 @@
     "image",
     "crop"
   ],
+  "license": "MIT",
+  "author": "nanxiaobei <nanxiaobei@gmail.com> (https://github.com/nanxiaobei)",
+  "homepage": "https://github.com/nanxiaobei/antd-img-crop",
+  "repository": "github:nanxiaobei/antd-img-crop",
+  "bugs": "https://github.com/nanxiaobei/antd-img-crop/issues",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "lib",
+    "es",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rimraf lib es",
+    "build:commonjs": "cross-env NODE_ENV=cjs rollup -c -o lib/index.js",
+    "build:es": "cross-env NODE_ENV=esm rollup -c -o es/index.js",
+    "build": "npm run clean && npm run build:commonjs && npm run build:es"
+  },
+  "peerDependencies": {
+    "antd": "^3.8.4",
+    "react": "^16.4.2"
+  },
   "dependencies": {
     "react-image-crop": "^6.0.9"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-import": "^1.11.0",
+    "cross-env": "^5.2.0",
+    "eslint-plugin-react": "^7.11.1",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.67.3",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-eslint": "^5.0.0",
+    "rollup-plugin-sass": "^0.9.3"
   }
 }
