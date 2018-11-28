@@ -6,7 +6,7 @@ An image cropper to wrap [Upload](https://ant.design/components/upload/) in Ant 
 
 ## Demo
 
-[https://codesandbox.io/s/q847mzxoyj](https://codesandbox.io/s/q847mzxoyj)
+[https://codesandbox.io/s/y3y6y80yk1](https://codesandbox.io/s/y3y6y80yk1)
 
 ## Install
 
