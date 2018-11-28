@@ -25,7 +25,7 @@ import { Upload } from 'antd';
 
 Use `width` and `height` to get ratio for crop area.
  
-**(Not use them as the real length)**
+*(Not use them as the real length)*
 
 #### width (Number)
 
