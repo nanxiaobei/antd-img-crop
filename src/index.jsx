@@ -1,23 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactCrop, { getPixelCrop } from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
-const checkProps = (props, requiredType) => {
-  Object.entries(props).forEach(([name, value]) => {
-    if (typeof value === requiredType) return;
-    throw new Error(`\`${name}\` prop to \`ImgCrop\` must be a ${requiredType}`);
-  });
-};
-
 class ImgCrop extends Component {
   constructor(props) {
     super(props);
-    const { modalTitle = '编辑图片', width = 100, height = 100 } = props;
-    checkProps({ modalTitle }, 'string');
-    checkProps({ width, height }, 'number');
-
-    this.modalTitle = modalTitle;
+    const { width, height } = props;
     this.aspect = width / height;
 
     this.initState = {
@@ -74,13 +64,14 @@ class ImgCrop extends Component {
 
   // 完成添加图片
   onImageLoaded = (image) => {
+    const { scale } = this.props;
     this.imageRef = image;
     const { naturalWidth, naturalHeight } = this.imageRef;
     const modalWidth = naturalWidth >= naturalHeight ? 640 + 24 * 2 : 320 + 24 * 2;
 
-    let ratio = 0.8;
+    let ratio = scale / 100;
     let { x, y, width, height } = this.getCropValues(naturalWidth, naturalHeight, ratio);
-    while (width > 80 || height > 80) {
+    while (width > scale || height > scale) {
       ratio -= 0.02;
       ({ x, y, width, height } = this.getCropValues(naturalWidth, naturalHeight, ratio));
     }
@@ -161,6 +152,7 @@ class ImgCrop extends Component {
   };
 
   render() {
+    const { modalTitle } = this.props;
     const { modalVisible, modalWidth, src, crop } = this.state;
     return (
       <>
@@ -171,7 +163,7 @@ class ImgCrop extends Component {
           onOk={this.onOk}
           onCancel={this.onCancel}
           wrapClassName="antd-img-crop-modal"
-          title={this.modalTitle}
+          title={modalTitle}
           maskClosable={false}
         >
           {src && (
@@ -187,5 +179,20 @@ class ImgCrop extends Component {
     );
   }
 }
+
+ImgCrop.defaultProps = {
+  modalTitle: '编辑图片',
+  width: 100,
+  height: 100,
+  scale: 80,
+};
+
+ImgCrop.propTypes = {
+  modalTitle: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  scale: PropTypes.number,
+  children: PropTypes.node,
+};
 
 export default ImgCrop;
