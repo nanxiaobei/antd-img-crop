@@ -30,6 +30,7 @@
   },
   "peerDependencies": {
     "antd": "^3.8.4",
+    "prop-types": "^15.6.2",
     "react": "^16.4.2"
   },
   "dependencies": {
