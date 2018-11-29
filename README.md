@@ -31,8 +31,6 @@ import { Upload } from 'antd';
 
 default: `"编辑图片"`
 
-Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
-
 #### width (Number)
 
 default: `100`
@@ -40,3 +38,11 @@ default: `100`
 #### height (Number)
 
 default: `100`
+
+> Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
+
+#### scale (Number)
+
+default: `80`
+
+> Use `scale` for the crop area size. (e.g. if `scale = 100`, then crop area will fill the full width or height)
