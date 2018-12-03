@@ -33,7 +33,7 @@ type: `string`, default: `"编辑图片"`
 
 #### width
 
-type: `string`, default: `100`
+type: `number`, default: `100`
 
 #### height
 
