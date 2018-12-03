@@ -27,22 +27,22 @@ import { Upload } from 'antd';
 
 ## Props
 
-#### modalTitle (String)
+#### modalTitle
 
-default: `"编辑图片"`
+type: `string`, default: `"编辑图片"`
 
-#### width (Number)
+#### width
 
-default: `100`
+type: `string`, default: `100`
 
-#### height (Number)
+#### height
 
-default: `100`
+type: `number`, default: `100`
 
-> Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
+Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
 
-#### scale (Number)
+#### scale
 
-default: `80`
+type: `number`, default: `80`
 
-> Use `scale` for the crop area size. (e.g. if `scale = 100`, then crop area will fill the full width or height)
+Use `scale` for the crop area size. (e.g. if `scale = 100`, then crop area will fill the full width or height)
