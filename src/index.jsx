@@ -5,6 +5,19 @@ import { Modal } from 'antd';
 import './index.scss';
 
 class ImgCrop extends Component {
+  static propTypes = {
+    modalTitle: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    scale: PropTypes.number,
+    children: PropTypes.node,
+  };
+  static defaultProps = {
+    modalTitle: '编辑图片',
+    width: 100,
+    height: 100,
+    scale: 80,
+  };
   constructor(props) {
     super(props);
     const { width, height } = props;
@@ -179,20 +192,5 @@ class ImgCrop extends Component {
     );
   }
 }
-
-ImgCrop.defaultProps = {
-  modalTitle: '编辑图片',
-  width: 100,
-  height: 100,
-  scale: 80,
-};
-
-ImgCrop.propTypes = {
-  modalTitle: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  scale: PropTypes.number,
-  children: PropTypes.node,
-};
 
 export default ImgCrop;
