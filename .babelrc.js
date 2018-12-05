@@ -8,7 +8,6 @@ module.exports = {
   ],
   plugins: [
     ['import', { libraryName: 'antd', libraryDirectory: 'es', style: 'css' }],
-    !isESMode && '@babel/plugin-transform-modules-commonjs',
     ['@babel/plugin-transform-runtime', { useESModules: isESMode }],
     '@babel/plugin-proposal-class-properties',
   ].filter(Boolean),
