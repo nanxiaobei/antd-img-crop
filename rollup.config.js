@@ -4,15 +4,12 @@ import sass from 'rollup-plugin-sass';
 
 import pkg from './package.json';
 
-const env = process.env.NODE_ENV;
-const dependencies = [
-  ...Object.keys(pkg.peerDependencies),
-  ...Object.keys(pkg.dependencies),
-];
+const { NODE_ENV } = process.env;
+const dependencies = [...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies)];
 
 const config = {
   input: 'src/index.jsx',
-  output: { format: env, indent: false },
+  output: { format: NODE_ENV, indent: false },
   external: (id) => {
     if (dependencies.includes(id)) return true;
     if (id.includes('antd/') || id.includes('@babel/runtime/')) return true;

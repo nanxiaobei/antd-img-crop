@@ -20,9 +20,11 @@ yarn add antd-img-crop
 import ImgCrop from 'antd-img-crop';
 import { Upload } from 'antd';
 
-<ImgCrop>
-  <Upload>+ Add image</Upload>
-</ImgCrop>
+return (
+  <ImgCrop>
+    <Upload>+ Add image</Upload>
+  </ImgCrop>
+);
 ```
 
 ## Props
