@@ -42,14 +42,22 @@ class ImgCrop extends Component {
   // 渲染 Upload 组件
   renderChildren = () => {
     const { children } = this.props;
-    if (children.type.defaultProps.prefixCls !== 'ant-upload') {
-      throw new Error('`children` to `ImgCrop` must be `Upload`');
+    let uploadComponent = children;
+
+    let lengthError = false;
+    if (Array.isArray(children)) {
+      uploadComponent = children[0];
+      if (children.length > 1) lengthError = true;
     }
+    if (lengthError || uploadComponent.type.defaultProps.prefixCls !== 'ant-upload') {
+      throw new Error('`children` to `ImgCrop` must be only `Upload`');
+    }
+
     const props = {
-      ...children.props,
+      ...uploadComponent.props,
       beforeUpload: this.beforeUpload,
     };
-    return { ...children, props };
+    return { ...uploadComponent, props };
   };
   // 格式化 beforeUpload 属性
   beforeUpload = (file) => {
