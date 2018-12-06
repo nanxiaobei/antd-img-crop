@@ -35,29 +35,30 @@ class ImgCrop extends Component {
     this.state = this.initState;
   }
 
-  //
   // Upload 组件
-  //
+  // --------------------------------------------------
 
   // 渲染 Upload 组件
   renderChildren = () => {
     const { children } = this.props;
-    let uploadComponent = children;
+    this.Upload = children;
 
     let lengthError = false;
     if (Array.isArray(children)) {
-      uploadComponent = children[0];
+      this.Upload = children[0];
       if (children.length > 1) lengthError = true;
     }
-    if (lengthError || uploadComponent.type.defaultProps.prefixCls !== 'ant-upload') {
+    if (lengthError || this.Upload.type.defaultProps.prefixCls !== 'ant-upload') {
       throw new Error('`children` to `ImgCrop` must be only `Upload`');
     }
 
-    const props = {
-      ...uploadComponent.props,
-      beforeUpload: this.beforeUpload,
+    return {
+      ...this.Upload,
+      props: {
+        ...this.Upload.props,
+        beforeUpload: this.beforeUpload,
+      },
     };
-    return { ...uploadComponent, props };
   };
   // 格式化 beforeUpload 属性
   beforeUpload = (file) => {
@@ -79,9 +80,8 @@ class ImgCrop extends Component {
     });
   };
 
-  //
   // ReactCrop 组件
-  //
+  // --------------------------------------------------
 
   // 完成添加图片
   onImageLoaded = (image) => {
@@ -118,9 +118,8 @@ class ImgCrop extends Component {
     this.setState({ crop, pixelCrop });
   };
 
-  //
   // Modal 组件
-  //
+  // --------------------------------------------------
 
   // 点击确定
   onOk = async () => {
@@ -143,8 +142,7 @@ class ImgCrop extends Component {
 
       this.setState(this.initState);
 
-      const { children } = this.props;
-      const { beforeUpload } = children.props;
+      const { beforeUpload } = this.Upload.props;
       if (!beforeUpload) {
         this.resolve(newFile);
       } else {
