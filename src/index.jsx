@@ -14,11 +14,11 @@ const defaultState = {
   pixelCrop: {},
 };
 // 获取 crop 的值
-const getCropValues = (naturalWidth, naturalHeight, ratio, aspect) => {
+const getCropValues = (naturalWidth, naturalHeight, scaleRatio, aspect) => {
   // 注意，此处 width, height, x, y 均为百分比的值，如 "width: 80"，即为占比 "80%"
   // @link: https://github.com/DominicTobias/react-image-crop#crop-required
-  const width = ((naturalHeight * ratio * aspect) / naturalWidth) * 100;
-  const height = ((naturalHeight * ratio) / naturalHeight) * 100;
+  const width = ((naturalHeight * scaleRatio * aspect) / naturalWidth) * 100;
+  const height = ((naturalHeight * scaleRatio) / naturalHeight) * 100;
   const x = ((naturalWidth * (1 - width / 100)) / 2 / naturalWidth) * 100;
   const y = ((naturalHeight * (1 - height / 100)) / 2 / naturalHeight) * 100;
 
@@ -31,6 +31,12 @@ class ImgCrop extends Component {
     const { width, height } = props;
     this.aspect = width / height;
     this.state = defaultState;
+    // Bind `this`
+    this.beforeUpload = this.beforeUpload.bind(this);
+    this.onImageLoaded = this.onImageLoaded.bind(this);
+    this.onCropChange = this.onCropChange.bind(this);
+    this.onOk = this.onOk.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
 
   /**
@@ -46,7 +52,7 @@ class ImgCrop extends Component {
       this.Upload = children[0];
       if (children.length > 1) lengthError = true;
     }
-    if (lengthError || this.Upload.type.defaultProps.prefixCls !== 'ant-upload') {
+    if (lengthError || !this.Upload.type.defaultProps.beforeUpload) {
       throw new Error('`children` to `ImgCrop` must be only `Upload`');
     }
 
@@ -88,11 +94,11 @@ class ImgCrop extends Component {
     const { naturalWidth, naturalHeight } = this.imageRef;
     const modalWidth = naturalWidth >= naturalHeight ? 640 + 24 * 2 : 320 + 24 * 2;
 
-    let ratio = scale / 100;
-    let { x, y, width, height } = getCropValues(naturalWidth, naturalHeight, ratio, this.aspect);
+    let scaleRatio = scale / 100;
+    let { x, y, width, height } = getCropValues(naturalWidth, naturalHeight, scaleRatio, this.aspect);
     while (width > scale || height > scale) {
-      ratio -= 0.02;
-      ({ x, y, width, height } = getCropValues(naturalWidth, naturalHeight, ratio, this.aspect));
+      scaleRatio -= 0.02;
+      ({ x, y, width, height } = getCropValues(naturalWidth, naturalHeight, scaleRatio, this.aspect));
     }
 
     const crop = { aspect: this.aspect, x, y, width, height };
