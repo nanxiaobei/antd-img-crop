@@ -13,6 +13,7 @@ const defaultState = {
   crop: {},
   pixelCrop: {},
 };
+
 // 获取 crop 的值
 const getCropValues = (naturalWidth, naturalHeight, scaleRatio, aspect) => {
   // 注意，此处 width, height, x, y 均为百分比的值，如 "width: 80"，即为占比 "80%"
