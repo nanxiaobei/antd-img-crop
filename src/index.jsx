@@ -48,40 +48,51 @@ class ImgCrop extends Component {
     const { children } = this.props;
     this.Upload = children;
 
-    let lengthError = false;
+    let lengthErr = false;
     if (Array.isArray(children)) {
       this.Upload = children[0];
-      if (children.length > 1) lengthError = true;
+      if (children.length > 1) lengthErr = true;
     }
-    if (lengthError || !this.Upload.type.defaultProps.beforeUpload) {
+    if (lengthErr || !this.Upload.type.defaultProps.beforeUpload) {
       throw new Error('`children` to `ImgCrop` must be only `Upload`');
     }
 
+    const { accept } = this.Upload.props;
     return {
       ...this.Upload,
       props: {
         ...this.Upload.props,
+        accept: !accept ? 'image/*' : accept,
         beforeUpload: this.beforeUpload,
       },
     };
   }
   // 格式化 beforeUpload 属性
-  beforeUpload(file) {
-    this.oldFile = file;
-
-    // 读取添加的图片
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      this.setState({
-        modalVisible: true,
-        src: reader.result,
-      });
-    });
-    reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
-
-    return new Promise((resolve, reject) => {
+  beforeUpload(file, fileList) {
+    return new Promise(async (resolve, reject) => {
+      this.oldFile = file;
       this.resolve = resolve;
-      this.reject = reject;
+
+      const { beforeUpload } = this.Upload.props;
+      const result = beforeUpload(file, fileList);
+      if (!result) return false;
+
+      if (result.then) {
+        try {
+          const resolved = await result;
+          const type = Object.prototype.toString.call(resolved);
+          if (type === '[object File]' || type === '[object Blob]') this.oldFile = resolved;
+        } catch (err) {
+          return reject(err);
+        }
+      }
+
+      // 读取添加的图片
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        this.setState({ modalVisible: true, src: reader.result });
+      });
+      reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
     });
   }
 
@@ -90,16 +101,27 @@ class ImgCrop extends Component {
    */
   // 完成添加图片
   onImageLoaded(image) {
-    const { scale } = this.props;
     this.imageRef = image;
+    const { scale } = this.props;
+
     const { naturalWidth, naturalHeight } = this.imageRef;
     const modalWidth = naturalWidth >= naturalHeight ? 640 + 24 * 2 : 320 + 24 * 2;
 
     let scaleRatio = scale / 100;
-    let { x, y, width, height } = getCropValues(naturalWidth, naturalHeight, scaleRatio, this.aspect);
+    let { x, y, width, height } = getCropValues(
+      naturalWidth,
+      naturalHeight,
+      scaleRatio,
+      this.aspect,
+    );
     while (width > scale || height > scale) {
       scaleRatio -= 0.02;
-      ({ x, y, width, height } = getCropValues(naturalWidth, naturalHeight, scaleRatio, this.aspect));
+      ({ x, y, width, height } = getCropValues(
+        naturalWidth,
+        naturalHeight,
+        scaleRatio,
+        this.aspect,
+      ));
     }
 
     const crop = { aspect: this.aspect, x, y, width, height };
@@ -135,28 +157,7 @@ class ImgCrop extends Component {
       newFile.uid = uid;
 
       this.setState(defaultState);
-
-      const { beforeUpload } = this.Upload.props;
-      if (!beforeUpload) {
-        this.resolve(newFile);
-      } else {
-        const before = beforeUpload(newFile, [newFile]);
-        if (before) {
-          if (!before.then) {
-            this.resolve(newFile);
-          } else {
-            const processedFile = await before;
-            const fileType = Object.prototype.toString.call(processedFile);
-            if (fileType === '[object File]' || fileType === '[object Blob]') {
-              this.resolve(processedFile);
-            } else {
-              this.resolve(newFile);
-            }
-          }
-        } else {
-          this.reject();
-        }
-      }
+      this.resolve(newFile);
     }, type);
   }
   // 取消弹窗
@@ -167,6 +168,7 @@ class ImgCrop extends Component {
   render() {
     const { modalTitle } = this.props;
     const { modalVisible, modalWidth, src, crop } = this.state;
+
     return (
       <>
         {this.renderChildren()}
