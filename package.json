@@ -35,6 +35,7 @@
     "react": "^16.7.0"
   },
   "dependencies": {
+    "canvas-toBlob": "^1.0.0",
     "react-image-crop": "^6.0.12"
   },
   "devDependencies": {

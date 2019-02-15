@@ -4,6 +4,24 @@ import ReactCrop, { getPixelCrop } from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
+// 修复IE中 canvas.toBlob() 报错
+import 'canvas-toBlob';
+
+// 修复IE中 new File() 报错
+try {
+  new File([], '');
+} catch (e) {
+  /* eslint-disable-next-line */
+  File = class File extends Blob {
+    constructor(chunks, filename, opts = {}) {
+      super(chunks, opts);
+      this.lastModifiedDate = new Date();
+      this.lastModified = +this.lastModifiedDate;
+      this.name = filename;
+    }
+  };
+}
+
 const defaultState = {
   // Modal
   modalVisible: false,
