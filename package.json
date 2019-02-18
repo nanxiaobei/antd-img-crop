@@ -1,6 +1,6 @@
 {
   "name": "antd-img-crop",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "An image cropper to wrap Upload in Ant Design",
   "keywords": [
     "react",
