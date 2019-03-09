@@ -163,33 +163,37 @@ class ImgCrop extends Component {
 
     canvas.toBlob(async (blob) => {
       // 生成新图片
-      const newFile = new File([blob], name, { type, lastModified: Date.now() });
-      newFile.uid = uid;
+      const croppedFile = new File([blob], name, { type, lastModified: Date.now() });
+      croppedFile.uid = uid;
       this.setState(initialState);
 
       const { beforeUpload } = this.Upload.props;
       if (!beforeUpload) {
-        this.resolve(newFile);
+        this.resolve(croppedFile);
         return;
       }
 
-      const result = beforeUpload(newFile, [newFile]);
+      const result = beforeUpload(croppedFile, [croppedFile]);
       if (!result) {
         this.reject();
         return;
       }
 
       if (!result.then) {
-        this.resolve(newFile);
+        this.resolve(croppedFile);
         return;
       }
 
-      const resolved = await result;
-      const fileType = Object.prototype.toString.call(resolved);
-      if (fileType === '[object File]' || fileType === '[object Blob]') {
-        this.resolve(resolved);
-      } else {
-        this.resolve(newFile);
+      try {
+        const resolvedFile = await result;
+        const fileType = Object.prototype.toString.call(resolvedFile);
+        if (fileType === '[object File]' || fileType === '[object Blob]') {
+          this.resolve(resolvedFile);
+        } else {
+          this.resolve(croppedFile);
+        }
+      } catch (err) {
+        this.reject(err);
       }
     }, type);
   };
