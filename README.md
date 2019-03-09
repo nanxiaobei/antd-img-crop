@@ -33,9 +33,9 @@ const Demo = () => (
 
 type: `function`, default: -
 
-Hook function execute before crop, if returned `false`, crop will be stop. (Don't support `Promise`)
-
-_Ant Design Upload's `beforeUpload` prop will execute after crop, before upload._
+> Hook function execute before crop, if returned `false`, crop will be stop. (Don't support `Promise`)
+>
+> _Ant Design Upload's `beforeUpload` prop will execute after crop, before upload._
 
 #### modalTitle
 
@@ -49,10 +49,10 @@ type: `number`, default: `100`
 
 type: `number`, default: `100`
 
-Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
+> Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
 
 #### scale
 
 type: `number`, default: `80`
 
-Use `scale` for the crop area size. (e.g. if `scale = 100`, then crop area will fill the full width or height)
+> Use `scale` for the crop area size. (e.g. if `scale = 100`, then crop area will fill the full width or height)
