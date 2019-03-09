@@ -4,10 +4,10 @@ import ReactCrop, { getPixelCrop } from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
-// 修复IE中 canvas.toBlob() 报错
+// 修复 IE canvas.toBlob()
 import 'canvas-toBlob';
 
-// 修复IE中 new File() 报错
+// 修复 IE new File()
 try {
   new File([], '');
 } catch (e) {
@@ -22,7 +22,7 @@ try {
   };
 }
 
-const defaultState = {
+const initialState = {
   // Modal
   modalVisible: false,
   modalWidth: 520,
@@ -49,20 +49,14 @@ class ImgCrop extends Component {
     super(props);
     const { width, height } = props;
     this.aspect = width / height;
-    this.state = defaultState;
-    // Bind `this`
-    this.beforeUpload = this.beforeUpload.bind(this);
-    this.onImageLoaded = this.onImageLoaded.bind(this);
-    this.onCropChange = this.onCropChange.bind(this);
-    this.onOk = this.onOk.bind(this);
-    this.onCancel = this.onCancel.bind(this);
+    this.state = initialState;
   }
 
   /**
    * Upload 组件
    */
   // 渲染 Upload 组件
-  renderChildren() {
+  renderUpload = () => {
     const { children } = this.props;
     this.Upload = children;
 
@@ -84,44 +78,42 @@ class ImgCrop extends Component {
         beforeUpload: this.beforeUpload,
       },
     };
-  }
+  };
   // 格式化 beforeUpload 属性
-  beforeUpload(file, fileList) {
-    return new Promise(async (resolve, reject) => {
-      this.oldFile = file;
-      this.resolve = resolve;
+  beforeUpload = (file, fileList) => {
+    // 裁剪前校验图片
+    const { beforeCrop } = this.props;
+    if (beforeCrop) {
+      const passed = beforeCrop(file, fileList);
+      if (!passed) return;
+    }
 
-      const { beforeUpload } = this.Upload.props;
-      const result = beforeUpload(file, fileList);
-      if (!result) return false;
+    this.oldFile = file;
 
-      if (result.then) {
-        try {
-          const resolved = await result;
-          const type = Object.prototype.toString.call(resolved);
-          if (type === '[object File]' || type === '[object Blob]') this.oldFile = resolved;
-        } catch (err) {
-          return reject(err);
-        }
-      }
-
-      // 读取添加的图片
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        this.setState({ modalVisible: true, src: reader.result });
+    // 读取添加的图片
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      this.setState({
+        modalVisible: true,
+        src: reader.result,
       });
-      reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
     });
-  }
+    reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
+
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  };
 
   /**
    * ReactCrop 组件
    */
   // 完成添加图片
-  onImageLoaded(image) {
-    this.imageRef = image;
+  onImageLoaded = (image) => {
     const { scale } = this.props;
 
+    this.imageRef = image;
     const { naturalWidth, naturalHeight } = this.imageRef;
     const modalWidth = naturalWidth >= naturalHeight ? 640 + 24 * 2 : 320 + 24 * 2;
 
@@ -146,17 +138,17 @@ class ImgCrop extends Component {
     const pixelCrop = getPixelCrop(this.imageRef, crop);
 
     this.setState({ modalWidth, crop, pixelCrop });
-  }
+  };
   // 响应裁切变化
-  onCropChange(crop, pixelCrop) {
+  onCropChange = (crop, pixelCrop) => {
     this.setState({ crop, pixelCrop });
-  }
+  };
 
   /**
    * Modal 组件
    */
   // 点击确定
-  async onOk() {
+  onOk = async () => {
     const { pixelCrop } = this.state;
     const { x, y, width, height } = pixelCrop;
 
@@ -173,15 +165,38 @@ class ImgCrop extends Component {
       // 生成新图片
       const newFile = new File([blob], name, { type, lastModified: Date.now() });
       newFile.uid = uid;
+      this.setState(initialState);
 
-      this.setState(defaultState);
-      this.resolve(newFile);
+      const { beforeUpload } = this.Upload.props;
+      if (!beforeUpload) {
+        this.resolve(newFile);
+        return;
+      }
+
+      const result = beforeUpload(newFile, [newFile]);
+      if (!result) {
+        this.reject();
+        return;
+      }
+
+      if (!result.then) {
+        this.resolve(newFile);
+        return;
+      }
+
+      const resolved = await result;
+      const fileType = Object.prototype.toString.call(resolved);
+      if (fileType === '[object File]' || fileType === '[object Blob]') {
+        this.resolve(resolved);
+      } else {
+        this.resolve(newFile);
+      }
     }, type);
-  }
+  };
   // 取消弹窗
-  onCancel() {
-    this.setState(defaultState);
-  }
+  onCancel = () => {
+    this.setState(initialState);
+  };
 
   render() {
     const { modalTitle } = this.props;
@@ -189,7 +204,7 @@ class ImgCrop extends Component {
 
     return (
       <>
-        {this.renderChildren()}
+        {this.renderUpload()}
         <Modal
           visible={modalVisible}
           width={modalWidth}
@@ -214,6 +229,7 @@ class ImgCrop extends Component {
 }
 
 ImgCrop.propTypes = {
+  beforeCrop: PropTypes.func,
   modalTitle: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
