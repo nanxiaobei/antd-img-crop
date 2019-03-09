@@ -33,7 +33,7 @@ const Demo = () => (
 
 type: `function`, default: -
 
-Hook function execute before crop, if returned `false`, crop will be stop. (Don't support Promise)
+Hook function execute before crop, if returned `false`, crop will be stop. (Don't support `Promise`)
 
 _Ant Design Upload's `beforeUpload` prop will execute after crop, before upload._
 
