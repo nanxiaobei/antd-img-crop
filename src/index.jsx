@@ -81,28 +81,28 @@ class ImgCrop extends Component {
   };
   // 格式化 beforeUpload 属性
   beforeUpload = (file, fileList) => {
-    // 裁剪前校验图片
-    const { beforeCrop } = this.props;
-    if (beforeCrop) {
-      const passed = beforeCrop(file, fileList);
-      if (!passed) return;
-    }
-
-    this.oldFile = file;
-
-    // 读取添加的图片
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      this.setState({
-        modalVisible: true,
-        src: reader.result,
-      });
-    });
-    reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
-
     return new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;
+
+      // 裁剪前校验图片
+      const { beforeCrop } = this.props;
+      if (beforeCrop && !beforeCrop(file, fileList)) {
+        this.reject();
+        return;
+      }
+
+      this.oldFile = file;
+
+      // 读取添加的图片
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        this.setState({
+          modalVisible: true,
+          src: reader.result,
+        });
+      });
+      reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
     });
   };
 
