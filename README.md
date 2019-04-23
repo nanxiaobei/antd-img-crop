@@ -41,24 +41,36 @@ Ant Design Upload's `beforeUpload` prop will execute after crop, before upload.
 
 ### modalTitle
 
-type: `string`, default: `"编辑图片"`, modal's title.
+type: `string`, default: `"编辑图片"`
+
+Modal's title.
 
 ### modalWidth
 
-type: `number`, default: `520`, modal's width.
+type: `number`, default: `520`
+
+Modal's width.
 
 ### width
 
-type: `number`, default: `100`, crop's width in `px`.
+type: `number`, default: `100`
+
+Crop's width in `px`.
 
 ### height
 
-type: `number`, default: `100`, crop's height in `px`.
+type: `number`, default: `100`
+
+Crop's height in `px`.
 
 ### resize
 
-type: `boolean`, default: `true`, if crop can resize.
+type: `boolean`, default: `true`
+
+If crop can resize.
 
 ### resizeAndDrag
 
-type: `boolean`, default: `true`, if crop can resize and drag.
+type: `boolean`, default: `true`
+
+If crop can resize and drag.
