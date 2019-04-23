@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactCrop, { getPixelCrop } from 'react-image-crop';
+import ReactCrop from 'react-image-crop';
 import { Modal } from 'antd';
 import './index.scss';
 
-// 修复 IE canvas.toBlob()
+// 兼容 IE
 import 'canvas-toBlob';
 
-// 修复 IE new File()
+// 兼容 IE new File()
 try {
   new File([], '');
 } catch (e) {
@@ -22,34 +22,14 @@ try {
   };
 }
 
-const initialState = {
-  // Modal
-  modalVisible: false,
-  modalWidth: 520,
-  // ReactCrop
-  src: null,
-  crop: {},
-  pixelCrop: {},
-};
-
-// 获取 crop 的值
-const getCropValues = (naturalWidth, naturalHeight, scaleRatio, aspect) => {
-  // 注意，此处 width, height, x, y 均为百分比的值，如 "width: 80"，即为占比 "80%"
-  // @link: https://github.com/DominicTobias/react-image-crop#crop-required
-  const width = ((naturalHeight * scaleRatio * aspect) / naturalWidth) * 100;
-  const height = ((naturalHeight * scaleRatio) / naturalHeight) * 100;
-  const x = ((naturalWidth * (1 - width / 100)) / 2 / naturalWidth) * 100;
-  const y = ((naturalHeight * (1 - height / 100)) / 2 / naturalHeight) * 100;
-
-  return { x, y, width, height };
-};
-
 class ImgCrop extends Component {
   constructor(props) {
     super(props);
-    const { width, height } = props;
-    this.aspect = width / height;
-    this.state = initialState;
+    this.state = {
+      modalVisible: false,
+      src: null,
+      crop: {},
+    };
   }
 
   /**
@@ -111,37 +91,23 @@ class ImgCrop extends Component {
    */
   // 完成添加图片
   onImageLoaded = (image) => {
-    const { scale } = this.props;
+    const { modalWidth, width, height } = this.props;
+    const maxAreaWidth = modalWidth - 24 * 2;
 
     this.imageRef = image;
     const { naturalWidth, naturalHeight } = this.imageRef;
-    const modalWidth = naturalWidth >= naturalHeight ? 640 + 24 * 2 : 320 + 24 * 2;
+    const areaWidth = naturalWidth >= maxAreaWidth ? maxAreaWidth : naturalWidth;
+    const areaHeight = (naturalHeight * areaWidth) / naturalWidth;
 
-    let scaleRatio = scale / 100;
-    let { x, y, width, height } = getCropValues(
-      naturalWidth,
-      naturalHeight,
-      scaleRatio,
-      this.aspect,
-    );
-    while (width > scale || height > scale) {
-      scaleRatio -= 0.02;
-      ({ x, y, width, height } = getCropValues(
-        naturalWidth,
-        naturalHeight,
-        scaleRatio,
-        this.aspect,
-      ));
-    }
+    const aspect = width / height;
+    const x = (areaWidth - width) / 2;
+    const y = (areaHeight - height) / 2;
 
-    const crop = { aspect: this.aspect, x, y, width, height };
-    const pixelCrop = getPixelCrop(this.imageRef, crop);
-
-    this.setState({ modalWidth, crop, pixelCrop });
+    this.setState({ crop: { aspect, x, y, width, height } });
   };
   // 响应裁切变化
-  onCropChange = (crop, pixelCrop) => {
-    this.setState({ crop, pixelCrop });
+  onCropChange = (crop) => {
+    this.setState({ crop });
   };
 
   /**
@@ -149,8 +115,8 @@ class ImgCrop extends Component {
    */
   // 点击确定
   onOk = async () => {
-    const { pixelCrop } = this.state;
-    const { x, y, width, height } = pixelCrop;
+    const { crop } = this.state;
+    const { x, y, width, height } = crop;
 
     // 获取裁切后的图片
     const canvas = document.createElement('canvas');
@@ -163,9 +129,13 @@ class ImgCrop extends Component {
 
     canvas.toBlob(async (blob) => {
       // 生成新图片
-      const croppedFile = new File([blob], name, { type, lastModified: Date.now() });
+      const croppedFile = new File([blob], name, {
+        type,
+        lastModified: Date.now(),
+      });
       croppedFile.uid = uid;
-      this.setState(initialState);
+      // 关闭弹窗
+      this.onClose();
 
       const { beforeUpload } = this.Upload.props;
       if (!beforeUpload) {
@@ -197,14 +167,18 @@ class ImgCrop extends Component {
       }
     }, type);
   };
-  // 取消弹窗
-  onCancel = () => {
-    this.setState(initialState);
+  // 关闭弹窗
+  onClose = () => {
+    this.setState({
+      modalVisible: false,
+      src: null,
+      crop: {},
+    });
   };
 
   render() {
-    const { modalTitle } = this.props;
-    const { modalVisible, modalWidth, src, crop } = this.state;
+    const { modalTitle, modalWidth, resize, resizeAndDrag } = this.props;
+    const { modalVisible, src, crop } = this.state;
 
     return (
       <>
@@ -213,7 +187,7 @@ class ImgCrop extends Component {
           visible={modalVisible}
           width={modalWidth}
           onOk={this.onOk}
-          onCancel={this.onCancel}
+          onCancel={this.onClose}
           wrapClassName="antd-img-crop-modal"
           title={modalTitle}
           maskClosable={false}
@@ -222,6 +196,8 @@ class ImgCrop extends Component {
             <ReactCrop
               src={src}
               crop={crop}
+              locked={resize === false}
+              disabled={resizeAndDrag === false}
               onImageLoaded={this.onImageLoaded}
               onChange={this.onCropChange}
             />
@@ -235,17 +211,21 @@ class ImgCrop extends Component {
 ImgCrop.propTypes = {
   beforeCrop: PropTypes.func,
   modalTitle: PropTypes.string,
+  modalWidth: PropTypes.number,
   width: PropTypes.number,
   height: PropTypes.number,
-  scale: PropTypes.number,
+  resize: PropTypes.bool,
+  resizeAndDrag: PropTypes.bool,
   children: PropTypes.node,
 };
 
 ImgCrop.defaultProps = {
   modalTitle: '编辑图片',
+  modalWidth: 520,
   width: 100,
   height: 100,
-  scale: 80,
+  resize: true,
+  resizeAndDrag: true,
 };
 
 export default ImgCrop;
