@@ -31,7 +31,7 @@ const Demo = () => (
 
 ## Props
 
-#### beforeCrop
+### beforeCrop
 
 type: `function`, default: -
 
@@ -39,26 +39,26 @@ Execute before crop, if return `false`, modal will not open. (Not support `Promi
 
 Ant Design Upload's `beforeUpload` prop will execute after crop, before upload.
 
-#### modalTitle
+### modalTitle
 
 type: `string`, default: `"编辑图片"`, modal's title.
 
-#### modalWidth
+### modalWidth
 
 type: `number`, default: `520`, modal's width.
 
-#### width
+### width
 
 type: `number`, default: `100`, crop's width in `px`.
 
-#### height
+### height
 
 type: `number`, default: `100`, crop's height in `px`.
 
-#### resize
+### resize
 
 type: `boolean`, default: `true`, if crop can resize.
 
-#### resizeAndDrag
+### resizeAndDrag
 
 type: `boolean`, default: `true`, if crop can resize and drag.
