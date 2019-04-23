@@ -2,11 +2,11 @@
 
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
 
-An image cropper to wrap [Upload](https://ant.design/components/upload/) in Ant Design
+An image cropper for Ant Design's [Upload](https://ant.design/components/upload/).
 
 ## Demo
 
-[https://codesandbox.io/s/y3y6y80yk1](https://codesandbox.io/s/y3y6y80yk1)
+[https://codesandbox.io/s/r0oz1z4vwp](https://codesandbox.io/s/r0oz1z4vwp)
 
 ## Install
 
@@ -33,26 +33,30 @@ const Demo = () => (
 
 type: `function`, default: -
 
-Hook function execute before crop, if returned `false`, crop will be stop. (Don't support `Promise`)
+Execute before crop, if return `false`, crop will stop. (Not support `Promise`)
 
 Ant Design Upload's `beforeUpload` prop will execute after crop, before upload.
 
 #### modalTitle
 
-type: `string`, default: `"编辑图片"`
+type: `string`, default: `"编辑图片"`, modal's title.
+
+#### modalWidth
+
+type: `number`, default: `520`, modal's width.
 
 #### width
 
-type: `number`, default: `100`
+type: `number`, default: `100`, crop width in pixels.
 
 #### height
 
-type: `number`, default: `100`
+type: `number`, default: `100`, crop height in pixels.
 
-Use `width` and `height` to get ratio for crop area. (Not use them as the real length)
+#### resize
 
-#### scale
+type: `boolean`, default: `true`, if crop can resize.
 
-type: `number`, default: `80`
+#### resizeAndDrag
 
-Use `scale` for the crop area size. (e.g. if `scale = 100`, then crop area will fill the full width or height)
+type: `boolean`, default: `true`, if crop can resize and drag.
