@@ -8,7 +8,7 @@ An image cropper for Ant Design's [Upload](https://ant.design/components/upload/
 
 ## Demo
 
-[https://codesandbox.io/s/r0oz1z4vwp](https://codesandbox.io/s/r0oz1z4vwp)
+[https://codesandbox.io/s/4qoom5p9x4](https://codesandbox.io/s/4qoom5p9x4)
 
 ## Install
 
