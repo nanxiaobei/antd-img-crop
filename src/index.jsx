@@ -92,16 +92,23 @@ class ImgCrop extends Component {
   // 完成添加图片
   onImageLoaded = (image) => {
     const { modalWidth, width, height } = this.props;
-    const maxAreaWidth = modalWidth - 24 * 2;
+    const modalBodyWidth = modalWidth - 24 * 2;
 
     this.imageRef = image;
     const { naturalWidth, naturalHeight } = this.imageRef;
-    const areaWidth = naturalWidth >= maxAreaWidth ? maxAreaWidth : naturalWidth;
-    const areaHeight = (naturalHeight * areaWidth) / naturalWidth;
+
+    let imgWidth = naturalWidth;
+    let imgHeight = naturalHeight;
+
+    if (naturalWidth > modalBodyWidth) {
+      imgWidth = modalBodyWidth;
+      this.scale = naturalWidth / imgWidth;
+      imgHeight = naturalHeight / this.scale;
+    }
 
     const aspect = width / height;
-    const x = (areaWidth - width) / 2;
-    const y = (areaHeight - height) / 2;
+    const x = (imgWidth - width) / 2;
+    const y = (imgHeight - height) / 2;
 
     this.setState({ crop: { aspect, x, y, width, height } });
   };
@@ -116,7 +123,14 @@ class ImgCrop extends Component {
   // 点击确定
   onOk = async () => {
     const { crop } = this.state;
-    const { x, y, width, height } = crop;
+    let { x, y, width, height } = crop;
+
+    if (this.scale !== undefined) {
+      x = x * this.scale;
+      y = y * this.scale;
+      width = width * this.scale;
+      height = height * this.scale;
+    }
 
     // 获取裁切后的图片
     const canvas = document.createElement('canvas');
