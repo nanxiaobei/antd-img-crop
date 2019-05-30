@@ -91,6 +91,8 @@ class ImgCrop extends Component {
    */
   // 完成添加图片
   onImageLoaded = (image) => {
+    if (this.imageRef !== undefined) return;
+
     const { modalWidth, width, height } = this.props;
     const modalBodyWidth = modalWidth - 24 * 2;
 
@@ -124,6 +126,11 @@ class ImgCrop extends Component {
   onOk = async () => {
     const { crop } = this.state;
     let { x, y, width, height } = crop;
+
+    if (!width || !height) {
+      this.onClose();
+      return;
+    }
 
     if (this.scale !== undefined) {
       x = x * this.scale;
@@ -183,9 +190,11 @@ class ImgCrop extends Component {
   };
   // 关闭弹窗
   onClose = () => {
+    this.imageRef = undefined;
+    this.scale = undefined;
+
     this.setState({
       modalVisible: false,
-      src: null,
       crop: {},
     });
   };
@@ -205,6 +214,7 @@ class ImgCrop extends Component {
           wrapClassName="antd-img-crop-modal"
           title={modalTitle}
           maskClosable={false}
+          destroyOnClose
         >
           {src && (
             <ReactCrop
@@ -214,6 +224,7 @@ class ImgCrop extends Component {
               disabled={resizeAndDrag === false}
               onImageLoaded={this.onImageLoaded}
               onChange={this.onCropChange}
+              keepSelection
             />
           )}
         </Modal>
