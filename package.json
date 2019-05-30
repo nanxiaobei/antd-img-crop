@@ -35,27 +35,27 @@
     "react": "^16.7.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
     "canvas-toBlob": "^1.0.0",
-    "react-image-crop": "^7.0.2"
+    "react-image-crop": "^7.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
-    "babel-plugin-import": "^1.11.0",
+    "babel-plugin-import": "^1.11.2",
     "cross-env": "^5.2.0",
     "eslint-plugin-react": "^7.13.0",
     "husky": "^2.3.0",
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
     "rimraf": "^2.6.2",
-    "rollup": "^1.12.1",
+    "rollup": "^1.12.5",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-eslint": "^5.1.0",
+    "rollup-plugin-eslint": "^6.0.0",
     "rollup-plugin-sass": "^1.2.2"
   },
   "husky": {
