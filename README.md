@@ -31,26 +31,6 @@ const Demo = () => (
 
 ## Props
 
-### beforeCrop
-
-type: `function`, default: -
-
-Execute before crop, if return `false`, modal will not open. (Not support `Promise`)
-
-Ant Design Upload's `beforeUpload` prop will execute after crop, before upload.
-
-### modalTitle
-
-type: `string`, default: `"编辑图片"`
-
-Modal's title.
-
-### modalWidth
-
-type: `number`, default: `520`
-
-Modal's width.
-
 ### width
 
 type: `number`, default: `100`
@@ -74,3 +54,23 @@ If crop can resize.
 type: `boolean`, default: `true`
 
 If crop can resize and drag.
+
+### modalTitle
+
+type: `string`, default: `"编辑图片"`
+
+Modal's title.
+
+### modalWidth
+
+type: `number`, default: `520`
+
+Modal's width in `px`.
+
+### beforeCrop
+
+type: `function`, default: -
+
+Execute before crop, if return `false`, modal will not open. (Not support `Promise`)
+
+Ant Design Upload's `beforeUpload` prop will execute after crop, before upload.

@@ -31,26 +31,6 @@ const Demo = () => (
 
 ## Props
 
-### beforeCrop
-
-类型：`function`，默认：-
-
-图片裁切前执行，若返回 `false`，弹框将不会打开。（不支持 `Promise`）
-
-Ant Design Upload 组件的 `beforeUpload` 属性在图片裁切后、上传前执行。
-
-### modalTitle
-
-类型：`string`，默认：`"编辑图片"`
-
-弹窗标题。
-
-### modalWidth
-
-类型：`number`，默认：`520`
-
-弹窗宽度。
-
 ### width
 
 类型：`number`，默认：`100`
@@ -74,3 +54,23 @@ Ant Design Upload 组件的 `beforeUpload` 属性在图片裁切后、上传前�
 类型：`boolean`，默认：`true`
 
 裁切是否可调整大小、可拖动。
+
+### modalTitle
+
+类型：`string`，默认：`"编辑图片"`
+
+弹窗标题。
+
+### modalWidth
+
+类型：`number`，默认：`520`
+
+弹窗宽度，单位 `px`。
+
+### beforeCrop
+
+类型：`function`，默认：-
+
+图片裁切前执行，若返回 `false`，弹框将不会打开。（不支持 `Promise`）
+
+Ant Design Upload 组件的 `beforeUpload` 属性在图片裁切后、上传前执行。
