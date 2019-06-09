@@ -4,7 +4,7 @@
 
 [English](./README.md) | 简体中文
 
-图片裁切工具，用于 Ant Design 的 [Upload](https://ant.design/components/upload-cn/) 组件。
+图片裁切工具，用于 Ant Design [Upload](https://ant.design/components/upload-cn/) 组件。
 
 ## 示例
 
@@ -35,13 +35,21 @@ const Demo = () => (
 
 类型：`number`，默认：`100`
 
-裁切宽度，单位 `px`。
+裁切宽度，单位 `px`。若 `useRatio` 为 `true`，则是比例。
 
 ### height
 
 类型：`number`，默认：`100`
 
-裁切高度，单位 `px`。
+裁切高度，单位 `px`。若 `useRatio` 为 `true`，则是比例。
+
+### useRatio
+
+类型：`boolean`，默认：`false`
+
+是否将 `width` 和 `height` 用作比例，而非真实 `px`。此时裁切将占满宽度或高度。
+
+例如，`width={500} height={400}` 与 `width={5} height={4}` 其实是一样的。
 
 ### resize
 
@@ -74,3 +82,5 @@ const Demo = () => (
 图片裁切前执行，若返回 `false`，弹框将不会打开。（不支持 `Promise`）
 
 Ant Design Upload 组件的 `beforeUpload` 属性在图片裁切后、上传前执行。
+
+---

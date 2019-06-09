@@ -4,7 +4,7 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-An image cropper for Ant Design's [Upload](https://ant.design/components/upload/).
+An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
 
 ## Demo
 
@@ -35,13 +35,21 @@ const Demo = () => (
 
 type: `number`, default: `100`
 
-Crop's width in `px`.
+Crop width in `px`. If `useRatio` is `true`, it'll be ratio.
 
 ### height
 
 type: `number`, default: `100`
 
-Crop's height in `px`.
+Crop height in `px`. If `useRatio` is `true`, it'll be ratio.
+
+### useRatio
+
+type: `boolean`, default: `false`
+
+If use `width` and `height` as ratio, not real `px`. And crop will fill the width or height.
+
+e.g. `width={500} height={400}` and `width={5} height={4}` are exactly the same.
 
 ### resize
 
@@ -57,15 +65,15 @@ If crop can resize and drag.
 
 ### modalTitle
 
-type: `string`, default: `"编辑图片"`
+type: `string`, default: `"Edit image"`
 
-Modal's title.
+Modal title.
 
 ### modalWidth
 
 type: `number`, default: `520`
 
-Modal's width in `px`.
+Modal width in `px`.
 
 ### beforeCrop
 
@@ -73,4 +81,4 @@ type: `function`, default: -
 
 Execute before crop, if return `false`, modal will not open. (Not support `Promise`)
 
-Ant Design Upload's `beforeUpload` prop will execute after crop, before upload.
+Ant Design Upload `beforeUpload` prop will execute after crop, before upload.
