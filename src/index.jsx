@@ -2,25 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
 import { Modal } from 'antd';
+import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
 import './index.scss';
 
-// 兼容 IE
-import 'canvas-toBlob';
-
-// 兼容 IE new File()
 try {
   new File([], '');
 } catch (e) {
-  /* eslint-disable-next-line */
-  File = class File extends Blob {
-    constructor(chunks, filename, opts = {}) {
-      super(chunks, opts);
-      this.lastModifiedDate = new Date();
-      this.lastModified = +this.lastModifiedDate;
-      this.name = filename;
-    }
-  };
+  // 兼容 IE new File()
+  import('canvas-toBlob').then(() => {
+    /* eslint-disable-next-line */
+    File = class File extends Blob {
+      constructor(chunks, filename, opts = {}) {
+        super(chunks, opts);
+        this.lastModifiedDate = new Date();
+        this.lastModified = +this.lastModifiedDate;
+        this.name = filename;
+      }
+    };
+  });
 }
+
+const MODAL_TITLE = 'Edit image';
+const NOT_ONLY_ERR = '`children` to `<ImgCrop />` must be only `<Upload />`';
 
 class ImgCrop extends Component {
   constructor(props) {
@@ -38,24 +41,33 @@ class ImgCrop extends Component {
   // 渲染 Upload 组件
   renderUpload = () => {
     const { children } = this.props;
-    this.Upload = children;
 
-    let lengthErr = false;
-    if (Array.isArray(children)) {
-      this.Upload = children[0];
-      if (children.length > 1) lengthErr = true;
-    }
-    if (lengthErr || !this.Upload.type.defaultProps.beforeUpload) {
-      throw new Error('`children` to `ImgCrop` must be only `Upload`');
-    }
+    let Upload;
+    if (this.newUploadProps === undefined) {
+      if (Array.isArray(children)) {
+        if (children.length > 1) throw new Error(NOT_ONLY_ERR);
+        Upload = children[0];
+      } else {
+        Upload = children;
+      }
+      if (!Upload.type.defaultProps.beforeUpload) throw new Error(NOT_ONLY_ERR);
 
-    const { accept } = this.Upload.props;
-    return {
-      ...this.Upload,
-      props: {
-        ...this.Upload.props,
+      const { accept, beforeUpload } = Upload.props;
+      this.realBeforeUpload = beforeUpload;
+
+      this.newUploadProps = {
         accept: !accept ? 'image/*' : accept,
         beforeUpload: this.beforeUpload,
+      };
+    } else {
+      Upload = Array.isArray(children) ? children[0] : children;
+    }
+
+    return {
+      ...Upload,
+      props: {
+        ...Upload.props,
+        ...this.newUploadProps,
       },
     };
   };
@@ -93,26 +105,48 @@ class ImgCrop extends Component {
   onImageLoaded = (image) => {
     if (this.imageRef !== undefined) return;
 
-    const { modalWidth, width, height } = this.props;
-    const modalBodyWidth = modalWidth - 24 * 2;
-
     this.imageRef = image;
     const { naturalWidth, naturalHeight } = this.imageRef;
-
     let imgWidth = naturalWidth;
     let imgHeight = naturalHeight;
 
+    const { modalWidth, width: cropWidth, height: cropHeight, useRatio } = this.props;
+
+    const modalBodyWidth = modalWidth - 24 * 2;
     if (naturalWidth > modalBodyWidth) {
       imgWidth = modalBodyWidth;
       this.scale = naturalWidth / imgWidth;
       imgHeight = naturalHeight / this.scale;
     }
 
-    const aspect = width / height;
-    const x = (imgWidth - width) / 2;
-    const y = (imgHeight - height) / 2;
+    const aspect = cropWidth / cropHeight;
+    let x;
+    let y;
+    let width;
+    let height;
+
+    if (useRatio === true) {
+      const naturalAspect = naturalWidth / naturalHeight;
+      if (naturalAspect > aspect) {
+        y = 0;
+        height = imgHeight;
+        width = height * aspect;
+        x = (imgWidth - width) / 2;
+      } else {
+        x = 0;
+        width = imgWidth;
+        height = width / aspect;
+        y = (imgHeight - height) / 2;
+      }
+    } else {
+      x = (imgWidth - cropWidth) / 2;
+      y = (imgHeight - cropHeight) / 2;
+      width = cropWidth;
+      height = cropHeight;
+    }
 
     this.setState({ crop: { aspect, x, y, width, height } });
+    return false;
   };
   // 响应裁切变化
   onCropChange = (crop) => {
@@ -147,41 +181,34 @@ class ImgCrop extends Component {
     ctx.drawImage(this.imageRef, x, y, width, height, 0, 0, width, height);
 
     const { name, type, uid } = this.oldFile;
-
     canvas.toBlob(async (blob) => {
       // 生成新图片
-      const croppedFile = new File([blob], name, {
-        type,
-        lastModified: Date.now(),
-      });
-      croppedFile.uid = uid;
+      const newFile = new File([blob], name, { type, lastModified: Date.now() });
+      newFile.uid = uid;
+
       // 关闭弹窗
       this.onClose();
 
-      const { beforeUpload } = this.Upload.props;
-      if (!beforeUpload) {
-        this.resolve(croppedFile);
-        return;
-      }
+      // 调用 beforeUpload
+      const response = this.realBeforeUpload(newFile, [newFile]);
 
-      const result = beforeUpload(croppedFile, [croppedFile]);
-      if (!result) {
+      if (response === false) {
         this.reject();
         return;
       }
 
-      if (!result.then) {
-        this.resolve(croppedFile);
+      if (!response.then) {
+        this.resolve(newFile);
         return;
       }
 
       try {
-        const resolvedFile = await result;
-        const fileType = Object.prototype.toString.call(resolvedFile);
+        const newProcessedFile = await response;
+        const fileType = Object.prototype.toString.call(newProcessedFile);
         if (fileType === '[object File]' || fileType === '[object Blob]') {
-          this.resolve(resolvedFile);
+          this.resolve(newProcessedFile);
         } else {
-          this.resolve(croppedFile);
+          this.resolve(newFile);
         }
       } catch (err) {
         this.reject(err);
@@ -204,53 +231,62 @@ class ImgCrop extends Component {
     const { modalVisible, src, crop } = this.state;
 
     return (
-      <>
-        {this.renderUpload()}
-        <Modal
-          visible={modalVisible}
-          width={modalWidth}
-          onOk={this.onOk}
-          onCancel={this.onClose}
-          wrapClassName="antd-img-crop-modal"
-          title={modalTitle}
-          maskClosable={false}
-          destroyOnClose
-        >
-          {src && (
-            <ReactCrop
-              src={src}
-              crop={crop}
-              locked={resize === false}
-              disabled={resizeAndDrag === false}
-              onImageLoaded={this.onImageLoaded}
-              onChange={this.onCropChange}
-              keepSelection
-            />
-          )}
-        </Modal>
-      </>
+      <LocaleReceiver>
+        {(locale, localeCode) => (
+          <>
+            {this.renderUpload()}
+            <Modal
+              visible={modalVisible}
+              width={modalWidth}
+              onOk={this.onOk}
+              onCancel={this.onClose}
+              wrapClassName="antd-img-crop-modal"
+              title={localeCode === 'zh-cn' && modalTitle === MODAL_TITLE ? '编辑图片' : modalTitle}
+              maskClosable={false}
+              destroyOnClose
+            >
+              {src && (
+                <ReactCrop
+                  src={src}
+                  crop={crop}
+                  locked={resize === false}
+                  disabled={resizeAndDrag === false}
+                  onImageLoaded={this.onImageLoaded}
+                  onChange={this.onCropChange}
+                  keepSelection
+                />
+              )}
+            </Modal>
+          </>
+        )}
+      </LocaleReceiver>
     );
   }
 }
 
 ImgCrop.propTypes = {
-  beforeCrop: PropTypes.func,
-  modalTitle: PropTypes.string,
-  modalWidth: PropTypes.number,
   width: PropTypes.number,
   height: PropTypes.number,
+  useRatio: PropTypes.bool,
   resize: PropTypes.bool,
   resizeAndDrag: PropTypes.bool,
+
+  modalTitle: PropTypes.string,
+  modalWidth: PropTypes.number,
+  beforeCrop: PropTypes.func,
+
   children: PropTypes.node,
 };
 
 ImgCrop.defaultProps = {
-  modalTitle: '编辑图片',
-  modalWidth: 520,
   width: 100,
   height: 100,
+  useRatio: false,
   resize: true,
   resizeAndDrag: true,
+
+  modalTitle: MODAL_TITLE,
+  modalWidth: 520,
 };
 
 export default ImgCrop;
