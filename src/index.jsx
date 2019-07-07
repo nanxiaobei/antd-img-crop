@@ -145,7 +145,7 @@ class ImgCrop extends Component {
       height = cropHeight;
     }
 
-    this.setState({ crop: { aspect, x, y, width, height } });
+    this.setState({ crop: { unit: 'px', aspect, x, y, width, height } });
     return false;
   };
   // 响应裁切变化
