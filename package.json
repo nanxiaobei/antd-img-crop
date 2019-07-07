@@ -37,7 +37,7 @@
   "dependencies": {
     "@babel/runtime": "^7.5.1",
     "canvas-toBlob": "^1.0.0",
-    "react-image-crop": "^8.1.0"
+    "react-image-crop": "8.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
