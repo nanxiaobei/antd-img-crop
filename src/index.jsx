@@ -84,7 +84,7 @@ class ImgCrop extends Component {
         return;
       }
 
-      this.oldFile = file;
+      this.originalFIle = file;
 
       // 读取添加的图片
       const reader = new FileReader();
@@ -94,7 +94,7 @@ class ImgCrop extends Component {
           src: reader.result,
         });
       });
-      reader.readAsDataURL(this.oldFile); // then -> `onImageLoaded`
+      reader.readAsDataURL(this.originalFIle); // then -> `onImageLoaded`
     });
   };
 
@@ -180,36 +180,34 @@ class ImgCrop extends Component {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(this.imageRef, x, y, width, height, 0, 0, width, height);
 
-    const { name, type, uid } = this.oldFile;
+    const { name, type, uid } = this.originalFIle;
     canvas.toBlob(async (blob) => {
       // 生成新图片
-      const newFile = new File([blob], name, { type, lastModified: Date.now() });
-      newFile.uid = uid;
+      const croppedFile = new File([blob], name, { type, lastModified: Date.now() });
+      croppedFile.uid = uid;
 
       // 关闭弹窗
       this.onClose();
 
       // 调用 beforeUpload
-      const response = this.realBeforeUpload(newFile, [newFile]);
+      const response = this.realBeforeUpload(croppedFile, [croppedFile]);
 
       if (response === false) {
         this.reject();
         return;
       }
 
-      if (!response.then) {
-        this.resolve(newFile);
+      if (typeof response.then !== 'function') {
+        this.resolve(croppedFile);
         return;
       }
 
       try {
-        const newProcessedFile = await response;
-        const fileType = Object.prototype.toString.call(newProcessedFile);
-        if (fileType === '[object File]' || fileType === '[object Blob]') {
-          this.resolve(newProcessedFile);
-        } else {
-          this.resolve(newFile);
-        }
+        const croppedProcessedFile = await response;
+        const fileType = Object.prototype.toString.call(croppedProcessedFile);
+        const useProcessedFile = fileType === '[object File]' || fileType === '[object Blob]';
+
+        this.resolve(useProcessedFile ? croppedProcessedFile : croppedFile);
       } catch (err) {
         this.reject(err);
       }
