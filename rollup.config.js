@@ -1,34 +1,22 @@
-import { eslint } from 'rollup-plugin-eslint';
 import babel from 'rollup-plugin-babel';
 import sass from 'rollup-plugin-sass';
-
 import pkg from './package.json';
 
-const { NODE_ENV } = process.env;
-const dependencies = [...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies)];
+const input = 'src/index.jsx';
+const deps = [...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies)];
+const external = (id) => deps.includes(id) || id.includes('antd') || id.includes('@babel/runtime');
+const plugins = (isEsm) => [
+  babel({
+    plugins: [
+      ['import', { libraryName: 'antd', libraryDirectory: isEsm ? 'es' : 'lib', style: 'css' }],
+      ['@babel/plugin-transform-runtime', { useESModules: isEsm }],
+    ],
+    runtimeHelpers: true,
+  }),
+  sass({ insert: true }),
+];
 
-const config = {
-  input: 'src/index.jsx',
-  output: { format: NODE_ENV, indent: false },
-  external: (id) => {
-    if (dependencies.includes(id)) return true;
-    if (id.includes('antd/') || id.includes('@babel/runtime/')) return true;
-  },
-  plugins: [
-    eslint({
-      throwOnError: true,
-      throwOnWarning: true,
-      include: ['src/**/*.(js|jsx)'],
-      exclude: ['node_modules/**'],
-    }),
-    babel({
-      exclude: 'node_modules/**',
-      runtimeHelpers: true,
-    }),
-    sass({
-      insert: true,
-    }),
-  ],
-};
-
-export default config;
+export default [
+  { input, output: { file: pkg.main, format: 'cjs' }, external, plugins: plugins(false) },
+  { input, output: { file: pkg.module, format: 'es' }, external, plugins: plugins(true) },
+];
