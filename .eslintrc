@@ -1,24 +1,21 @@
 {
-  "root": true,
   "parser": "babel-eslint",
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
-  "settings": {
-    "react": { "version": "999.999.999" }
-  },
-  "env": {
-    "browser": true,
-    "node": true,
-    "commonjs": true,
-    "es6": true
-  },
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
+    }
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     }
   }
 }
