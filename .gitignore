@@ -1,8 +1,4 @@
-.git
-.idea
-
 node_modules
-lib
-es
+dist
 
 yarn-error.log
