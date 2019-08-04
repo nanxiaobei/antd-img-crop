@@ -1,18 +1,21 @@
 # antd-img-crop
 
+An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
+
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
+[![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
+[![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE)
 
 English | [简体中文](./README.zh-CN.md)
 
-An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
-
 ## Demo
 
-[https://codesandbox.io/s/4qoom5p9x4](https://codesandbox.io/s/4qoom5p9x4)
+[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14)
 
 ## Install
 
-```bash
+```sh
 yarn add antd-img-crop
 ```
 
@@ -82,3 +85,7 @@ type: `function`, default: -
 Execute before crop, if return `false`, modal will not open. (Not support `Promise`)
 
 Ant Design Upload `beforeUpload` prop will execute after crop, before upload.
+
+## License
+
+[MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)

@@ -1,18 +1,21 @@
 # antd-img-crop
 
+图片裁切工具，用于 Ant Design [Upload](https://ant.design/components/upload-cn/) 组件。
+
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
+[![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
+[![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE)
 
 [English](./README.md) | 简体中文
 
-图片裁切工具，用于 Ant Design [Upload](https://ant.design/components/upload-cn/) 组件。
-
 ## 示例
 
-[https://codesandbox.io/s/4qoom5p9x4](https://codesandbox.io/s/4qoom5p9x4)
+[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14)
 
 ## 安装
 
-```bash
+```sh
 yarn add antd-img-crop
 ```
 
@@ -83,4 +86,6 @@ const Demo = () => (
 
 Ant Design Upload 组件的 `beforeUpload` 属性在图片裁切后、上传前执行。
 
----
+## 协议
+
+[MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)
