@@ -4,7 +4,7 @@ import pkg from './package.json';
 
 const input = 'src/index.jsx';
 const deps = [...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.dependencies)];
-const external = (id) => deps.includes(id) || id.includes('antd') || id.includes('@babel/runtime');
+const external = (id) => deps.includes(id) || /antd\/|@babel\/runtime\//.test(id);
 const plugins = (isEsm) => [
   babel({
     plugins: [
