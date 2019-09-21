@@ -45,10 +45,10 @@
     "babel-plugin-import": "^1.12.1",
     "eslint": "^6.4.0",
     "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.14.3",
     "prettier": "^1.18.2",
-    "rollup": "^1.21.3",
+    "rollup": "^1.21.4",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-sass": "^1.2.2"
   },
