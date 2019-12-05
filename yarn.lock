@@ -1002,9 +1002,9 @@ callsites@^3.0.0:
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
 caniuse-lite@^1.0.30001012:
-  version "1.0.30001013"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001013.tgz#da2440d4d266a17d40eb79bd19c0c8cc1d029c72"
-  integrity sha512-hOAXaWKuq/UVFgYawxIOdPdyMQdYcwOCDOjnZcKn7wCgFUrhP7smuNZjGLuJlPSgE6aRA4cRJ+bGSrhtEt7ZAg==
+  version "1.0.30001015"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001015.tgz#15a7ddf66aba786a71d99626bc8f2b91c6f0f5f0"
+  integrity sha512-/xL2AbW/XWHNu1gnIrO8UitBGoFthcsDgU9VLK1/dpsoxbaD5LscHozKze05R6WLsBvLhqv78dAPozMFQBYLbQ==
 
 canvas-toBlob@^1.0.0:
   version "1.0.0"
@@ -1141,7 +1141,7 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.10.tgz#8a5b8391f8cc7013da703411ce5b585706300d7f"
   integrity sha512-I39t74+4t+zau64EN1fE5v2W31Adtc/REhzWN+gWRRXg6WH5qAsZm62DHpQ1+Yhe4047T55jvzz7MUqF/dBBlA==
 
-core-js@^3.2.1:
+core-js@^3.4.2:
   version "3.4.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.4.7.tgz#57c35937da80fe494fbc3adcf9cf3dc00eb86b34"
   integrity sha512-qaPVGw30J1wQ0GR3GvoPqlGf9GZfKKF4kFC7kiHlcsPTqH3txrs9crCp3ZiMAXuSenhz89Jnl4GZs/67S5VOSg==
@@ -2239,9 +2239,9 @@ node-pre-gyp@^0.12.0:
     tar "^4"
 
 node-releases@^1.1.41:
-  version "1.1.41"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.41.tgz#57674a82a37f812d18e3b26118aefaf53a00afed"
-  integrity sha512-+IctMa7wIs8Cfsa8iYzeaLTFwv5Y4r5jZud+4AnfymzeEXKBCavFX0KBgzVaPVqf0ywa6PrO8/b+bPqdwjGBSg==
+  version "1.1.42"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.42.tgz#a999f6a62f8746981f6da90627a8d2fc090bbad7"
+  integrity sha512-OQ/ESmUqGawI2PRX+XIRao44qWYBBfN54ImQYdWVTQqUckuejOg76ysSqDBK8NG3zwySRVnX36JwDQ6x+9GxzA==
   dependencies:
     semver "^6.3.0"
 
@@ -2513,13 +2513,13 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-image-crop@8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-8.3.0.tgz#a0642dd3daafd77f142bac01887628cb967876b7"
-  integrity sha512-iC6Soqkf588WvEHc4EpKWNaiw4YQe0UbXziBpC8KRPKyaccakmWf7MewDFnYiPfPNEWxj96S390q7BUJz8LGZg==
+react-image-crop@8.4.2:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-8.4.2.tgz#93573d45160277661c192d6b483e349337b4e5bc"
+  integrity sha512-JSi/L7fxCeipW481rhWnXpvluIns9VCE6K+hImJK48rldge7l1/5eMyRuXa1W/BJLQh5Z3ynCEsUHHWYJ6NEnQ==
   dependencies:
     clsx "^1.0.4"
-    core-js "^3.2.1"
+    core-js "^3.4.2"
     prop-types "^15.7.2"
 
 react-is@^16.8.1:
