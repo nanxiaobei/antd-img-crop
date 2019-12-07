@@ -109,12 +109,15 @@ class ImgCrop extends Component {
     if (this.image !== undefined) return;
 
     this.image = image;
+
+    // realXXX 实际大小，showXXX 显示大小
     const { naturalWidth: realImgWidth, naturalHeight: realImgHeight } = image;
-    const { modalWidth, width: realCropWidth, height: realCropHeight } = this.props;
+    const { width: realCropWidth, height: realCropHeight, modalWidth } = this.props;
 
-    const modalBodyWidth = modalWidth - 24 * 2;
     const cropRate = realCropWidth / realCropHeight;
+    const modalBodyWidth = modalWidth - 24 * 2;
 
+    let scale = 1;
     let showImgWidth;
     let showImgHeight;
 
@@ -131,71 +134,57 @@ class ImgCrop extends Component {
       contain = this.props.contain || this.props.useRatio; // eslint-disable-line
     }
 
-    if (realImgWidth <= modalBodyWidth) {
-      // 1. 图片宽度小于 Model
+    // 设置数值大小
+    const setNumberData = () => {
+      showCropWidth = realCropWidth / scale;
+      showCropHeight = realCropHeight / scale;
+
+      showCropX = (showImgWidth - showCropWidth) / 2;
+      showCropY = (showImgHeight - showCropHeight) / 2;
+    };
+
+    // 设置填充容器
+    const setContainData = () => {
+      const imgRate = realImgWidth / realImgHeight;
+
+      if (cropRate > imgRate) {
+        // 裁剪框宽度大于图片
+        showCropWidth = showImgWidth;
+        showCropHeight = showCropWidth / cropRate;
+
+        showCropX = 0;
+        showCropY = (showImgHeight - showCropHeight) / 2;
+      } else {
+        // 裁剪框宽度小于图片
+        showCropHeight = showImgHeight;
+        showCropWidth = showCropHeight * cropRate;
+
+        showCropX = (showImgWidth - showCropWidth) / 2;
+        showCropY = 0;
+      }
+    };
+
+    // 设置数值大小 or 填充容器
+    const setCropData = () => {
+      contain === true ? setContainData() : setNumberData();
+    };
+
+    // 设置裁切相关值
+    if (realImgWidth > modalBodyWidth) {
+      // 图片宽度大于 Model
+      showImgWidth = modalBodyWidth;
+      scale = realImgWidth / showImgWidth;
+      showImgHeight = realImgHeight / scale;
+
+      this.scale = scale;
+
+      setCropData();
+    } else {
+      // 图片宽度小于 Model
       showImgWidth = realImgWidth;
       showImgHeight = realImgHeight;
 
-      if (contain !== true) {
-        // 1.1. 真实大小
-        showCropWidth = realCropWidth;
-        showCropHeight = realCropHeight;
-
-        showCropX = (showImgWidth - showCropWidth) / 2;
-        showCropY = (showImgHeight - showCropHeight) / 2;
-      } else {
-        // 1.2. 填充容器
-        const imgRate = realImgWidth / realImgHeight;
-        if (cropRate > imgRate) {
-          // 裁剪框宽度大于图片
-          showCropWidth = showImgWidth;
-          showCropHeight = showCropWidth / cropRate;
-
-          showCropX = 0;
-          showCropY = (showImgHeight - showCropHeight) / 2;
-        } else {
-          // 裁剪框宽度小于图片
-          showCropHeight = showImgHeight;
-          showCropWidth = showCropHeight * cropRate;
-
-          showCropX = (showImgWidth - showCropWidth) / 2;
-          showCropY = 0;
-        }
-      }
-    } else {
-      // 2. 图片宽度大于 Model
-      const scale = realImgWidth / modalBodyWidth;
-      this.scale = scale;
-
-      showImgWidth = modalBodyWidth;
-      showImgHeight = realImgHeight / scale;
-
-      if (contain !== true) {
-        // 2.1. 真实大小
-        showCropWidth = realCropWidth / scale;
-        showCropHeight = realCropHeight / scale;
-
-        showCropX = (showImgWidth - showCropWidth) / 2;
-        showCropY = (showImgHeight - showCropHeight) / 2;
-      } else {
-        // 2.2. 填充容器
-        const imgRate = realImgWidth / realImgHeight;
-        if (cropRate > imgRate) {
-          // 裁剪框宽度大于图片
-          showCropWidth = showImgWidth;
-          showCropHeight = showCropWidth / cropRate;
-
-          showCropX = 0;
-          showCropY = (showImgHeight - showCropHeight) / 2;
-        } else {
-          // 裁剪框宽度小于图片
-          showCropHeight = showImgHeight;
-          showCropWidth = showCropHeight * cropRate;
-
-          showCropX = (showImgWidth - showCropWidth) / 2;
-          showCropY = 0;
-        }
-      }
+      setCropData();
     }
 
     this.setState({
