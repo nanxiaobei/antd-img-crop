@@ -173,12 +173,22 @@ class ImgCrop extends Component {
       height = height * this.scale;
     }
 
+    // calculate final dimensions of image
+    let finalWidth, finalHeight;
+    if (this.props.useRatio === true) {
+      finalWidth = width;
+      finalHeight = height;
+    } else {
+      finalWidth = this.props.width;
+      finalHeight = this.props.height;
+    }
+
     // 获取裁切后的图片
     const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = finalWidth;
+    canvas.height = finalHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(this.imageRef, x, y, width, height, 0, 0, width, height);
+    ctx.drawImage(this.imageRef, x, y, width, height, 0, 0, finalWidth, finalHeight);
 
     const { name, type, uid } = this.originalFIle;
     canvas.toBlob(async (blob) => {
