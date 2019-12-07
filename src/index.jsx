@@ -23,11 +23,17 @@ try {
 }
 
 const MODAL_TITLE = 'Edit image';
-const NOT_ONLY_ERR = '`children` to `<ImgCrop />` must be only `<Upload />`';
+const ERR_NOT_ONLY_UPLOAD = "'children' to '<ImgCrop />' must be only '<Upload />'";
+const WARN_DEPRECATED_USE_RATIO = "'useRatio' is deprecated, please use 'contain' instead";
 
 class ImgCrop extends Component {
   constructor(props) {
     super(props);
+    // eslint-disable-next-line
+    if (props.useRatio !== undefined) {
+      console.warn(WARN_DEPRECATED_USE_RATIO);
+    }
+
     this.state = {
       modalVisible: false,
       src: null,
@@ -45,12 +51,12 @@ class ImgCrop extends Component {
     let Upload;
     if (this.newUploadProps === undefined) {
       if (Array.isArray(children)) {
-        if (children.length > 1) throw new Error(NOT_ONLY_ERR);
+        if (children.length > 1) throw new Error(ERR_NOT_ONLY_UPLOAD);
         Upload = children[0];
       } else {
         Upload = children;
       }
-      if (!Upload.type.defaultProps.beforeUpload) throw new Error(NOT_ONLY_ERR);
+      if (!Upload.type.defaultProps.beforeUpload) throw new Error(ERR_NOT_ONLY_UPLOAD);
 
       const { accept, beforeUpload } = Upload.props;
       this.realBeforeUpload = beforeUpload;
@@ -89,10 +95,7 @@ class ImgCrop extends Component {
       // 读取添加的图片
       const reader = new FileReader();
       reader.addEventListener('load', () => {
-        this.setState({
-          modalVisible: true,
-          src: reader.result,
-        });
+        this.setState({ modalVisible: true, src: reader.result });
       });
       reader.readAsDataURL(this.originalFIle); // then -> `onImageLoaded`
     });
@@ -103,49 +106,109 @@ class ImgCrop extends Component {
    */
   // 完成添加图片
   onImageLoaded = (image) => {
-    if (this.imageRef !== undefined) return;
+    if (this.image !== undefined) return;
 
-    this.imageRef = image;
-    const { naturalWidth, naturalHeight } = this.imageRef;
-    let imgWidth = naturalWidth;
-    let imgHeight = naturalHeight;
-
-    const { modalWidth, width: cropWidth, height: cropHeight, useRatio } = this.props;
+    this.image = image;
+    const { naturalWidth: realImgWidth, naturalHeight: realImgHeight } = image;
+    const { modalWidth, width: realCropWidth, height: realCropHeight } = this.props;
 
     const modalBodyWidth = modalWidth - 24 * 2;
-    if (naturalWidth > modalBodyWidth) {
-      imgWidth = modalBodyWidth;
-      this.scale = naturalWidth / imgWidth;
-      imgHeight = naturalHeight / this.scale;
+    const cropRate = realCropWidth / realCropHeight;
+
+    let showImgWidth;
+    let showImgHeight;
+
+    let showCropWidth;
+    let showCropHeight;
+
+    let showCropX;
+    let showCropY;
+
+    let contain;
+    if (realCropWidth > realImgWidth || realCropHeight > realImgHeight) {
+      contain = true;
+    } else {
+      contain = this.props.contain || this.props.useRatio; // eslint-disable-line
     }
 
-    const aspect = cropWidth / cropHeight;
-    let x;
-    let y;
-    let width;
-    let height;
+    if (realImgWidth <= modalBodyWidth) {
+      // 1. 图片宽度小于 Model
+      showImgWidth = realImgWidth;
+      showImgHeight = realImgHeight;
 
-    if (useRatio === true) {
-      const naturalAspect = naturalWidth / naturalHeight;
-      if (naturalAspect > aspect) {
-        y = 0;
-        height = imgHeight;
-        width = height * aspect;
-        x = (imgWidth - width) / 2;
+      if (contain !== true) {
+        // 1.1. 真实大小
+        showCropWidth = realCropWidth;
+        showCropHeight = realCropHeight;
+
+        showCropX = (showImgWidth - showCropWidth) / 2;
+        showCropY = (showImgHeight - showCropHeight) / 2;
       } else {
-        x = 0;
-        width = imgWidth;
-        height = width / aspect;
-        y = (imgHeight - height) / 2;
+        // 1.2. 填充容器
+        const imgRate = realImgWidth / realImgHeight;
+        if (cropRate > imgRate) {
+          // 裁剪框宽度大于图片
+          showCropWidth = showImgWidth;
+          showCropHeight = showCropWidth / cropRate;
+
+          showCropX = 0;
+          showCropY = (showImgHeight - showCropHeight) / 2;
+        } else {
+          // 裁剪框宽度小于图片
+          showCropHeight = showImgHeight;
+          showCropWidth = showCropHeight * cropRate;
+
+          showCropX = (showImgWidth - showCropWidth) / 2;
+          showCropY = 0;
+        }
       }
     } else {
-      x = (imgWidth - cropWidth) / 2;
-      y = (imgHeight - cropHeight) / 2;
-      width = cropWidth;
-      height = cropHeight;
+      // 2. 图片宽度大于 Model
+      const scale = realImgWidth / modalBodyWidth;
+      this.scale = scale;
+
+      showImgWidth = modalBodyWidth;
+      showImgHeight = realImgHeight / scale;
+
+      if (contain !== true) {
+        // 2.1. 真实大小
+        showCropWidth = realCropWidth / scale;
+        showCropHeight = realCropHeight / scale;
+
+        showCropX = (showImgWidth - showCropWidth) / 2;
+        showCropY = (showImgHeight - showCropHeight) / 2;
+      } else {
+        // 2.2. 填充容器
+        const imgRate = realImgWidth / realImgHeight;
+        if (cropRate > imgRate) {
+          // 裁剪框宽度大于图片
+          showCropWidth = showImgWidth;
+          showCropHeight = showCropWidth / cropRate;
+
+          showCropX = 0;
+          showCropY = (showImgHeight - showCropHeight) / 2;
+        } else {
+          // 裁剪框宽度小于图片
+          showCropHeight = showImgHeight;
+          showCropWidth = showCropHeight * cropRate;
+
+          showCropX = (showImgWidth - showCropWidth) / 2;
+          showCropY = 0;
+        }
+      }
     }
 
-    this.setState({ crop: { unit: 'px', aspect, x, y, width, height } });
+    this.setState({
+      crop: {
+        unit: 'px',
+        aspect: cropRate,
+        width: showCropWidth,
+        height: showCropHeight,
+        x: showCropX,
+        y: showCropY,
+      },
+    });
+
     return false;
   };
   // 响应裁切变化
@@ -159,36 +222,33 @@ class ImgCrop extends Component {
   // 点击确定
   onOk = async () => {
     const { crop } = this.state;
-    let { x, y, width, height } = crop;
+    let { width: sWidth, height: sHeight } = crop;
 
-    if (!width || !height) {
+    if (!sWidth || !sHeight) {
       this.onClose();
       return;
     }
 
-    if (this.scale !== undefined) {
-      x = x * this.scale;
-      y = y * this.scale;
-      width = width * this.scale;
-      height = height * this.scale;
+    const image = this.image;
+    const scale = this.scale;
+
+    let { x: sx, y: sy } = crop;
+
+    if (scale !== undefined) {
+      sx = sx * scale;
+      sy = sy * scale;
+      sWidth = sWidth * scale;
+      sHeight = sHeight * scale;
     }
 
-    // calculate final dimensions of image
-    let finalWidth, finalHeight;
-    if (this.props.useRatio === true) {
-      finalWidth = width;
-      finalHeight = height;
-    } else {
-      finalWidth = this.props.width;
-      finalHeight = this.props.height;
-    }
+    const { width: dWidth, height: dHeight } = this.props;
 
     // 获取裁切后的图片
     const canvas = document.createElement('canvas');
-    canvas.width = finalWidth;
-    canvas.height = finalHeight;
+    canvas.width = dWidth;
+    canvas.height = dHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(this.imageRef, x, y, width, height, 0, 0, finalWidth, finalHeight);
+    ctx.drawImage(image, sx, sy, sWidth, sHeight, 0, 0, dWidth, dHeight);
 
     const { name, type, uid } = this.originalFIle;
     canvas.toBlob(async (blob) => {
@@ -225,13 +285,9 @@ class ImgCrop extends Component {
   };
   // 关闭弹窗
   onClose = () => {
-    this.imageRef = undefined;
+    this.image = undefined;
     this.scale = undefined;
-
-    this.setState({
-      modalVisible: false,
-      crop: {},
-    });
+    this.setState({ modalVisible: false, crop: {} });
   };
 
   render() {
@@ -275,7 +331,7 @@ class ImgCrop extends Component {
 ImgCrop.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  useRatio: PropTypes.bool,
+  contain: PropTypes.bool,
   resize: PropTypes.bool,
   resizeAndDrag: PropTypes.bool,
 
@@ -289,7 +345,7 @@ ImgCrop.propTypes = {
 ImgCrop.defaultProps = {
   width: 100,
   height: 100,
-  useRatio: false,
+  contain: false,
   resize: true,
   resizeAndDrag: true,
 
