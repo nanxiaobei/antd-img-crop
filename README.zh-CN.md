@@ -34,16 +34,17 @@ const Demo = () => (
 
 ## Props
 
-| 名称          | 类型       | 默认         | 说明                                                                                                                                                    |
-| ------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| width         | `number`   | `100`        | 裁切宽度，单位 `px`。若 `useRatio` 为 `true`，则是比例。                                                                                                |
-| height        | `number`   | `100`        | 裁切高度，单位 `px`。若 `useRatio` 为 `true`，则是比例。                                                                                                |
-| useRatio      | `boolean`  | `false`      | 是否将 `width` 和 `height` 用作比例，而非真实 `px`。此时裁切将占满宽度或高度。例如，`width={500} height={400}` 与 `width={5} height={4}` 其实是一样的。 |
-| resize        | `boolean`  | `true`       | 裁切是否可调整大小。                                                                                                                                    |
-| resizeAndDrag | `boolean`  | `true`       | 裁切是否可调整大小、可拖动。                                                                                                                            |
-| modalTitle    | `string`   | `"编辑图片"` | 弹窗标题。                                                                                                                                              |
-| modalWidth    | `number`   | `520`        | 弹窗宽度，单位 `px`。                                                                                                                                   |
-| beforeCrop    | `function` | -            | 图片裁切前执行，若返回 `false`，弹框将不会打开（不支持 `Promise`）。Ant Design Upload 组件的 `beforeUpload` 属性在图片裁切后、上传前执行。              |
+| 名称          | 类型       | 默认         | 说明                                                                                                               |
+| ------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| width         | `number`   | `100`        | 裁切所得图片的宽度，单位 `px`。                                                                                    |
+| height        | `number`   | `100`        | 裁切所得图片的高度，单位 `px`。                                                                                    |
+| contain       | `boolean`  | `false`      | 与 `background-size: contain` 表现一致，裁切区域将占满宽度或高度。                                                 |
+| ~~useRatio~~  | -          | -            | 已废弃，请使用 `contain`。                                                                                         |
+| resize        | `boolean`  | `true`       | 裁切区域是否可调大小。                                                                                             |
+| resizeAndDrag | `boolean`  | `true`       | 裁切区域是否可调大小且可拖动。                                                                                     |
+| modalTitle    | `string`   | `"编辑图片"` | 弹窗标题。                                                                                                         |
+| modalWidth    | `number`   | `520`        | 弹窗宽度，单位 `px`。                                                                                              |
+| beforeCrop    | `function` | -            | 裁切前执行，若返回 `false` 弹框将不会打开（不支持 `Promise`）。Upload 组件的 `beforeUpload` 在裁切后、上传前执行。 |
 
 ## 协议
 

@@ -34,16 +34,17 @@ const Demo = () => (
 
 ## Props
 
-| Name          | Type       | Default        | Description                                                                                                                                                                   |
-| ------------- | ---------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| width         | `number`   | `100`          | Crop width in `px`. If `useRatio` is `true`, it'll be ratio.                                                                                                                  |
-| height        | `number`   | `100`          | Crop height in `px`. If `useRatio` is `true`, it'll be ratio.                                                                                                                 |
-| useRatio      | `boolean`  | `false`        | If use `width` and `height` as ratio, not real `px`. And crop will fill the width or height. e.g. `width={500} height={400}` and `width={5} height={4}` are exactly the same. |
-| resize        | `boolean`  | `true`         | If crop can resize.                                                                                                                                                           |
-| resizeAndDrag | `boolean`  | `true`         | If crop can resize and drag.                                                                                                                                                  |
-| modalTitle    | `string`   | `"Edit image"` | Modal title.                                                                                                                                                                  |
-| modalWidth    | `number`   | `520`          | Modal width in `px`.                                                                                                                                                          |
-| beforeCrop    | `function` | -              | Execute before crop, if return `false`, modal will not open (Not support `Promise`). Ant Design Upload `beforeUpload` prop will execute after crop, before upload.            |
+| Name          | Type       | Default        | Description                                                                                                                                               |
+| ------------- | ---------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| width         | `number`   | `100`          | Width of cropped image in `px`.                                                                                                                           |
+| height        | `number`   | `100`          | Height of cropped image in `px`.                                                                                                                          |
+| contain       | `boolean`  | `false`        | Consistent with `background-size: contain`, crop area will fill the width or height.                                                                      |
+| ~~useRatio~~  | -          | -              | Deprecated, please use `contain`.                                                                                                                         |
+| resize        | `boolean`  | `true`         | If crop area can resize.                                                                                                                                  |
+| resizeAndDrag | `boolean`  | `true`         | If crop area can resize and drag.                                                                                                                         |
+| modalTitle    | `string`   | `"Edit image"` | Title of modal.                                                                                                                                           |
+| modalWidth    | `number`   | `520`          | Width of modal in `px`.                                                                                                                                   |
+| beforeCrop    | `function` | -              | Execute before crop, modal will not open if return `false` (Not support `Promise`). `beforeUpload` prop of Upload will execute after crop, before upload. |
 
 ## License
 
