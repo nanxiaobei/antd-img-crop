@@ -1,11 +1,11 @@
 // @ts-ignore
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 declare module 'antd-img-crop' {
   export interface ImgCropProps {
     width?: number;
     height?: number;
-    useRatio?: boolean;
+    contain?: boolean;
     resize?: boolean;
     resizeAndDrag?: boolean;
     modalTitle?: string;
