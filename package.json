@@ -53,6 +53,7 @@
     "rollup-plugin-sass": "^1.2.2"
   },
   "eslintIgnore": [
-    "dist"
+    "dist",
+    "index.d.ts"
   ]
 }
