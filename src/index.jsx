@@ -90,14 +90,14 @@ class ImgCrop extends Component {
         return;
       }
 
-      this.originalFIle = file;
+      this.oldFile = file;
 
       // 读取添加的图片
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         this.setState({ modalVisible: true, src: reader.result });
       });
-      reader.readAsDataURL(this.originalFIle); // then -> `onImageLoaded`
+      reader.readAsDataURL(file); // then -> `onImageLoaded`
     });
   };
 
@@ -239,7 +239,7 @@ class ImgCrop extends Component {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(image, sx, sy, sWidth, sHeight, 0, 0, dWidth, dHeight);
 
-    const { name, type, uid } = this.originalFIle;
+    const { name, type, uid } = this.oldFile;
     canvas.toBlob(async (blob) => {
       // 生成新图片
       const croppedFile = new File([blob], name, { type, lastModified: Date.now() });
@@ -274,6 +274,7 @@ class ImgCrop extends Component {
   };
   // 关闭弹窗
   onClose = () => {
+    this.oldFile = undefined;
     this.image = undefined;
     this.scale = undefined;
     this.setState({ modalVisible: false, crop: {} });
