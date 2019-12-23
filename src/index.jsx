@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
-import { Modal } from 'antd';
+import { Modal, Upload } from 'antd';
 import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
 import './index.scss';
 
@@ -48,15 +48,16 @@ class ImgCrop extends Component {
   renderUpload = () => {
     const { children } = this.props;
 
-    let Upload;
+    let _Upload;
     if (this.newUploadProps === undefined) {
       if (Array.isArray(children)) {
         if (children.length > 1) throw new Error(ERR_NOT_ONLY_UPLOAD);
-        Upload = children[0];
+        _Upload = children[0];
       } else {
-        Upload = children;
+        _Upload = children;
       }
-      if (!Upload.type.defaultProps.beforeUpload) throw new Error(ERR_NOT_ONLY_UPLOAD);
+      if (![Upload.toString(), Upload.Dragger.toString()].includes(_Upload.type.toString()))
+        throw new Error(ERR_NOT_ONLY_UPLOAD);
 
       const { accept, beforeUpload } = Upload.props;
       this.realBeforeUpload = beforeUpload;
@@ -66,13 +67,13 @@ class ImgCrop extends Component {
         beforeUpload: this.beforeUpload,
       };
     } else {
-      Upload = Array.isArray(children) ? children[0] : children;
+      _Upload = Array.isArray(children) ? children[0] : children;
     }
 
     return {
-      ...Upload,
+      ..._Upload,
       props: {
-        ...Upload.props,
+        ..._Upload.props,
         ...this.newUploadProps,
       },
     };
