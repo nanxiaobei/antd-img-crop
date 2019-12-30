@@ -7,7 +7,7 @@ import './index.scss';
 
 try {
   new File([], '');
-} catch (e) {
+} catch (err) {
   // 兼容 IE new File()
   import('canvas-toBlob').then(() => {
     /* eslint-disable-next-line */
@@ -22,9 +22,9 @@ try {
   });
 }
 
-const MODAL_TITLE = 'Edit image';
-const ERR_NOT_ONLY_UPLOAD = "'children' to '<ImgCrop />' must be only '<Upload />'";
 const WARN_DEPRECATED_USE_RATIO = "'useRatio' is deprecated, please use 'contain' instead";
+const ERR_NOT_UPLOAD = "'children' to 'ImgCrop' must be 'Upload' or 'Upload.Dragger'";
+const MODAL_TITLE = 'Edit image';
 
 class ImgCrop extends Component {
   constructor(props) {
@@ -48,32 +48,33 @@ class ImgCrop extends Component {
   renderUpload = () => {
     const { children } = this.props;
 
-    let _Upload;
+    let uploadComponent;
     if (this.newUploadProps === undefined) {
       if (Array.isArray(children)) {
-        if (children.length > 1) throw new Error(ERR_NOT_ONLY_UPLOAD);
-        _Upload = children[0];
+        if (children.length > 1) throw new Error(ERR_NOT_UPLOAD);
+        uploadComponent = children[0];
       } else {
-        _Upload = children;
+        uploadComponent = children;
       }
-      if (![Upload.toString(), Upload.Dragger.toString()].includes(_Upload.type.toString()))
-        throw new Error(ERR_NOT_ONLY_UPLOAD);
 
-      const { accept, beforeUpload } = Upload.props;
+      const { type } = uploadComponent;
+      if (type !== Upload && type !== Upload.Dragger) throw new Error(ERR_NOT_UPLOAD);
+
+      const { accept, beforeUpload } = uploadComponent.props;
       this.realBeforeUpload = beforeUpload;
 
       this.newUploadProps = {
-        accept: !accept ? 'image/*' : accept,
+        accept: accept || 'image/*',
         beforeUpload: this.beforeUpload,
       };
     } else {
-      _Upload = Array.isArray(children) ? children[0] : children;
+      uploadComponent = Array.isArray(children) ? children[0] : children;
     }
 
     return {
-      ..._Upload,
+      ...uploadComponent,
       props: {
-        ..._Upload.props,
+        ...uploadComponent.props,
         ...this.newUploadProps,
       },
     };
