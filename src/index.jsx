@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
-import { Modal, Upload } from 'antd';
+import { Modal } from 'antd';
 import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
 import './index.scss';
 
@@ -23,7 +23,6 @@ try {
 }
 
 const WARN_DEPRECATED_USE_RATIO = "'useRatio' is deprecated, please use 'contain' instead";
-const ERR_NOT_UPLOAD = "'children' to 'ImgCrop' must be 'Upload' or 'Upload.Dragger'";
 const MODAL_TITLE = 'Edit image';
 
 class ImgCrop extends Component {
@@ -47,28 +46,13 @@ class ImgCrop extends Component {
   // 渲染 Upload 组件
   renderUpload = () => {
     const { children } = this.props;
+    const uploadComponent = Array.isArray(children) ? children[0] : children;
 
-    let uploadComponent;
     if (this.newUploadProps === undefined) {
-      if (Array.isArray(children)) {
-        if (children.length > 1) throw new Error(ERR_NOT_UPLOAD);
-        uploadComponent = children[0];
-      } else {
-        uploadComponent = children;
-      }
-
-      const { type } = uploadComponent;
-      if (type !== Upload && type !== Upload.Dragger) throw new Error(ERR_NOT_UPLOAD);
-
-      const { accept, beforeUpload } = uploadComponent.props;
+      const { accept = 'image/*', beforeUpload = () => true } = uploadComponent.props;
       this.realBeforeUpload = beforeUpload;
 
-      this.newUploadProps = {
-        accept: accept || 'image/*',
-        beforeUpload: this.beforeUpload,
-      };
-    } else {
-      uploadComponent = Array.isArray(children) ? children[0] : children;
+      this.newUploadProps = { accept, beforeUpload: this.beforeUpload };
     }
 
     return {
