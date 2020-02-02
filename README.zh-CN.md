@@ -46,6 +46,8 @@ const Demo = () => (
 | modalWidth    | `number`   | `520`        | 弹窗宽度，单位 `px`。                                                                                              |
 | beforeCrop    | `function` | -            | 裁切前执行，若返回 `false` 弹框将不会打开（不支持 `Promise`）。Upload 组件的 `beforeUpload` 在裁切后、上传前执行。 |
 
+> `new File` 错误？请尝试 https://github.com/jimmywarting/FormData/issues/11#issuecomment-277522987
+
 ## 协议
 
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)

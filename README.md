@@ -46,6 +46,8 @@ const Demo = () => (
 | modalWidth    | `number`   | `520`          | Width of modal in `px`.                                                                                                                                   |
 | beforeCrop    | `function` | -              | Execute before crop, modal will not open if return `false` (Not support `Promise`). `beforeUpload` prop of Upload will execute after crop, before upload. |
 
+> `new File` error? try https://github.com/jimmywarting/FormData/issues/11#issuecomment-277522987
+
 ## License
 
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)
