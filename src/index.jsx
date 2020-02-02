@@ -1,38 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
+import Modal from 'antd/es/modal';
 import ReactCrop from 'react-image-crop';
-import { Modal } from 'antd';
-import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
+
+import 'antd/es/modal/style/index.css';
+import 'antd/es/button/style/index.css';
 import './index.scss';
 
-try {
-  new File([], '');
-} catch (err) {
-  // 兼容 IE new File()
-  import('canvas-toBlob').then(() => {
-    /* eslint-disable-next-line */
-    File = class File extends Blob {
-      constructor(chunks, filename, opts = {}) {
-        super(chunks, opts);
-        this.lastModifiedDate = new Date();
-        this.lastModified = +this.lastModifiedDate;
-        this.name = filename;
-      }
-    };
-  });
-}
-
-const WARN_DEPRECATED_USE_RATIO = "'useRatio' is deprecated, please use 'contain' instead";
 const MODAL_TITLE = 'Edit image';
 
 class ImgCrop extends Component {
   constructor(props) {
     super(props);
-    // eslint-disable-next-line
-    if (props.useRatio !== undefined) {
-      console.warn(WARN_DEPRECATED_USE_RATIO);
-    }
-
     this.state = {
       modalVisible: false,
       src: null,
@@ -117,7 +97,7 @@ class ImgCrop extends Component {
     if (realCropWidth > realImgWidth || realCropHeight > realImgHeight) {
       contain = true;
     } else {
-      contain = this.props.contain || this.props.useRatio; // eslint-disable-line
+      contain = this.props.contain;
     }
 
     // 设置数值大小
