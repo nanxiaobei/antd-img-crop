@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import Modal from 'antd/es/modal';
+import Slider from 'antd/es/slider';
+import Col from 'antd/es/col';
+import Row from 'antd/es/row';
 import ReactCrop from 'react-image-crop';
 
 import 'antd/es/modal/style/index.css';
 import 'antd/es/button/style/index.css';
+import 'antd/es/slider/style/index.css';
+import 'antd/es/grid/style/index.css';
 import './index.scss';
 
 const MODAL_TITLE = 'Edit image';
+const ZOOM_TITLE = 'Zoom';
+const ROTATION_TITLE = 'Rotation';
 
 class ImgCrop extends Component {
   constructor(props) {
@@ -17,6 +24,10 @@ class ImgCrop extends Component {
       modalVisible: false,
       src: null,
       crop: {},
+      rotationDegree: 0,
+      zoomScale: 1,
+      imageTranslateX: 0,
+      imageTranslateY: 0,
     };
   }
 
@@ -164,6 +175,56 @@ class ImgCrop extends Component {
       },
     });
 
+    const { zoom } = this.props;
+
+    if (zoom) {
+      let offsetX;
+      let offsetY;
+      let coordX;
+      let coordY;
+      let isDragInProgress;
+
+      const startDrag = (event) => {
+        const { zoomScale, imageTranslateX, imageTranslateY } = this.state;
+        if (zoomScale === 1 || event.button !== 0) {
+          return;
+        }
+        if (!event) {
+          event = window.event;
+        }
+
+        offsetX = event.clientX;
+        offsetY = event.clientY;
+
+        coordX = parseInt(imageTranslateX);
+        coordY = parseInt(imageTranslateY);
+
+        isDragInProgress = true;
+        this.image.onmousemove = onDrag;
+        return false;
+      };
+
+      const onDrag = (event) => {
+        const { zoomScale } = this.state;
+        if (zoomScale === 1 || !isDragInProgress) {
+          return;
+        }
+
+        this.setState({
+          imageTranslateX: coordX + event.clientX - offsetX,
+          imageTranslateY: coordY + event.clientY - offsetY,
+        });
+        return false;
+      };
+
+      const stopDrag = () => {
+        isDragInProgress = false;
+      };
+
+      this.image.onmousedown = startDrag;
+      this.image.onmouseup = stopDrag;
+    }
+
     return false;
   };
   // 响应裁切变化
@@ -176,7 +237,7 @@ class ImgCrop extends Component {
    */
   // 点击确定
   onOk = async () => {
-    const { crop } = this.state;
+    const { crop, rotationDegree, zoomScale } = this.state;
     let { width: sWidth, height: sHeight } = crop;
 
     if (!sWidth || !sHeight) {
@@ -184,16 +245,19 @@ class ImgCrop extends Component {
       return;
     }
 
-    const image = this.image;
+    let image = this.image;
     const scale = this.scale;
 
     let { x: sx, y: sy } = crop;
+    let { imageTranslateX, imageTranslateY } = this.state;
 
     if (scale !== undefined) {
       sx = sx * scale;
       sy = sy * scale;
       sWidth = sWidth * scale;
       sHeight = sHeight * scale;
+      imageTranslateX = imageTranslateX * scale;
+      imageTranslateY = imageTranslateY * scale;
     }
 
     const { width: dWidth, height: dHeight } = this.props;
@@ -203,6 +267,36 @@ class ImgCrop extends Component {
     canvas.width = dWidth;
     canvas.height = dHeight;
     const ctx = canvas.getContext('2d');
+
+    //Redraw the image only if it has been modified
+    if (rotationDegree || zoomScale > 1) {
+      const canvas1 = document.createElement('canvas');
+      canvas1.width = image.naturalWidth;
+      canvas1.height = image.naturalHeight;
+      const ctx1 = canvas1.getContext('2d');
+
+      const canvas1HalfWidth = canvas1.width / 2;
+      const canvas1HalfHeight = canvas1.height / 2;
+
+      ctx1.translate(canvas1HalfWidth, canvas1HalfHeight);
+      ctx1.translate(imageTranslateX, imageTranslateY);
+
+      //Apply the zoom
+      if (zoomScale > 1) {
+        ctx1.scale(zoomScale, zoomScale);
+      }
+
+      //Apply the rotation
+      if (rotationDegree) {
+        ctx1.rotate((rotationDegree * Math.PI) / 180);
+      }
+
+      ctx1.translate(-canvas1HalfWidth, -canvas1HalfHeight);
+
+      //Redraw the image
+      ctx1.drawImage(image, 0, 0);
+      image = canvas1;
+    }
     ctx.drawImage(image, sx, sy, sWidth, sHeight, 0, 0, dWidth, dHeight);
 
     const { name, type, uid } = this.oldFile;
@@ -243,12 +337,56 @@ class ImgCrop extends Component {
     this.oldFile = undefined;
     this.image = undefined;
     this.scale = undefined;
-    this.setState({ modalVisible: false, crop: {} });
+    this.setState({
+      modalVisible: false,
+      crop: {},
+      rotationDegree: 0,
+      zoomScale: 1,
+      imageTranslateX: 0,
+      imageTranslateY: 0,
+    });
+  };
+
+  onRotationDegreeChange = (value) => {
+    this.setState({
+      rotationDegree: value,
+    });
+  };
+
+  onZoomScaleChange = (value) => {
+    this.setState({
+      zoomScale: value,
+    });
+    if (value === 1) {
+      this.setState({
+        imageTranslateX: 0,
+        imageTranslateY: 0,
+      });
+    }
   };
 
   render() {
-    const { modalTitle, modalWidth, resize, resizeAndDrag } = this.props;
-    const { modalVisible, src, crop } = this.state;
+    const {
+      modalTitle,
+      modalWidth,
+      resize,
+      resizeAndDrag,
+      rotation,
+      rotationText,
+      zoom,
+      zoomText,
+    } = this.props;
+    const {
+      modalVisible,
+      src,
+      crop,
+      rotationDegree,
+      zoomScale,
+      imageTranslateX,
+      imageTranslateY,
+    } = this.state;
+
+    const transformStyle = `translate(${imageTranslateX}px, ${imageTranslateY}px) rotate(${rotationDegree}deg) scale(${zoomScale})`;
 
     return (
       <LocaleReceiver>
@@ -266,15 +404,62 @@ class ImgCrop extends Component {
               destroyOnClose
             >
               {src && (
-                <ReactCrop
-                  src={src}
-                  crop={crop}
-                  locked={resize === false}
-                  disabled={resizeAndDrag === false}
-                  onImageLoaded={this.onImageLoaded}
-                  onChange={this.onCropChange}
-                  keepSelection
-                />
+                <>
+                  <ReactCrop
+                    src={src}
+                    crop={crop}
+                    locked={resize === false}
+                    disabled={resizeAndDrag === false}
+                    onImageLoaded={this.onImageLoaded}
+                    onChange={this.onCropChange}
+                    keepSelection
+                    imageStyle={{
+                      transform: transformStyle,
+                      MozTransform: transformStyle,
+                      WebkitTransform: transformStyle,
+                      OTransform: transformStyle,
+                      MsTransform: transformStyle,
+                      cursor: zoomScale > 1 ? 'grab' : 'inherit',
+                    }}
+                  />
+                  {zoom && (
+                    <>
+                      <div className="break" />
+                      <Row className="functionality-box">
+                        <Col span={6} className="title">
+                          <strong>{zoomText ? zoomText : ZOOM_TITLE}</strong>
+                        </Col>
+                        <Col span={18}>
+                          <Slider
+                            min={1}
+                            max={3}
+                            step={0.1}
+                            onChange={this.onZoomScaleChange}
+                            value={typeof zoomScale === 'number' ? zoomScale : 1}
+                          />
+                        </Col>
+                      </Row>
+                    </>
+                  )}
+                  {rotation && (
+                    <>
+                      <div className="break" />
+                      <Row className="functionality-box">
+                        <Col span={6} className="title">
+                          <strong>{rotationText ? rotationText : ROTATION_TITLE}</strong>
+                        </Col>
+                        <Col span={18}>
+                          <Slider
+                            min={0}
+                            max={360}
+                            onChange={this.onRotationDegreeChange}
+                            value={typeof rotationDegree === 'number' ? rotationDegree : 0}
+                          />
+                        </Col>
+                      </Row>
+                    </>
+                  )}
+                </>
               )}
             </Modal>
           </>
@@ -296,6 +481,11 @@ ImgCrop.propTypes = {
   beforeCrop: PropTypes.func,
 
   children: PropTypes.node,
+
+  rotation: PropTypes.bool,
+  rotationTitle: PropTypes.string,
+  zoom: PropTypes.bool,
+  zoomTitle: PropTypes.string,
 };
 
 ImgCrop.defaultProps = {
@@ -307,6 +497,9 @@ ImgCrop.defaultProps = {
 
   modalTitle: MODAL_TITLE,
   modalWidth: 520,
+
+  rotation: false,
+  zoom: false,
 };
 
 export default ImgCrop;

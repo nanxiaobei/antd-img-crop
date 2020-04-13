@@ -45,6 +45,10 @@ const Demo = () => (
 | modalTitle    | `string`   | `"Edit image"` | Title of modal.                                                                                                                                           |
 | modalWidth    | `number`   | `520`          | Width of modal in `px`.                                                                                                                                   |
 | beforeCrop    | `function` | -              | Execute before crop, modal will not open if return `false` (Not support `Promise`). `beforeUpload` prop of Upload will execute after crop, before upload. |
+| rotation      | `boolean`  | `false`        | If image can rotate                                                                                                                                       |
+| rotationTitle | `string`   | `"Rotation"`   | Title of rotation functionality                                                                                                                           |
+| zoom          | `boolean`  | `false`        | If image can be zoomed                                                                                                                                    |
+| zoomTitle     | `string`   | `"Zoom"`       | Title of zoom functionality                                                                                                                               |
 
 > `new File` error? try https://github.com/jimmywarting/FormData/issues/11#issuecomment-277522987
 

@@ -5,8 +5,22 @@
     .ant-modal-body {
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       .ReactCrop__image {
         max-height: none;
+      }
+      .functionality-box {
+        flex-grow: 1;
+        .title {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          padding-right: 10px;
+        }
+      }
+      .break {
+        flex-basis: 100%;
+        height: 0;
       }
     }
   }
