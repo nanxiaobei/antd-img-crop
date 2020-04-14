@@ -372,9 +372,9 @@ class ImgCrop extends Component {
       resize,
       resizeAndDrag,
       rotation,
-      rotationText,
+      rotationTitle,
       zoom,
-      zoomText,
+      zoomTitle,
     } = this.props;
     const {
       modalVisible,
@@ -427,7 +427,7 @@ class ImgCrop extends Component {
                       <div className="break" />
                       <Row className="functionality-box">
                         <Col span={6} className="title">
-                          <strong>{zoomText ? zoomText : ZOOM_TITLE}</strong>
+                          <strong>{zoomTitle ? zoomTitle : ZOOM_TITLE}</strong>
                         </Col>
                         <Col span={18}>
                           <Slider
@@ -446,7 +446,7 @@ class ImgCrop extends Component {
                       <div className="break" />
                       <Row className="functionality-box">
                         <Col span={6} className="title">
-                          <strong>{rotationText ? rotationText : ROTATION_TITLE}</strong>
+                          <strong>{rotationTitle ? rotationTitle : ROTATION_TITLE}</strong>
                         </Col>
                         <Col span={18}>
                           <Slider
