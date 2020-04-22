@@ -264,7 +264,7 @@ class ImgCrop extends Component {
       degree: 0,
     });
   };
-  // 图片旋转
+  // 旋转图片
   onRotate = (degree) => {
     this.setState({ degree });
   };
@@ -326,7 +326,6 @@ ImgCrop.propTypes = {
   modalTitle: PropTypes.string,
   modalWidth: PropTypes.number,
   beforeCrop: PropTypes.func,
-
   rotate: PropTypes.bool,
   rotateLabel: PropTypes.string,
 
@@ -342,7 +341,6 @@ ImgCrop.defaultProps = {
 
   modalTitle: MODAL_TITLE,
   modalWidth: 520,
-
   rotate: false,
   rotateLabel: ROTATE_LABEL,
 };
