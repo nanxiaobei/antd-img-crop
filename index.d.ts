@@ -16,6 +16,6 @@ declare module 'antd-img-crop' {
     zooom?: boolean;
     zoomTitle?: string;
   }
-  export class ImgCrop extends Component<ImgCropProps> { }
+  export class ImgCrop extends Component<ImgCropProps> {}
   export default ImgCrop;
 }
