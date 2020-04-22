@@ -11,10 +11,8 @@ declare module 'antd-img-crop' {
     modalTitle?: string;
     modalWidth?: number;
     beforeCrop?: () => boolean;
-    rotation?: boolean;
-    rotationTitle?: string;
-    zooom?: boolean;
-    zoomTitle?: string;
+    rotate?: boolean;
+    rotateLabel?: string;
   }
   export class ImgCrop extends Component<ImgCropProps> {}
   export default ImgCrop;
