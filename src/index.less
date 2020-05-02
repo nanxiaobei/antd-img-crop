@@ -1,0 +1,44 @@
+@pkg: antd-img-crop;
+
+.@{pkg}-modal {
+  .@{pkg}-container {
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    margin-bottom: 16px;
+  }
+  .@{pkg}-action {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    + .@{pkg}-action {
+      margin-top: 12px;
+    }
+    &.zoom i {
+      font-size: 20px;
+    }
+    &.rotate i {
+      font-size: 18px;
+      &:first-of-type {
+        transform: rotate(5deg);
+      }
+      &:last-of-type {
+        transform: rotate(90deg);
+      }
+    }
+    i {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      font-style: normal;
+    }
+    .ant-slider {
+      flex: 1;
+      margin: 0 12px;
+    }
+  }
+}
