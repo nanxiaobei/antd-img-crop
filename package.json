@@ -21,7 +21,8 @@
   "types": "index.d.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "scripts": {
     "build": "rimraf dist && rollup -c"
