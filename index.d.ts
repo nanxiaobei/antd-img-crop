@@ -1,19 +1,13 @@
-// @ts-ignore
-import { Component } from 'react';
+import * as React from 'react';
 
-declare module 'antd-img-crop' {
-  export interface ImgCropProps {
-    width?: number;
-    height?: number;
-    contain?: boolean;
-    resize?: boolean;
-    resizeAndDrag?: boolean;
-    modalTitle?: string;
-    modalWidth?: number;
-    beforeCrop?: () => boolean;
-    rotate?: boolean;
-    rotateLabel?: string;
-  }
-  export class ImgCrop extends Component<ImgCropProps> {}
-  export default ImgCrop;
+export interface ImgCropProps {
+  aspect?: number;
+  shape?: 'rect' | 'round';
+  zoom?: boolean;
+  rotate?: boolean;
+  beforeCrop?: (file: File, fileList: File[]) => boolean;
+  modalTitle?: string;
+  modalWidth?: number | string;
 }
+declare const ImgCrop: React.FC<ImgCropProps>;
+export default ImgCrop;
