@@ -1,6 +1,6 @@
 import replace from '@rollup/plugin-replace';
 import babel from 'rollup-plugin-babel';
-import sass from 'rollup-plugin-sass';
+import less from 'rollup-plugin-less';
 import pkg from './package.json';
 
 const input = 'src/index.jsx';
@@ -12,7 +12,7 @@ const plugins = (isCjs) => [
     plugins: [['@babel/plugin-transform-runtime', { useESModules: !isCjs }]],
     runtimeHelpers: true,
   }),
-  sass({ insert: true }),
+  less({ insert: true, output: false }),
 ];
 
 export default [
