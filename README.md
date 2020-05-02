@@ -1,6 +1,6 @@
 # antd-img-crop
 
-An image cropper for [Upload](https://ant.design/components/upload/) of Ant Design.
+An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
 
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
 [![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
@@ -34,20 +34,15 @@ const Demo = () => (
 
 ## Props
 
-| Name          | Type       | Default        | Description                                                                                       |
-| ------------- | ---------- | -------------- | ------------------------------------------------------------------------------------------------- |
-| width         | `number`   | `100`          | Width of cropped image in `px`                                                                    |
-| height        | `number`   | `100`          | Height of cropped image in `px`                                                                   |
-| contain       | `boolean`  | `false`        | Consistent with `background-size: contain`, crop area will fill the width or height               |
-| resize        | `boolean`  | `true`         | If crop area can resize                                                                           |
-| resizeAndDrag | `boolean`  | `true`         | If crop area can resize and drag                                                                  |
-| modalTitle    | `string`   | `'Edit image'` | Title of modal                                                                                    |
-| modalWidth    | `number`   | `520`          | Width of modal in `px`                                                                            |
-| beforeCrop    | `function` | -              | If return `false`, modal will not open. Call order: `beforeCrop` → crop → `beforeUpload` → upload |
-| rotate        | `boolean`  | `false`        | If image can rotate                                                                               |
-| rotateLabel   | `string`   | `'Rotate'`     | Rotate label                                                                                      |
-
-> `new File` error? try https://github.com/jimmywarting/FormData/issues/11#issuecomment-277522987
+| Name       | Type                 | Default        | Description                                                     |
+| ---------- | -------------------- | -------------- | --------------------------------------------------------------- |
+| aspect     | `number`             | `1 / 1`        | Aspect of the crop area , `width / height`                      |
+| shape      | `string`             | `'rect'`       | Shape of the crop area, `'rect'` or `'round'`                   |
+| zoom       | `boolean`            | `true`         | Enable zoom for the image                                       |
+| rotate     | `boolean`            | `false`        | Enable rotate for the image                                     |
+| beforeCrop | `function`           | -              | Called before the model open, if return `false`, it'll not open |
+| modalTitle | `string`             | `'Edit image'` | Title of the modal                                              |
+| modalWidth | `number` \| `string` | `520`          | Width of the modal in pixels or percentages                     |
 
 ## License
 
