@@ -34,7 +34,7 @@ const Demo = () => (
 
 ## Props
 
-| Name       | Type                 | Default        | Description                                                     |
+| Prop       | Type                 | Default        | Description                                                     |
 | ---------- | -------------------- | -------------- | --------------------------------------------------------------- |
 | aspect     | `number`             | `1 / 1`        | Aspect of the crop area , `width / height`                      |
 | shape      | `string`             | `'rect'`       | Shape of the crop area, `'rect'` or `'round'`                   |
