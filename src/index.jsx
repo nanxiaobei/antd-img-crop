@@ -154,19 +154,19 @@ const ImgCrop = (props) => {
 
   const subZoomVal = useCallback(() => {
     if (!isMinZoom) setZoomVal(zoomVal - ZOOM_STEP);
-  }, [zoomVal, isMinZoom]);
+  }, [isMinZoom, zoomVal]);
 
   const addZoomVal = useCallback(() => {
     if (!isMaxZoom) setZoomVal(zoomVal + ZOOM_STEP);
-  }, [zoomVal, isMaxZoom]);
+  }, [isMaxZoom, zoomVal]);
 
   const subRotateVal = useCallback(() => {
     if (!isMinRotate) setRotateVal(rotateVal - ROTATE_STEP);
-  }, [rotateVal, isMinRotate]);
+  }, [isMinRotate, rotateVal]);
 
   const addRotateVal = useCallback(() => {
     if (!isMaxRotate) setRotateVal(rotateVal + ROTATE_STEP);
-  }, [rotateVal, isMaxRotate]);
+  }, [isMaxRotate, rotateVal]);
 
   /**
    * Modal
