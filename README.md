@@ -38,6 +38,7 @@ const Demo = () => (
 | ---------- | -------------------- | -------------- | --------------------------------------------------------------- |
 | aspect     | `number`             | `1 / 1`        | Aspect of the crop area , `width / height`                      |
 | shape      | `string`             | `'rect'`       | Shape of the crop area, `'rect'` or `'round'`                   |
+| grid       | `boolean`            | `false`        | Show grid of the crop area (third-lines)                        |
 | zoom       | `boolean`            | `true`         | Enable zoom for the image                                       |
 | rotate     | `boolean`            | `false`        | Enable rotate for the image                                     |
 | beforeCrop | `function`           | -              | Called before the model open, if return `false`, it'll not open |

@@ -38,6 +38,7 @@ const Demo = () => (
 | ---------- | -------------------- | ------------ | ---------------------------------------------- |
 | aspect     | `number`             | `1 / 1`      | 裁切区域宽高比，`width / height`               |
 | shape      | `string`             | `'rect'`     | 裁切区域形状，`'rect'` 或 `'round'`            |
+| grid       | `boolean`            | `false`      | 显示裁切区域网格（九宫格）                     |
 | zoom       | `boolean`            | `true`       | 启用图片缩放                                   |
 | rotate     | `boolean`            | `false`      | 启用图片旋转                                   |
 | beforeCrop | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开 |
