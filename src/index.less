@@ -7,38 +7,46 @@
     height: 40vh;
     margin-bottom: 24px;
   }
-  .@{pkg}-action {
+  .@{pkg}-control {
     display: flex;
     align-items: center;
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-    + .@{pkg}-action {
-      margin-top: 14px;
-    }
-    &.zoom i {
-      font-size: 18px;
-    }
-    &.rotate i {
-      font-size: 16px;
-      &:first-of-type {
-        transform: rotate(5deg);
-      }
-      &:last-of-type {
-        transform: rotate(90deg);
-      }
-    }
-    i {
+    button {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 24px;
-      height: 24px;
+      width: 34px;
+      height: 34px;
+      padding: 0;
       font-style: normal;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+    }
+    &.zoom {
+      margin-top: -8px;
+      button {
+        font-size: 18px;
+      }
+    }
+    &.rotate {
+      margin-bottom: -8px;
+      button {
+        font-size: 16px;
+        &:first-of-type {
+          transform: rotate(-40deg);
+        }
+        &:last-of-type {
+          transform: rotate(40deg);
+        }
+      }
     }
     .ant-slider {
       flex: 1;
-      margin: 0 12px;
+      margin: 0 8px;
     }
   }
 }

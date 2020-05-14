@@ -230,17 +230,17 @@ const ImgCrop = (props) => {
                 onComplete={onComplete}
               />
               {hasZoom && (
-                <div className={`${pkg}-action zoom`}>
-                  <i>－</i>
+                <div className={`${pkg}-control zoom`}>
+                  <button onClick={() => setZoomVal(zoomVal - 0.1)}>－</button>
                   <Slider min={1} max={3} step={0.1} value={zoomVal} onChange={setZoomVal} />
-                  <i>＋</i>
+                  <button onClick={() => setZoomVal(zoomVal + 0.1)}>＋</button>
                 </div>
               )}
               {hasRotate && (
-                <div className={`${pkg}-action rotate`}>
-                  <i>↻</i>
+                <div className={`${pkg}-control rotate`}>
+                  <button onClick={() => setRotateVal(rotateVal - 1)}>↺</button>
                   <Slider min={0} max={360} value={rotateVal} onChange={setRotateVal} />
-                  <i>↻</i>
+                  <button onClick={() => setRotateVal(rotateVal + 1)}>↻</button>
                 </div>
               )}
             </Modal>
