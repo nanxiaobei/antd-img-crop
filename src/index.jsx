@@ -32,6 +32,7 @@ const EasyCrop = (props) => {
     src,
     aspect,
     shape,
+    grid,
     hasZoom,
     zoomVal,
     rotateVal,
@@ -52,6 +53,7 @@ const EasyCrop = (props) => {
       image={src}
       aspect={aspect}
       cropShape={shape}
+      showGrid={grid}
       zoomWithScroll={hasZoom}
       crop={crop}
       zoom={zoomVal}
@@ -61,7 +63,6 @@ const EasyCrop = (props) => {
       onRotationChange={setRotateVal}
       onCropComplete={onCropComplete}
       classes={{ containerClassName: `${pkg}-container`, mediaClassName: MEDIA_CLASS }}
-      showGrid={false}
     />
   );
 };
@@ -70,6 +71,7 @@ EasyCrop.propTypes = {
   src: t.string,
   aspect: t.number,
   shape: t.string,
+  grid: t.bool,
   hasZoom: t.bool,
   zoomVal: t.number,
   rotateVal: t.number,
@@ -81,7 +83,7 @@ EasyCrop.propTypes = {
 const ImgCrop = (props) => {
   if (process.env.NODE_ENV !== 'production') deprecate(props);
 
-  const { aspect, shape, zoom, rotate, beforeCrop, modalTitle, modalWidth, children } = props;
+  const { aspect, shape, grid, zoom, rotate, beforeCrop, modalTitle, modalWidth, children } = props;
   const hasZoom = zoom === true;
   const hasRotate = rotate === true;
 
@@ -219,6 +221,7 @@ const ImgCrop = (props) => {
                 src={src}
                 aspect={aspect}
                 shape={shape}
+                grid={grid}
                 hasZoom={hasZoom}
                 zoomVal={zoomVal}
                 rotateVal={rotateVal}
@@ -252,6 +255,7 @@ ImgCrop.propTypes = {
   aspect: t.number,
   shape: t.oneOf(['rect', 'round']),
   zoom: t.bool,
+  grid: t.bool,
   rotate: t.bool,
   beforeCrop: t.func,
   modalTitle: t.string,
@@ -262,6 +266,7 @@ ImgCrop.propTypes = {
 ImgCrop.defaultProps = {
   aspect: 1,
   shape: 'rect',
+  grid: false,
   zoom: true,
   rotate: false,
   modalTitle: MODAL_TITLE,
