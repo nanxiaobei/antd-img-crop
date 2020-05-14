@@ -27,6 +27,14 @@ const deprecate = (props) => {
 const MEDIA_CLASS = `${pkg}-media`;
 const MODAL_TITLE = 'Edit image';
 
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 3;
+const ZOOM_STEP = 0.1;
+
+const MIN_ROTATE = 0;
+const MAX_ROTATE = 360;
+const ROTATE_STEP = 1;
+
 const EasyCrop = (props) => {
   const {
     src,
@@ -137,6 +145,30 @@ const ImgCrop = (props) => {
   );
 
   /**
+   * Controls
+   */
+  const isMinZoom = zoomVal === MIN_ZOOM;
+  const isMaxZoom = zoomVal === MAX_ZOOM;
+  const isMinRotate = rotateVal === MIN_ROTATE;
+  const isMaxRotate = rotateVal === MAX_ROTATE;
+
+  const subZoomVal = useCallback(() => {
+    if (!isMinZoom) setZoomVal(zoomVal - ZOOM_STEP);
+  }, [zoomVal, isMinZoom]);
+
+  const addZoomVal = useCallback(() => {
+    if (!isMaxZoom) setZoomVal(zoomVal + ZOOM_STEP);
+  }, [zoomVal, isMaxZoom]);
+
+  const subRotateVal = useCallback(() => {
+    if (!isMinRotate) setRotateVal(rotateVal - ROTATE_STEP);
+  }, [rotateVal, isMinRotate]);
+
+  const addRotateVal = useCallback(() => {
+    if (!isMaxRotate) setRotateVal(rotateVal + ROTATE_STEP);
+  }, [rotateVal, isMaxRotate]);
+
+  /**
    * Modal
    */
   const onClose = useCallback(() => {
@@ -231,16 +263,36 @@ const ImgCrop = (props) => {
               />
               {hasZoom && (
                 <div className={`${pkg}-control zoom`}>
-                  <button onClick={() => setZoomVal(zoomVal - 0.1)}>－</button>
-                  <Slider min={1} max={3} step={0.1} value={zoomVal} onChange={setZoomVal} />
-                  <button onClick={() => setZoomVal(zoomVal + 0.1)}>＋</button>
+                  <button onClick={subZoomVal} disabled={isMinZoom}>
+                    －
+                  </button>
+                  <Slider
+                    min={MIN_ZOOM}
+                    max={MAX_ZOOM}
+                    step={ZOOM_STEP}
+                    value={zoomVal}
+                    onChange={setZoomVal}
+                  />
+                  <button onClick={addZoomVal} disabled={isMaxZoom}>
+                    ＋
+                  </button>
                 </div>
               )}
               {hasRotate && (
                 <div className={`${pkg}-control rotate`}>
-                  <button onClick={() => setRotateVal(rotateVal - 1)}>↺</button>
-                  <Slider min={0} max={360} value={rotateVal} onChange={setRotateVal} />
-                  <button onClick={() => setRotateVal(rotateVal + 1)}>↻</button>
+                  <button onClick={subRotateVal} disabled={isMinRotate}>
+                    ↺
+                  </button>
+                  <Slider
+                    min={MIN_ROTATE}
+                    max={MAX_ROTATE}
+                    step={ROTATE_STEP}
+                    value={rotateVal}
+                    onChange={setRotateVal}
+                  />
+                  <button onClick={addRotateVal} disabled={isMaxRotate}>
+                    ↻
+                  </button>
                 </div>
               )}
             </Modal>

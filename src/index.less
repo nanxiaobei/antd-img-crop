@@ -1,11 +1,14 @@
 @pkg: antd-img-crop;
 
 .@{pkg}-modal {
+  .ant-modal-body {
+    padding-bottom: 16px;
+  }
   .@{pkg}-container {
     position: relative;
     width: 100%;
     height: 40vh;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
   .@{pkg}-control {
     display: flex;
@@ -25,23 +28,21 @@
       border: 0;
       outline: 0;
       cursor: pointer;
-    }
-    &.zoom {
-      margin-top: -8px;
-      button {
-        font-size: 18px;
+      &[disabled] {
+        opacity: 0.3;
+        cursor: default;
       }
     }
-    &.rotate {
-      margin-bottom: -8px;
-      button {
-        font-size: 16px;
-        &:first-of-type {
-          transform: rotate(-40deg);
-        }
-        &:last-of-type {
-          transform: rotate(40deg);
-        }
+    &.zoom button {
+      font-size: 18px;
+    }
+    &.rotate button {
+      font-size: 16px;
+      &:first-of-type {
+        transform: rotate(-20deg);
+      }
+      &:last-of-type {
+        transform: rotate(20deg);
       }
     }
     .ant-slider {
