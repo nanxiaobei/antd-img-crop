@@ -53,7 +53,7 @@ const EasyCrop = (props) => {
     (croppedArea, croppedAreaPixels) => {
       onComplete(croppedAreaPixels);
     },
-    [onComplete],
+    [onComplete]
   );
 
   return (
@@ -91,9 +91,27 @@ EasyCrop.propTypes = {
 const ImgCrop = (props) => {
   if (process.env.NODE_ENV !== 'production') deprecate(props);
 
-  const { aspect, shape, grid, zoom, rotate, beforeCrop, modalTitle, modalWidth, children } = props;
+  const {
+    aspect,
+    shape,
+    grid,
+    zoom,
+    rotate,
+    beforeCrop,
+    modalTitle,
+    modalWidth,
+    modelOk,
+    modelCancel,
+    children,
+  } = props;
+
   const hasZoom = zoom === true;
   const hasRotate = rotate === true;
+
+  const modelTextProps = { okText: modelOk, cancelText: modelCancel };
+  Object.keys(modelTextProps).forEach((key) => {
+    if (!modelTextProps[key]) delete modelTextProps[key];
+  });
 
   const [src, setSrc] = useState('');
   const [zoomVal, setZoomVal] = useState(1);
@@ -141,7 +159,7 @@ const ImgCrop = (props) => {
     (croppedAreaPixels) => {
       data.croppedAreaPixels = croppedAreaPixels;
     },
-    [data],
+    [data]
   );
 
   /**
@@ -248,6 +266,7 @@ const ImgCrop = (props) => {
               onCancel={onClose}
               maskClosable={false}
               destroyOnClose
+              {...modelTextProps}
             >
               <EasyCrop
                 src={src}
@@ -312,6 +331,8 @@ ImgCrop.propTypes = {
   beforeCrop: t.func,
   modalTitle: t.string,
   modalWidth: t.oneOfType([t.number, t.string]),
+  modelOk: t.string,
+  modelCancel: t.string,
   children: t.node,
 };
 
