@@ -44,8 +44,8 @@ const Demo = () => (
 | beforeCrop  | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开 |
 | modalTitle  | `string`             | `'编辑图片'` | 弹窗标题                                       |
 | modalWidth  | `number` \| `string` | `520`        | 弹窗宽度，像素值或百分比                       |
-| modelOk     | `string`             | `'确定'`     | 弹窗确定按钮文字                               |
-| modelCancel | `string`             | `'取消'`     | 弹窗取消按钮文字                               |
+| modalOk     | `string`             | `'确定'`     | 弹窗确定按钮文字                               |
+| modalCancel | `string`             | `'取消'`     | 弹窗取消按钮文字                               |
 
 ## 协议
 

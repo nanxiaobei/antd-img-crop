@@ -100,17 +100,17 @@ const ImgCrop = (props) => {
     beforeCrop,
     modalTitle,
     modalWidth,
-    modelOk,
-    modelCancel,
+    modalOk,
+    modalCancel,
     children,
   } = props;
 
   const hasZoom = zoom === true;
   const hasRotate = rotate === true;
 
-  const modelTextProps = { okText: modelOk, cancelText: modelCancel };
-  Object.keys(modelTextProps).forEach((key) => {
-    if (!modelTextProps[key]) delete modelTextProps[key];
+  const modalTextProps = { okText: modalOk, cancelText: modalCancel };
+  Object.keys(modalTextProps).forEach((key) => {
+    if (!modalTextProps[key]) delete modalTextProps[key];
   });
 
   const [src, setSrc] = useState('');
@@ -266,7 +266,7 @@ const ImgCrop = (props) => {
               onCancel={onClose}
               maskClosable={false}
               destroyOnClose
-              {...modelTextProps}
+              {...modalTextProps}
             >
               <EasyCrop
                 src={src}
@@ -331,8 +331,8 @@ ImgCrop.propTypes = {
   beforeCrop: t.func,
   modalTitle: t.string,
   modalWidth: t.oneOfType([t.number, t.string]),
-  modelOk: t.string,
-  modelCancel: t.string,
+  modalOk: t.string,
+  modalCancel: t.string,
   children: t.node,
 };
 

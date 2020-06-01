@@ -41,11 +41,11 @@ const Demo = () => (
 | grid        | `boolean`            | `false`        | Show grid of crop area (third-lines)                        |
 | zoom        | `boolean`            | `true`         | Enable zoom for image                                       |
 | rotate      | `boolean`            | `false`        | Enable rotate for image                                     |
-| beforeCrop  | `function`           | -              | Called before model open, if return `false`, it'll not open |
+| beforeCrop  | `function`           | -              | Called before modal open, if return `false`, it'll not open |
 | modalTitle  | `string`             | `'Edit image'` | Title of modal                                              |
 | modalWidth  | `number` \| `string` | `520`          | Width of modal in pixels or percentages                     |
-| modelOk     | `string`             | `'OK'`         | Text of confirm button of model                             |
-| modelCancel | `string`             | `'Cancel'`     | Text of cancel button of model                              |
+| modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                             |
+| modalCancel | `string`             | `'Cancel'`     | Text of cancel button of modal                              |
 
 ## License
 
