@@ -47,6 +47,15 @@ const Demo = () => (
 | modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                             |
 | modalCancel | `string`             | `'Cancel'`     | Text of cancel button of modal                              |
 
+## Styles
+
+`antd-img-crop` does not import the style files of the `antd` components used itself (in case that customizing the `antd` theme variables), so if your project does not import `Modal` or `Slider`, you may need to import the style files yourself:
+
+```js
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
+```
+
 ## License
 
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)
