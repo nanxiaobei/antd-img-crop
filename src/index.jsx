@@ -199,8 +199,8 @@ const ImgCrop = (props) => {
   const onOk = useCallback(async () => {
     onClose();
 
-    const img = document.querySelector(`.${MEDIA_CLASS}`);
-    const { naturalWidth, naturalHeight } = img;
+    const naturalImg = document.querySelector(`.${MEDIA_CLASS}`);
+    const { naturalWidth, naturalHeight } = naturalImg;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -220,7 +220,7 @@ const ImgCrop = (props) => {
     // draw the source image in the center of the max canvas
     const left = (maxLen - naturalWidth) / 2;
     const top = (maxLen - naturalHeight) / 2;
-    ctx.drawImage(img, left, top);
+    ctx.drawImage(naturalImg, left, top);
 
     // shrink the max canvas to the crop area size, then align two center points
     const maxImgData = ctx.getImageData(0, 0, maxLen, maxLen);
@@ -231,24 +231,32 @@ const ImgCrop = (props) => {
 
     // get the new image
     const { beforeUpload = () => true, file, resolve, reject } = data;
-    canvas.toBlob(async (blob) => {
-      blob.lastModifiedDate = Date.now();
-      blob.name = file.name;
-      blob.uid = file.uid;
+    const { type, name, uid } = file;
+    canvas.toBlob(
+      async (blob) => {
+        let newFile = blob;
 
-      const res = beforeUpload(blob, [blob]);
-      if (res === false) return reject();
-      if (res === true) return resolve(blob);
-      if (typeof res.then === 'function') {
-        try {
-          const newFile = await res;
-          const fileType = Object.prototype.toString.call(newFile);
-          resolve(fileType === '[object File]' || fileType === '[object Blob]' ? newFile : blob);
-        } catch (err) {
-          reject(err);
+        newFile.lastModifiedDate = Date.now();
+        newFile.name = name;
+        newFile.uid = uid;
+
+        const res = beforeUpload(newFile, [newFile]);
+        if (res === false) return reject();
+        if (res === true) return resolve(newFile);
+        if (typeof res.then === 'function') {
+          try {
+            const passedFile = await res;
+            const type = Object.prototype.toString.call(passedFile);
+            if (type === '[object File]' || type === '[object Blob]') newFile = passedFile;
+            resolve(newFile);
+          } catch (err) {
+            reject(err);
+          }
         }
-      }
-    });
+      },
+      type,
+      0.4
+    );
   }, [data, onClose, hasRotate, rotateVal]);
 
   return (
