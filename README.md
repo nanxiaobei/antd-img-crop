@@ -49,7 +49,9 @@ const Demo = () => (
 
 ## Styles
 
-`antd-img-crop` does not import the style files of the `antd` components used itself (in case of customizing the `antd` theme variables), so if your project does not import `Modal` or `Slider`, you may need to import the style files yourself:
+To prevent overwriting the custom styles to `antd`, `antd-img-crop` does not import the style files of components.
+
+Therefore, if your project configured `babel-plugin-import`, and not used `Modal` or `Slider`, you need to import the styles yourself:
 
 ```js
 import 'antd/es/modal/style';

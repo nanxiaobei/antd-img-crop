@@ -49,7 +49,9 @@ const Demo = () => (
 
 ## 样式
 
-`antd-img-crop` 未引入自用 `antd` 组件的样式文件（以防需要自定义 `antd` 主题变量），因此如果你的项目未引入 `Modal` 或 `Slider`，则可能需要自行引入样式文件：
+为防止覆盖自定义 `antd` 样式，`antd-img-crop` 中没有引入组件样式文件。
+
+因此如果你的项目配置了 `babel-plugin-import`，且未用到 `Modal` 或 `Slider`，则需自行引入样式：
 
 ```js
 import 'antd/es/modal/style';
