@@ -2,8 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
-import Modal from 'antd/es/modal';
-import Slider from 'antd/es/slider';
+import { Modal, Slider } from 'antd';
 import './index.less';
 
 const pkg = 'antd-img-crop';
