@@ -1,3 +1,4 @@
+import replace from '@rollup/plugin-replace';
 import babel from 'rollup-plugin-babel';
 import less from 'rollup-plugin-less';
 import pkg from './package.json';
@@ -5,6 +6,7 @@ import pkg from './package.json';
 const input = 'src/index.jsx';
 const external = (id) => !/index.less$/.test(id);
 const plugins = (isEsm) => [
+  !isEsm && replace({ '/es/': '/lib/' }),
   babel({
     presets: [
       ['@babel/preset-env', { targets: '> 0.25%, not dead', modules: false, loose: true }],
