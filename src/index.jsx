@@ -1,27 +1,12 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useLayoutEffect } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
-import { Modal, Slider } from 'antd';
+import Modal from 'antd/es/modal';
+import Slider from 'antd/es/slider';
 import './index.less';
 
 const pkg = 'antd-img-crop';
-const deprecateMap = {
-  width: 'aspect',
-  height: 'aspect',
-  contain: '',
-  resize: 'zoom',
-  resizeAndDrag: '',
-};
-const deprecate = (props) => {
-  Object.entries(deprecateMap).forEach(([key, val]) => {
-    if (props[key] === undefined) return;
-    let msg = `\`${key}\` is deprecated`;
-    if (val) msg += `, please use \`${val}\` instead`;
-    msg += `, see https://github.com/nanxiaobei/${pkg}`;
-    console.error(msg);
-  });
-};
 
 const MEDIA_CLASS = `${pkg}-media`;
 const MODAL_TITLE = 'Edit image';
@@ -88,8 +73,6 @@ EasyCrop.propTypes = {
 };
 
 const ImgCrop = (props) => {
-  if (process.env.NODE_ENV !== 'production') deprecate(props);
-
   const {
     aspect,
     shape,
@@ -101,6 +84,7 @@ const ImgCrop = (props) => {
     modalWidth,
     modalOk,
     modalCancel,
+    styleImport,
     children,
   } = props;
 
@@ -118,6 +102,21 @@ const ImgCrop = (props) => {
 
   const dataRef = useRef({});
   const data = dataRef.current;
+
+  /**
+   * Style
+   */
+  useLayoutEffect(() => {
+    if (styleImport === true) {
+      import('antd/es/modal/style');
+      import('antd/es/slider/style');
+      return;
+    }
+    if (styleImport === 'css') {
+      import('antd/es/modal/style/css');
+      import('antd/es/slider/style/css');
+    }
+  }, [styleImport]);
 
   /**
    * Upload
@@ -340,6 +339,7 @@ ImgCrop.propTypes = {
   modalWidth: t.oneOfType([t.number, t.string]),
   modalOk: t.string,
   modalCancel: t.string,
+  styleImport: t.oneOf([true, false, 'css']),
   children: t.node,
 };
 
@@ -351,6 +351,7 @@ ImgCrop.defaultProps = {
   rotate: false,
   modalTitle: MODAL_TITLE,
   modalWidth: 520,
+  styleImport: true,
 };
 
 export default ImgCrop;
