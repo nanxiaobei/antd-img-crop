@@ -34,18 +34,19 @@ const Demo = () => (
 
 ## Props
 
-| Prop        | Type                 | Default        | Description                                                 |
-| ----------- | -------------------- | -------------- | ----------------------------------------------------------- |
-| aspect      | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                      |
-| shape       | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                   |
-| grid        | `boolean`            | `false`        | Show grid of crop area (third-lines)                        |
-| zoom        | `boolean`            | `true`         | Enable zoom for image                                       |
-| rotate      | `boolean`            | `false`        | Enable rotate for image                                     |
-| beforeCrop  | `function`           | -              | Called before modal open, if return `false`, it'll not open |
-| modalTitle  | `string`             | `'Edit image'` | Title of modal                                              |
-| modalWidth  | `number` \| `string` | `520`          | Width of modal in pixels or percentages                     |
-| modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                             |
-| modalCancel | `string`             | `'Cancel'`     | Text of cancel button of modal                              |
+| Prop        | Type                  | Default        | Description                                                          |
+| ----------- | --------------------- | -------------- | -------------------------------------------------------------------- |
+| aspect      | `number`              | `1 / 1`        | Aspect of crop area , `width / height`                               |
+| shape       | `string`              | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                            |
+| grid        | `boolean`             | `false`        | Show grid of crop area (third-lines)                                 |
+| zoom        | `boolean`             | `true`         | Enable zoom for image                                                |
+| rotate      | `boolean`             | `false`        | Enable rotate for image                                              |
+| beforeCrop  | `function`            | -              | Called before modal open, if return `false`, it'll not open          |
+| modalTitle  | `string`              | `'Edit image'` | Title of modal                                                       |
+| modalWidth  | `number` \| `string`  | `520`          | Width of modal in pixels or percentages                              |
+| modalOk     | `string`              | `'OK'`         | Text of confirm button of modal                                      |
+| modalCancel | `string`              | `'Cancel'`     | Text of cancel button of modal                                       |
+| styleImport | `boolean` \| `string` | `true`         | Style import type, `true` → less, `false` → no import, `'css'` → css |
 
 ## License
 
