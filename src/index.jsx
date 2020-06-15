@@ -113,8 +113,9 @@ const ImgCrop = (props) => {
       return;
     }
     if (styleImport === 'css') {
-      import('antd/es/modal/style/css');
-      import('antd/es/slider/style/css');
+      const dir = 'style';
+      import(`antd/es/modal/${dir}/css`);
+      import(`antd/es/slider/${dir}/css`);
     }
   }, [styleImport]);
 
