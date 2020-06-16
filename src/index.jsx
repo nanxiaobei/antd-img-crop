@@ -108,14 +108,17 @@ const ImgCrop = (props) => {
    */
   useLayoutEffect(() => {
     if (styleImport === true) {
-      import('antd/es/modal/style');
-      import('antd/es/slider/style');
+      const modal = 'antd/es/modal/style';
+      const slider = 'antd/es/slider/style';
+      import(`${modal}`);
+      import(`${slider}`);
       return;
     }
     if (styleImport === 'css') {
-      const dir = 'style';
-      import(`antd/es/modal/${dir}/css`);
-      import(`antd/es/slider/${dir}/css`);
+      const modal = 'antd/es/modal/style/css';
+      const slider = 'antd/es/slider/style/css';
+      import(`${modal}`);
+      import(`${slider}`);
     }
   }, [styleImport]);
 
