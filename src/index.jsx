@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, forwardRef } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
@@ -19,7 +19,7 @@ const MIN_ROTATE = 0;
 const MAX_ROTATE = 360;
 const ROTATE_STEP = 1;
 
-const EasyCrop = (props) => {
+const EasyCrop = forwardRef((props) => {
   const {
     src,
     aspect,
@@ -57,7 +57,7 @@ const EasyCrop = (props) => {
       classes={{ containerClassName: `${pkg}-container`, mediaClassName: MEDIA_CLASS }}
     />
   );
-};
+});
 
 EasyCrop.propTypes = {
   src: t.string,
@@ -72,7 +72,7 @@ EasyCrop.propTypes = {
   onComplete: t.func,
 };
 
-const ImgCrop = (props) => {
+const ImgCrop = forwardRef((props) => {
   const {
     aspect,
     shape,
@@ -310,7 +310,7 @@ const ImgCrop = (props) => {
       )}
     </LocaleReceiver>
   );
-};
+});
 
 ImgCrop.propTypes = {
   aspect: t.number,
