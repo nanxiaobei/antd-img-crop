@@ -47,6 +47,17 @@ const Demo = () => (
 | modalOk     | `string`             | `'确定'`     | 弹窗确定按钮文字                               |
 | modalCancel | `string`             | `'取消'`     | 弹窗取消按钮文字                               |
 
+## 样式
+
+为防止覆盖自定义 `antd` 样式，`antd-img-crop` 中没有引入组件样式文件。
+
+因此如果你的项目配置了 `babel-plugin-import`，且未用到 `Modal` 或 `Slider`，则需自行引入样式：
+
+```js
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
+```
+
 ## 协议
 
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)
