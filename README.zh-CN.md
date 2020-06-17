@@ -34,19 +34,18 @@ const Demo = () => (
 
 ## Props
 
-| 属性        | 类型                  | 默认         | 说明                                                         |
-| ----------- | --------------------- | ------------ | ------------------------------------------------------------ |
-| aspect      | `number`              | `1 / 1`      | 裁切区域宽高比，`width / height`                             |
-| shape       | `string`              | `'rect'`     | 裁切区域形状，`'rect'` 或 `'round'`                          |
-| grid        | `boolean`             | `false`      | 显示裁切区域网格（九宫格）                                   |
-| zoom        | `boolean`             | `true`       | 启用图片缩放                                                 |
-| rotate      | `boolean`             | `false`      | 启用图片旋转                                                 |
-| beforeCrop  | `function`            | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开               |
-| modalTitle  | `string`              | `'编辑图片'` | 弹窗标题                                                     |
-| modalWidth  | `number` \| `string`  | `520`        | 弹窗宽度，像素值或百分比                                     |
-| modalOk     | `string`              | `'确定'`     | 弹窗确定按钮文字                                             |
-| modalCancel | `string`              | `'取消'`     | 弹窗取消按钮文字                                             |
-| styleImport | `boolean` \| `string` | `true`       | 样式引入方式，`true` → less，`false` → 不引入，`'css'` → css |
+| 属性        | 类型                 | 默认         | 说明                                           |
+| ----------- | -------------------- | ------------ | ---------------------------------------------- |
+| aspect      | `number`             | `1 / 1`      | 裁切区域宽高比，`width / height`               |
+| shape       | `string`             | `'rect'`     | 裁切区域形状，`'rect'` 或 `'round'`            |
+| grid        | `boolean`            | `false`      | 显示裁切区域网格（九宫格）                     |
+| zoom        | `boolean`            | `true`       | 启用图片缩放                                   |
+| rotate      | `boolean`            | `false`      | 启用图片旋转                                   |
+| beforeCrop  | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开 |
+| modalTitle  | `string`             | `'编辑图片'` | 弹窗标题                                       |
+| modalWidth  | `number` \| `string` | `520`        | 弹窗宽度，像素值或百分比                       |
+| modalOk     | `string`             | `'确定'`     | 弹窗确定按钮文字                               |
+| modalCancel | `string`             | `'取消'`     | 弹窗取消按钮文字                               |
 
 ## 协议
 

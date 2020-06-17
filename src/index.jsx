@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useLayoutEffect } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
@@ -84,7 +84,6 @@ const ImgCrop = (props) => {
     modalWidth,
     modalOk,
     modalCancel,
-    styleImport,
     children,
   } = props;
 
@@ -102,25 +101,6 @@ const ImgCrop = (props) => {
 
   const dataRef = useRef({});
   const data = dataRef.current;
-
-  /**
-   * Style
-   */
-  useLayoutEffect(() => {
-    if (styleImport === true) {
-      const modal = 'antd/es/modal/style';
-      const slider = 'antd/es/slider/style';
-      import(`${modal}`);
-      import(`${slider}`);
-      return;
-    }
-    if (styleImport === 'css') {
-      const modal = 'antd/es/modal/style/css';
-      const slider = 'antd/es/slider/style/css';
-      import(`${modal}`);
-      import(`${slider}`);
-    }
-  }, [styleImport]);
 
   /**
    * Upload
@@ -343,7 +323,6 @@ ImgCrop.propTypes = {
   modalWidth: t.oneOfType([t.number, t.string]),
   modalOk: t.string,
   modalCancel: t.string,
-  styleImport: t.oneOf([true, false, 'css']),
   children: t.node,
 };
 
@@ -355,7 +334,6 @@ ImgCrop.defaultProps = {
   rotate: false,
   modalTitle: MODAL_TITLE,
   modalWidth: 520,
-  styleImport: true,
 };
 
 export default ImgCrop;
