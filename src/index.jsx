@@ -7,6 +7,7 @@ import Slider from 'antd/es/slider';
 import './index.less';
 
 const pkg = 'antd-img-crop';
+const noop = () => {};
 
 const MEDIA_CLASS = `${pkg}-media`;
 const MODAL_TITLE = 'Edit image';
@@ -19,7 +20,7 @@ const MIN_ROTATE = 0;
 const MAX_ROTATE = 360;
 const ROTATE_STEP = 1;
 
-const EasyCrop = forwardRef((props) => {
+const EasyCrop = forwardRef((props, ref) => {
   const {
     src,
     aspect,
@@ -32,7 +33,9 @@ const EasyCrop = forwardRef((props) => {
     setRotateVal,
     onComplete,
   } = props;
+
   const [crop, setCrop] = useState({ x: 0, y: 0 });
+
   const onCropComplete = useCallback(
     (croppedArea, croppedAreaPixels) => {
       onComplete(croppedAreaPixels);
@@ -42,6 +45,7 @@ const EasyCrop = forwardRef((props) => {
 
   return (
     <Cropper
+      ref={ref}
       image={src}
       aspect={aspect}
       cropShape={shape}
@@ -72,7 +76,7 @@ EasyCrop.propTypes = {
   onComplete: t.func,
 };
 
-const ImgCrop = forwardRef((props) => {
+const ImgCrop = forwardRef((props, ref) => {
   const {
     aspect,
     shape,
@@ -99,18 +103,25 @@ const ImgCrop = forwardRef((props) => {
   const [zoomVal, setZoomVal] = useState(1);
   const [rotateVal, setRotateVal] = useState(0);
 
-  const dataRef = useRef({});
-  const data = dataRef.current;
+  const beforeUploadRef = useRef();
+  const fileRef = useRef();
+  const resolveRef = useRef(noop);
+  const rejectRef = useRef(noop);
+
+  const cropPixelsRef = useRef();
 
   /**
    * Upload
    */
   const renderUpload = useCallback(() => {
     const upload = Array.isArray(children) ? children[0] : children;
-    if (!data.uploadProps) {
-      const { accept, beforeUpload } = upload.props;
-      data.beforeUpload = beforeUpload;
-      data.uploadProps = {
+    const { beforeUpload, accept, ...restUploadProps } = upload.props;
+    beforeUploadRef.current = beforeUpload;
+
+    return {
+      ...upload,
+      props: {
+        ...restUploadProps,
         accept: accept || 'image/*',
         beforeUpload: (file, fileList) =>
           new Promise((resolve, reject) => {
@@ -119,9 +130,9 @@ const ImgCrop = forwardRef((props) => {
               return;
             }
 
-            data.file = file;
-            data.resolve = resolve;
-            data.reject = reject;
+            fileRef.current = file;
+            resolveRef.current = resolve;
+            rejectRef.current = reject;
 
             const reader = new FileReader();
             reader.addEventListener('load', () => {
@@ -129,20 +140,16 @@ const ImgCrop = forwardRef((props) => {
             });
             reader.readAsDataURL(file);
           }),
-      };
-    }
-    return { ...upload, props: { ...upload.props, ...data.uploadProps } };
-  }, [data, children, beforeCrop]);
+      },
+    };
+  }, [beforeCrop, children]);
 
   /**
    * EasyCrop
    */
-  const onComplete = useCallback(
-    (croppedAreaPixels) => {
-      data.croppedAreaPixels = croppedAreaPixels;
-    },
-    [data]
-  );
+  const onComplete = useCallback((croppedAreaPixels) => {
+    cropPixelsRef.current = croppedAreaPixels;
+  }, []);
 
   /**
    * Controls
@@ -175,7 +182,6 @@ const ImgCrop = forwardRef((props) => {
     setSrc('');
     setZoomVal(1);
     setRotateVal(0);
-    dataRef.current = {};
   }, []);
 
   const onOk = useCallback(async () => {
@@ -206,14 +212,13 @@ const ImgCrop = forwardRef((props) => {
 
     // shrink the max canvas to the crop area size, then align two center points
     const maxImgData = ctx.getImageData(0, 0, maxLen, maxLen);
-    const { width, height, x, y } = data.croppedAreaPixels;
+    const { width, height, x, y } = cropPixelsRef.current;
     canvas.width = width;
     canvas.height = height;
     ctx.putImageData(maxImgData, -left - x, -top - y);
 
     // get the new image
-    const { beforeUpload = () => true, file, resolve, reject } = data;
-    const { type, name, uid } = file;
+    const { type, name, uid } = fileRef.current;
     canvas.toBlob(
       async (blob) => {
         let newFile = blob;
@@ -222,24 +227,32 @@ const ImgCrop = forwardRef((props) => {
         newFile.name = name;
         newFile.uid = uid;
 
-        const res = beforeUpload(newFile, [newFile]);
-        if (res === false) return reject();
-        if (res === true) return resolve(newFile);
-        if (typeof res.then === 'function') {
+        if (typeof beforeUploadRef.current !== 'function') return resolveRef.current(newFile);
+
+        const res = beforeUploadRef.current(newFile, [newFile]);
+
+        if (typeof res !== 'boolean' && !res) {
+          console.error('beforeUpload must return a boolean or Promise');
+          return;
+        }
+
+        if (res === true) return resolveRef.current(newFile);
+        if (res === false) return rejectRef.current('not upload');
+        if (res && typeof res.then === 'function') {
           try {
             const passedFile = await res;
             const type = Object.prototype.toString.call(passedFile);
             if (type === '[object File]' || type === '[object Blob]') newFile = passedFile;
-            resolve(newFile);
+            resolveRef.current(newFile);
           } catch (err) {
-            reject(err);
+            rejectRef.current(err);
           }
         }
       },
       type,
       0.4
     );
-  }, [data, onClose, hasRotate, rotateVal]);
+  }, [hasRotate, onClose, rotateVal]);
 
   return (
     <LocaleReceiver>
@@ -259,6 +272,7 @@ const ImgCrop = forwardRef((props) => {
               {...modalTextProps}
             >
               <EasyCrop
+                ref={ref}
                 src={src}
                 aspect={aspect}
                 shape={shape}
