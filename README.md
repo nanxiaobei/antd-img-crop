@@ -11,7 +11,7 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Demo
 
-[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14)
+[Live demo](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4)
 
 ## Install
 

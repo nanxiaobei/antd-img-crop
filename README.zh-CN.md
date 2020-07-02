@@ -11,7 +11,7 @@
 
 ## 示例
 
-[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14)
+[在线示例](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4)
 
 ## 安装
 
