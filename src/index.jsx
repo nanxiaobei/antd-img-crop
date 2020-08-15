@@ -215,7 +215,7 @@ const ImgCrop = forwardRef((props, ref) => {
     const { width, height, x, y } = cropPixelsRef.current;
     canvas.width = width;
     canvas.height = height;
-    ctx.putImageData(maxImgData, -left - x, -top - y);
+    ctx.putImageData(maxImgData, Math.round(-left - x), Math.round(-top - y));
 
     // get the new image
     const { type, name, uid } = fileRef.current;
