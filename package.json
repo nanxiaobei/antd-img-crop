@@ -34,26 +34,26 @@
     "react-dom": "^16.8.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.2",
-    "react-easy-crop": "^3.0.1"
+    "@babel/runtime": "^7.11.2",
+    "react-easy-crop": "^3.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-transform-runtime": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
-    "@babel/preset-react": "^7.10.1",
+    "@babel/core": "^7.11.1",
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
     "@rollup/plugin-replace": "^2.3.3",
-    "@types/react": "^16.9.38",
-    "antd": "^4.3.4",
-    "eslint": "^7.2.0",
+    "@types/react": "^16.9.46",
+    "antd": "^4.5.4",
+    "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react-app": "^6.2.2",
     "prettier": "^2.0.5",
-    "rollup": "^2.17.0",
+    "rollup": "^2.26.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-less": "^1.1.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.7"
   },
   "eslintIgnore": [
     "dist",
