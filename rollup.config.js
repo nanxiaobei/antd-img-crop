@@ -19,6 +19,11 @@ const plugins = (isEsm) => [
 ];
 
 export default [
-  { input, output: { file: pkg.main, format: 'cjs' }, external, plugins: plugins(false) },
+  {
+    input,
+    output: { file: pkg.main, format: 'cjs', exports: 'auto' },
+    external,
+    plugins: plugins(false),
+  },
   { input, output: { file: pkg.module, format: 'es' }, external, plugins: plugins(true) },
 ];
