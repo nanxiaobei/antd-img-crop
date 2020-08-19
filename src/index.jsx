@@ -137,6 +137,18 @@ const ImgCrop = forwardRef((props, ref) => {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
               setSrc(reader.result);
+              /*
+              *  fix redraw bug for Safari where the
+              *  crop size could be wrong caused possibly
+              *  by the modal animation
+              */
+              const stop = Date.now() + 600
+              let animInt = setInterval(() => {
+                setRotateVal(0.1)
+                setRotateVal(0)
+                if(Date.now() - stop >= 0) clearInterval(animInt)
+              }, 30)
+              
             });
             reader.readAsDataURL(file);
           }),
