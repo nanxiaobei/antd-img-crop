@@ -5,6 +5,9 @@ export interface ImgCropProps {
   shape?: 'rect' | 'round';
   grid?: boolean;
   zoom?: boolean;
+  minZoom?: number;
+  maxZoom?: number;
+  restrictPosition?: boolean;
   rotate?: boolean;
   beforeCrop?: (file: File, fileList: File[]) => boolean;
   modalTitle?: string;
