@@ -7,6 +7,7 @@ export interface ImgCropProps {
   zoom?: boolean;
   rotate?: boolean;
   beforeCrop?: (file: File, fileList: File[]) => boolean;
+  gifCrop: boolean,
   modalTitle?: string;
   modalWidth?: number | string;
   modalOk?: string;

@@ -42,6 +42,7 @@ const Demo = () => (
 | zoom        | `boolean`            | `true`       | 启用图片缩放                                   |
 | rotate      | `boolean`            | `false`      | 启用图片旋转                                   |
 | beforeCrop  | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开 |
+| gifCrop     | `boolean`            | `true`       | 裁切 `.gif`                                    |
 | modalTitle  | `string`             | `'编辑图片'` | 弹窗标题                                       |
 | modalWidth  | `number` \| `string` | `520`        | 弹窗宽度，像素值或百分比                       |
 | modalOk     | `string`             | `'确定'`     | 弹窗确定按钮文字                               |

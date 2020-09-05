@@ -42,6 +42,7 @@ const Demo = () => (
 | zoom        | `boolean`            | `true`         | Enable zoom for image                                       |
 | rotate      | `boolean`            | `false`        | Enable rotate for image                                     |
 | beforeCrop  | `function`           | -              | Called before modal open, if return `false`, it'll not open |
+| gifCrop     | `boolean`            | `true`         |  Crop `.gif`                                                |
 | modalTitle  | `string`             | `'Edit image'` | Title of modal                                              |
 | modalWidth  | `number` \| `string` | `520`          | Width of modal in pixels or percentages                     |
 | modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                             |
