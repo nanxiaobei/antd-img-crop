@@ -46,6 +46,9 @@ const Demo = () => (
 | modalWidth  | `number` \| `string` | `520`          | Width of modal in pixels or percentages                     |
 | modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                             |
 | modalCancel | `string`             | `'Cancel'`     | Text of cancel button of modal                              |
+| minZoom     | `number`             | `1`            | Minimum zoom factor                                         |
+| maxZoom     | `number`             | `3`            | Maximum zoom factor                                         |
+| restrictPosition        | `boolean` | `true` if current zoom is at least 1, `false` otherwise | Whether the position of the media should be restricted to the boundaries of the cropper. Most useful when zoom factor is less than 1. |
 
 ## Styles
 
