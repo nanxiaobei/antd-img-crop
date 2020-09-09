@@ -12,8 +12,6 @@ const noop = () => {};
 const MEDIA_CLASS = `${pkg}-media`;
 const MODAL_TITLE = 'Edit image';
 
-const MIN_ZOOM = 1;
-const MAX_ZOOM = 3;
 const ZOOM_STEP = 0.1;
 
 const MIN_ROTATE = 0;
@@ -28,6 +26,9 @@ const EasyCrop = forwardRef((props, ref) => {
     grid,
     hasZoom,
     zoomVal,
+    minZoom,
+    maxZoom,
+    restrictPosition,
     rotateVal,
     setZoomVal,
     setRotateVal,
@@ -53,6 +54,9 @@ const EasyCrop = forwardRef((props, ref) => {
       zoomWithScroll={hasZoom}
       crop={crop}
       zoom={zoomVal}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
+      restrictPosition={restrictPosition}
       rotation={rotateVal}
       onCropChange={setCrop}
       onZoomChange={setZoomVal}
@@ -70,6 +74,9 @@ EasyCrop.propTypes = {
   grid: t.bool,
   hasZoom: t.bool,
   zoomVal: t.number,
+  minZoom: t.number,
+  maxZoom: t.number,
+  restrictPosition: t.bool,
   rotateVal: t.number,
   setZoomVal: t.func,
   setRotateVal: t.func,
@@ -88,6 +95,9 @@ const ImgCrop = forwardRef((props, ref) => {
     modalWidth,
     modalOk,
     modalCancel,
+    minZoom,
+    maxZoom,
+    restrictPosition,
     children,
   } = props;
 
@@ -154,8 +164,8 @@ const ImgCrop = forwardRef((props, ref) => {
   /**
    * Controls
    */
-  const isMinZoom = zoomVal === MIN_ZOOM;
-  const isMaxZoom = zoomVal === MAX_ZOOM;
+  const isMinZoom = zoomVal - ZOOM_STEP < minZoom;
+  const isMaxZoom = zoomVal + ZOOM_STEP > maxZoom;
   const isMinRotate = rotateVal === MIN_ROTATE;
   const isMaxRotate = rotateVal === MAX_ROTATE;
 
@@ -279,6 +289,9 @@ const ImgCrop = forwardRef((props, ref) => {
                 grid={grid}
                 hasZoom={hasZoom}
                 zoomVal={zoomVal}
+                minZoom={minZoom}
+                maxZoom={maxZoom}
+                restrictPosition={restrictPosition !== undefined ? restrictPosition : zoomVal >= 1}
                 rotateVal={rotateVal}
                 setZoomVal={setZoomVal}
                 setRotateVal={setRotateVal}
@@ -290,8 +303,8 @@ const ImgCrop = forwardRef((props, ref) => {
                     －
                   </button>
                   <Slider
-                    min={MIN_ZOOM}
-                    max={MAX_ZOOM}
+                    min={minZoom}
+                    max={maxZoom}
                     step={ZOOM_STEP}
                     value={zoomVal}
                     onChange={setZoomVal}
@@ -330,6 +343,9 @@ ImgCrop.propTypes = {
   aspect: t.number,
   shape: t.oneOf(['rect', 'round']),
   zoom: t.bool,
+  minZoom: t.number,
+  maxZoom: t.number,
+  restrictPosition: t.bool,
   grid: t.bool,
   rotate: t.bool,
   beforeCrop: t.func,
@@ -345,6 +361,8 @@ ImgCrop.defaultProps = {
   shape: 'rect',
   grid: false,
   zoom: true,
+  minZoom: 1,
+  maxZoom: 3,
   rotate: false,
   modalTitle: MODAL_TITLE,
   modalWidth: 520,
