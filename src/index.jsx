@@ -231,10 +231,11 @@ const ImgCrop = forwardRef((props, ref) => {
     const { type, name, uid } = fileRef.current;
     canvas.toBlob(
       async (blob) => {
-        let newFile = blob;
+        let newFile = new window.File([blob], name, { type: type });
+        // let newFile = blob;
 
-        newFile.lastModifiedDate = Date.now();
-        newFile.name = name;
+        // newFile.lastModifiedDate = Date.now();
+        // newFile.name = name;
         newFile.uid = uid;
 
         if (typeof beforeUploadRef.current !== 'function') return resolveRef.current(newFile);
