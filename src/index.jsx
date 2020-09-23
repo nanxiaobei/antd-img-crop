@@ -186,11 +186,11 @@ const ImgCrop = forwardRef((props, ref) => {
    * Modal
    */
   const modalProps = useMemo(() => {
-    const propObj = { width: modalWidth, okText: modalOk, cancelText: modalCancel };
-    Object.keys(modalProps).forEach((key) => {
-      if (!modalProps[key]) delete modalProps[key];
+    const obj = { width: modalWidth, okText: modalOk, cancelText: modalCancel };
+    Object.keys(obj).forEach((key) => {
+      if (!obj[key]) delete obj[key];
     });
-    return propObj;
+    return obj;
   }, [modalCancel, modalOk, modalWidth]);
 
   const onClose = useCallback(() => {
