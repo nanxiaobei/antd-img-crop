@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, forwardRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef, forwardRef } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
@@ -10,7 +10,6 @@ const pkg = 'antd-img-crop';
 const noop = () => {};
 
 const MEDIA_CLASS = `${pkg}-media`;
-const MODAL_TITLE = 'Edit image';
 
 const ZOOM_STEP = 0.1;
 
@@ -24,14 +23,15 @@ const EasyCrop = forwardRef((props, ref) => {
     aspect,
     shape,
     grid,
+
     hasZoom,
     zoomVal,
-    minZoom,
-    maxZoom,
-    restrictPosition,
     rotateVal,
     setZoomVal,
     setRotateVal,
+
+    minZoom,
+    maxZoom,
     onComplete,
   } = props;
 
@@ -48,19 +48,18 @@ const EasyCrop = forwardRef((props, ref) => {
     <Cropper
       ref={ref}
       image={src}
+      crop={crop}
+      onCropChange={setCrop}
       aspect={aspect}
       cropShape={shape}
       showGrid={grid}
       zoomWithScroll={hasZoom}
-      crop={crop}
       zoom={zoomVal}
-      minZoom={minZoom}
-      maxZoom={maxZoom}
-      restrictPosition={restrictPosition}
       rotation={rotateVal}
-      onCropChange={setCrop}
       onZoomChange={setZoomVal}
       onRotationChange={setRotateVal}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
       onCropComplete={onCropComplete}
       classes={{ containerClassName: `${pkg}-container`, mediaClassName: MEDIA_CLASS }}
     />
@@ -72,14 +71,15 @@ EasyCrop.propTypes = {
   aspect: t.number,
   shape: t.string,
   grid: t.bool,
+
   hasZoom: t.bool,
   zoomVal: t.number,
-  minZoom: t.number,
-  maxZoom: t.number,
-  restrictPosition: t.bool,
   rotateVal: t.number,
   setZoomVal: t.func,
   setRotateVal: t.func,
+
+  minZoom: t.number,
+  maxZoom: t.number,
   onComplete: t.func,
 };
 
@@ -88,26 +88,23 @@ const ImgCrop = forwardRef((props, ref) => {
     aspect,
     shape,
     grid,
+
     zoom,
     rotate,
-    beforeCrop,
+    minZoom,
+    maxZoom,
+
     modalTitle,
     modalWidth,
     modalOk,
     modalCancel,
-    minZoom,
-    maxZoom,
-    restrictPosition,
+
+    beforeCrop,
     children,
   } = props;
 
   const hasZoom = zoom === true;
   const hasRotate = rotate === true;
-
-  const modalTextProps = { okText: modalOk, cancelText: modalCancel };
-  Object.keys(modalTextProps).forEach((key) => {
-    if (!modalTextProps[key]) delete modalTextProps[key];
-  });
 
   const [src, setSrc] = useState('');
   const [zoomVal, setZoomVal] = useState(1);
@@ -188,6 +185,14 @@ const ImgCrop = forwardRef((props, ref) => {
   /**
    * Modal
    */
+  const modalProps = useMemo(() => {
+    const propObj = { width: modalWidth, okText: modalOk, cancelText: modalCancel };
+    Object.keys(modalProps).forEach((key) => {
+      if (!modalProps[key]) delete modalProps[key];
+    });
+    return propObj;
+  }, [modalCancel, modalOk, modalWidth]);
+
   const onClose = useCallback(() => {
     setSrc('');
     setZoomVal(1);
@@ -231,11 +236,7 @@ const ImgCrop = forwardRef((props, ref) => {
     const { type, name, uid } = fileRef.current;
     canvas.toBlob(
       async (blob) => {
-        let newFile = new window.File([blob], name, { type: type });
-        // let newFile = blob;
-
-        // newFile.lastModifiedDate = Date.now();
-        // newFile.name = name;
+        let newFile = new File([blob], name, { type });
         newFile.uid = uid;
 
         if (typeof beforeUploadRef.current !== 'function') return resolveRef.current(newFile);
@@ -265,77 +266,79 @@ const ImgCrop = forwardRef((props, ref) => {
     );
   }, [hasRotate, onClose, rotateVal]);
 
+  const renderComponent = (titleOfModal) => (
+    <>
+      {renderUpload()}
+      {src && (
+        <Modal
+          visible={true}
+          wrapClassName={`${pkg}-modal`}
+          title={titleOfModal}
+          onOk={onOk}
+          onCancel={onClose}
+          maskClosable={false}
+          destroyOnClose
+          {...modalProps}
+        >
+          <EasyCrop
+            ref={ref}
+            src={src}
+            aspect={aspect}
+            shape={shape}
+            grid={grid}
+            hasZoom={hasZoom}
+            zoomVal={zoomVal}
+            rotateVal={rotateVal}
+            setZoomVal={setZoomVal}
+            setRotateVal={setRotateVal}
+            minZoom={minZoom}
+            maxZoom={maxZoom}
+            onComplete={onComplete}
+          />
+          {hasZoom && (
+            <div className={`${pkg}-control zoom`}>
+              <button onClick={subZoomVal} disabled={isMinZoom}>
+                －
+              </button>
+              <Slider
+                min={minZoom}
+                max={maxZoom}
+                step={ZOOM_STEP}
+                value={zoomVal}
+                onChange={setZoomVal}
+              />
+              <button onClick={addZoomVal} disabled={isMaxZoom}>
+                ＋
+              </button>
+            </div>
+          )}
+          {hasRotate && (
+            <div className={`${pkg}-control rotate`}>
+              <button onClick={subRotateVal} disabled={isMinRotate}>
+                ↺
+              </button>
+              <Slider
+                min={MIN_ROTATE}
+                max={MAX_ROTATE}
+                step={ROTATE_STEP}
+                value={rotateVal}
+                onChange={setRotateVal}
+              />
+              <button onClick={addRotateVal} disabled={isMaxRotate}>
+                ↻
+              </button>
+            </div>
+          )}
+        </Modal>
+      )}
+    </>
+  );
+
+  if (modalTitle) return renderComponent(modalTitle);
+
   return (
     <LocaleReceiver>
-      {(locale, localeCode) => (
-        <>
-          {renderUpload()}
-          {src && (
-            <Modal
-              visible={true}
-              wrapClassName={`${pkg}-modal`}
-              title={localeCode === 'zh-cn' && modalTitle === MODAL_TITLE ? '编辑图片' : modalTitle}
-              width={modalWidth}
-              onOk={onOk}
-              onCancel={onClose}
-              maskClosable={false}
-              destroyOnClose
-              {...modalTextProps}
-            >
-              <EasyCrop
-                ref={ref}
-                src={src}
-                aspect={aspect}
-                shape={shape}
-                grid={grid}
-                hasZoom={hasZoom}
-                zoomVal={zoomVal}
-                minZoom={minZoom}
-                maxZoom={maxZoom}
-                restrictPosition={restrictPosition !== undefined ? restrictPosition : zoomVal >= 1}
-                rotateVal={rotateVal}
-                setZoomVal={setZoomVal}
-                setRotateVal={setRotateVal}
-                onComplete={onComplete}
-              />
-              {hasZoom && (
-                <div className={`${pkg}-control zoom`}>
-                  <button onClick={subZoomVal} disabled={isMinZoom}>
-                    －
-                  </button>
-                  <Slider
-                    min={minZoom}
-                    max={maxZoom}
-                    step={ZOOM_STEP}
-                    value={zoomVal}
-                    onChange={setZoomVal}
-                  />
-                  <button onClick={addZoomVal} disabled={isMaxZoom}>
-                    ＋
-                  </button>
-                </div>
-              )}
-              {hasRotate && (
-                <div className={`${pkg}-control rotate`}>
-                  <button onClick={subRotateVal} disabled={isMinRotate}>
-                    ↺
-                  </button>
-                  <Slider
-                    min={MIN_ROTATE}
-                    max={MAX_ROTATE}
-                    step={ROTATE_STEP}
-                    value={rotateVal}
-                    onChange={setRotateVal}
-                  />
-                  <button onClick={addRotateVal} disabled={isMaxRotate}>
-                    ↻
-                  </button>
-                </div>
-              )}
-            </Modal>
-          )}
-        </>
-      )}
+      {(locale, localeCode) => renderComponent(localeCode === 'zh-cn' ? '编辑图片' : 'Edit image')}
     </LocaleReceiver>
   );
 });
@@ -343,17 +346,19 @@ const ImgCrop = forwardRef((props, ref) => {
 ImgCrop.propTypes = {
   aspect: t.number,
   shape: t.oneOf(['rect', 'round']),
+  grid: t.bool,
+
   zoom: t.bool,
+  rotate: t.bool,
   minZoom: t.number,
   maxZoom: t.number,
-  restrictPosition: t.bool,
-  grid: t.bool,
-  rotate: t.bool,
-  beforeCrop: t.func,
+
   modalTitle: t.string,
   modalWidth: t.oneOfType([t.number, t.string]),
   modalOk: t.string,
   modalCancel: t.string,
+
+  beforeCrop: t.func,
   children: t.node,
 };
 
@@ -361,12 +366,11 @@ ImgCrop.defaultProps = {
   aspect: 1,
   shape: 'rect',
   grid: false,
+
   zoom: true,
+  rotate: false,
   minZoom: 1,
   maxZoom: 3,
-  rotate: false,
-  modalTitle: MODAL_TITLE,
-  modalWidth: 520,
 };
 
 export default ImgCrop;
