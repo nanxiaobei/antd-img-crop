@@ -4,16 +4,18 @@ export interface ImgCropProps {
   aspect?: number;
   shape?: 'rect' | 'round';
   grid?: boolean;
+
   zoom?: boolean;
+  rotate?: boolean;
   minZoom?: number;
   maxZoom?: number;
-  restrictPosition?: boolean;
-  rotate?: boolean;
-  beforeCrop?: (file: File, fileList: File[]) => boolean;
+
   modalTitle?: string;
   modalWidth?: number | string;
   modalOk?: string;
   modalCancel?: string;
+
+  beforeCrop?: (file: File, fileList: File[]) => boolean;
 }
 declare const ImgCrop: React.FC<ImgCropProps>;
 export default ImgCrop;
