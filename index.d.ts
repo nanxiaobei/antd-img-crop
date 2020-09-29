@@ -4,6 +4,10 @@ export interface ImgCropProps {
   aspect?: number;
   shape?: 'rect' | 'round';
   grid?: boolean;
+  cropSize?: {
+    width: number,
+    height: number,
+  };
 
   zoom?: boolean;
   rotate?: boolean;

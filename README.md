@@ -38,6 +38,7 @@ const Demo = () => (
 | ----------- | -------------------- | -------------- | --------------------------------------------------------- |
 | aspect      | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                    |
 | shape       | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                 |
+| cropSize    | `{ width: number, height: number }`   | - | Size of the crop area (in pixels). If you don't provide it, it will be computed automatically using the aspect prop and the media size.
 | grid        | `boolean`            | `false`        | Show grid of crop area (third-lines)                      |
 | zoom        | `boolean`            | `true`         | Enable zoom for image                                     |
 | rotate      | `boolean`            | `false`        | Enable rotate for image                                   |

@@ -23,6 +23,7 @@ const EasyCrop = forwardRef((props, ref) => {
     aspect,
     shape,
     grid,
+    cropSize,
 
     hasZoom,
     zoomVal,
@@ -51,6 +52,7 @@ const EasyCrop = forwardRef((props, ref) => {
       crop={crop}
       onCropChange={setCrop}
       aspect={aspect}
+      cropSize={cropSize}
       cropShape={shape}
       showGrid={grid}
       zoomWithScroll={hasZoom}
@@ -71,6 +73,10 @@ EasyCrop.propTypes = {
   aspect: t.number,
   shape: t.string,
   grid: t.bool,
+  cropSize: t.shape({
+    width: t.number,
+    height: t.number,
+  }),
 
   hasZoom: t.bool,
   zoomVal: t.number,
@@ -88,6 +94,7 @@ const ImgCrop = forwardRef((props, ref) => {
     aspect,
     shape,
     grid,
+    cropSize,
 
     zoom,
     rotate,
@@ -286,6 +293,7 @@ const ImgCrop = forwardRef((props, ref) => {
             aspect={aspect}
             shape={shape}
             grid={grid}
+            cropSize={cropSize}
             hasZoom={hasZoom}
             zoomVal={zoomVal}
             rotateVal={rotateVal}
@@ -347,6 +355,10 @@ ImgCrop.propTypes = {
   aspect: t.number,
   shape: t.oneOf(['rect', 'round']),
   grid: t.bool,
+  cropSize: t.shape({
+    width: t.number,
+    height: t.number,
+  }),
 
   zoom: t.bool,
   rotate: t.bool,
