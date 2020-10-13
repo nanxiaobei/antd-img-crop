@@ -33,6 +33,8 @@ const EasyCrop = forwardRef((props, ref) => {
     minZoom,
     maxZoom,
     onComplete,
+
+    cropperProps,
   } = props;
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -46,6 +48,7 @@ const EasyCrop = forwardRef((props, ref) => {
 
   return (
     <Cropper
+      {...cropperProps}
       ref={ref}
       image={src}
       crop={crop}
@@ -81,6 +84,8 @@ EasyCrop.propTypes = {
   minZoom: t.number,
   maxZoom: t.number,
   onComplete: t.func,
+
+  cropperProps: t.object,
 };
 
 const ImgCrop = forwardRef((props, ref) => {
@@ -101,6 +106,8 @@ const ImgCrop = forwardRef((props, ref) => {
 
     beforeCrop,
     children,
+
+    cropperProps,
   } = props;
 
   const hasZoom = zoom === true;
@@ -294,6 +301,7 @@ const ImgCrop = forwardRef((props, ref) => {
             minZoom={minZoom}
             maxZoom={maxZoom}
             onComplete={onComplete}
+            cropperProps={cropperProps}
           />
           {hasZoom && (
             <div className={`${pkg}-control zoom`}>
@@ -360,6 +368,8 @@ ImgCrop.propTypes = {
 
   beforeCrop: t.func,
   children: t.node,
+
+  cropperProps: t.object,
 };
 
 ImgCrop.defaultProps = {

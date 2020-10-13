@@ -48,6 +48,7 @@ const Demo = () => (
 | modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                           |
 | modalCancel | `string`             | `'Cancel'`     | Text of cancel button of modal                            |
 | beforeCrop  | `function`           | -              | Call before modal open, if return `false`, it'll not open |
+| cropperProps| `object`             | -              | Object of props for [react-easy-crop](https://www.npmjs.com/package/react-easy-crop). [List of Props](https://github.com/ricardo-ch/react-easy-crop#props)  |
 
 ## Styles
 

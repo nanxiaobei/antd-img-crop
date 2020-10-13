@@ -48,6 +48,7 @@ const Demo = () => (
 | modalOk     | `string`             | `'确定'`     | 弹窗确定按钮文字                               |
 | modalCancel | `string`             | `'取消'`     | 弹窗取消按钮文字                               |
 | beforeCrop  | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开 |
+| cropperProps| `object`             | -             | 道具对象 [react-easy-crop](https://www.npmjs.com/package/react-easy-crop). [道具清单](https://github.com/ricardo-ch/react-easy-crop#props)  |
 
 ## 样式
 
