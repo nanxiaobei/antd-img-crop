@@ -37,6 +37,7 @@ const EasyCrop = forwardRef((props, ref) => {
     cropperProps,
   } = props;
 
+  const [cropSize, setCropSize] = useState({ width: 82, height: 82 });
   const [crop, setCrop] = useState({ x: 0, y: 0 });
 
   const onCropComplete = useCallback(
@@ -54,6 +55,7 @@ const EasyCrop = forwardRef((props, ref) => {
       crop={crop}
       onCropChange={setCrop}
       aspect={aspect}
+      cropSize={cropSize}
       cropShape={shape}
       showGrid={grid}
       zoomWithScroll={hasZoom}
@@ -64,6 +66,19 @@ const EasyCrop = forwardRef((props, ref) => {
       minZoom={minZoom}
       maxZoom={maxZoom}
       onCropComplete={onCropComplete}
+      onMediaLoaded={(mediaSize) => {
+        if (mediaSize.width > mediaSize.height * aspect) {
+          setCropSize({
+            width: mediaSize.height * aspect,
+            height: mediaSize.height,
+          });
+        } else {
+          setCropSize({
+            width: mediaSize.width,
+            height: mediaSize.width / aspect,
+          });
+        }
+      }}
       classes={{ containerClassName: `${pkg}-container`, mediaClassName: MEDIA_CLASS }}
     />
   );
