@@ -50,11 +50,12 @@ const EasyCrop = forwardRef((props, ref) => {
   const onMediaLoaded = useCallback(
     (mediaSize) => {
       const { width, height } = mediaSize;
+      const ratioWidth = height * aspect;
 
-      if (width > height * aspect) {
-        setCropSize({ width: height * aspect, height: height });
+      if (width > ratioWidth) {
+        setCropSize({ width: ratioWidth, height });
       } else {
-        setCropSize({ width: width, height: width / aspect });
+        setCropSize({ width, height: width / aspect });
       }
     },
     [aspect]
