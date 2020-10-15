@@ -5,6 +5,7 @@ export interface ImgCropProps {
   aspect?: number;
   shape?: 'rect' | 'round';
   grid?: boolean;
+  quality?: number;
 
   zoom?: boolean;
   rotate?: boolean;
@@ -17,8 +18,7 @@ export interface ImgCropProps {
   modalCancel?: string;
 
   beforeCrop?: (file: File, fileList: File[]) => boolean;
-
-  cropperProps: CropperProps
+  cropperProps?: CropperProps;
 }
 declare const ImgCrop: React.FC<ImgCropProps>;
 export default ImgCrop;
