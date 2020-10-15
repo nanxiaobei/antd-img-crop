@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "react-easy-crop": "^3.1.1"
+    "react-easy-crop": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

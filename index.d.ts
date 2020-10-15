@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CropperProps } from 'react-easy-crop';
 
 export interface ImgCropProps {
   aspect?: number;
@@ -16,6 +17,8 @@ export interface ImgCropProps {
   modalCancel?: string;
 
   beforeCrop?: (file: File, fileList: File[]) => boolean;
+
+  cropperProps: CropperProps
 }
 declare const ImgCrop: React.FC<ImgCropProps>;
 export default ImgCrop;
