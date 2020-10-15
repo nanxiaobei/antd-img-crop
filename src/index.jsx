@@ -37,8 +37,8 @@ const EasyCrop = forwardRef((props, ref) => {
     cropperProps,
   } = props;
 
-  const [cropSize, setCropSize] = useState({ width: 82, height: 82 });
   const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [cropSize, setCropSize] = useState({ width: 0, height: 0 });
 
   const onCropComplete = useCallback(
     (croppedArea, croppedAreaPixels) => {
@@ -47,15 +47,28 @@ const EasyCrop = forwardRef((props, ref) => {
     [onComplete]
   );
 
+  const onMediaLoaded = useCallback(
+    (mediaSize) => {
+      const { width, height } = mediaSize;
+
+      if (width > height * aspect) {
+        setCropSize({ width: height * aspect, height: height });
+      } else {
+        setCropSize({ width: width, height: width / aspect });
+      }
+    },
+    [aspect]
+  );
+
   return (
     <Cropper
       {...cropperProps}
       ref={ref}
       image={src}
       crop={crop}
+      cropSize={cropSize}
       onCropChange={setCrop}
       aspect={aspect}
-      cropSize={cropSize}
       cropShape={shape}
       showGrid={grid}
       zoomWithScroll={hasZoom}
@@ -66,19 +79,7 @@ const EasyCrop = forwardRef((props, ref) => {
       minZoom={minZoom}
       maxZoom={maxZoom}
       onCropComplete={onCropComplete}
-      onMediaLoaded={(mediaSize) => {
-        if (mediaSize.width > mediaSize.height * aspect) {
-          setCropSize({
-            width: mediaSize.height * aspect,
-            height: mediaSize.height,
-          });
-        } else {
-          setCropSize({
-            width: mediaSize.width,
-            height: mediaSize.width / aspect,
-          });
-        }
-      }}
+      onMediaLoaded={onMediaLoaded}
       classes={{ containerClassName: `${pkg}-container`, mediaClassName: MEDIA_CLASS }}
     />
   );
@@ -108,6 +109,7 @@ const ImgCrop = forwardRef((props, ref) => {
     aspect,
     shape,
     grid,
+    quality,
 
     zoom,
     rotate,
@@ -284,9 +286,9 @@ const ImgCrop = forwardRef((props, ref) => {
         }
       },
       type,
-      0.4
+      quality
     );
-  }, [hasRotate, onClose, rotateVal]);
+  }, [hasRotate, onClose, quality, rotateVal]);
 
   const renderComponent = (titleOfModal) => (
     <>
@@ -370,6 +372,7 @@ ImgCrop.propTypes = {
   aspect: t.number,
   shape: t.oneOf(['rect', 'round']),
   grid: t.bool,
+  quality: t.number,
 
   zoom: t.bool,
   rotate: t.bool,
@@ -382,15 +385,16 @@ ImgCrop.propTypes = {
   modalCancel: t.string,
 
   beforeCrop: t.func,
-  children: t.node,
-
   cropperProps: t.object,
+
+  children: t.node,
 };
 
 ImgCrop.defaultProps = {
   aspect: 1,
   shape: 'rect',
   grid: false,
+  quality: 0.4,
 
   zoom: true,
   rotate: false,
