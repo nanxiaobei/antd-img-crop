@@ -34,21 +34,22 @@ const Demo = () => (
 
 ## Props
 
-| Prop        | Type                 | Default        | Description                                               |
-| ----------- | -------------------- | -------------- | --------------------------------------------------------- |
-| aspect      | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                    |
-| shape       | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                 |
-| grid        | `boolean`            | `false`        | Show grid of crop area (third-lines)                      |
-| zoom        | `boolean`            | `true`         | Enable zoom for image                                     |
-| rotate      | `boolean`            | `false`        | Enable rotate for image                                   |
-| minZoom     | `number`             | `1`            | Minimum zoom factor                                       |
-| maxZoom     | `number`             | `3`            | Maximum zoom factor                                       |
-| modalTitle  | `string`             | `'Edit image'` | Title of modal                                            |
-| modalWidth  | `number` \| `string` | `520`          | Width of modal in pixels number or percentages            |
-| modalOk     | `string`             | `'OK'`         | Text of confirm button of modal                           |
-| modalCancel | `string`             | `'Cancel'`     | Text of cancel button of modal                            |
-| beforeCrop  | `function`           | -              | Call before modal open, if return `false`, it'll not open |
-| cropperProps| `object`             | -              | Object of props for [react-easy-crop](https://www.npmjs.com/package/react-easy-crop). [List of Props](https://github.com/ricardo-ch/react-easy-crop#props)  |
+| Prop         | Type                 | Default        | Description                                                                |
+| ------------ | -------------------- | -------------- | -------------------------------------------------------------------------- |
+| aspect       | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                                     |
+| shape        | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                                  |
+| grid         | `boolean`            | `false`        | Show grid of crop area (third-lines)                                       |
+| quality      | `number`             | `0.4`          | Image quality, `0 ~ 1`                                                     |
+| zoom         | `boolean`            | `true`         | Enable zoom for image                                                      |
+| rotate       | `boolean`            | `false`        | Enable rotate for image                                                    |
+| minZoom      | `number`             | `1`            | Minimum zoom factor                                                        |
+| maxZoom      | `number`             | `3`            | Maximum zoom factor                                                        |
+| modalTitle   | `string`             | `'Edit image'` | Title of modal                                                             |
+| modalWidth   | `number` \| `string` | `520`          | Width of modal in pixels number or percentages                             |
+| modalOk      | `string`             | `'OK'`         | Text of confirm button of modal                                            |
+| modalCancel  | `string`             | `'Cancel'`     | Text of cancel button of modal                                             |
+| beforeCrop   | `function`           | -              | Call before modal open, if return `false`, it'll not open                  |
+| cropperProps | `object`             | -              | Props of [react-easy-crop] (Note: [existing in code] cannot be overridden) |
 
 ## Styles
 
@@ -64,3 +65,6 @@ import 'antd/es/slider/style';
 ## License
 
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://mrlee.me/)
+
+[react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
+[existing in code]: https://github.com/nanxiaobei/antd-img-crop/blob/master/src/index.jsx#L52
