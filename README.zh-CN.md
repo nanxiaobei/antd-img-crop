@@ -49,6 +49,7 @@ const Demo = () => (
 | modalOk      | `string`             | `'确定'`     | 弹窗确定按钮文字                                       |
 | modalCancel  | `string`             | `'取消'`     | 弹窗取消按钮文字                                       |
 | beforeCrop   | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开         |
+| onError      | `function`           | -            | 捕获错误                                             |
 | cropperProps | `object`             | -            | [react-easy-crop] 的 props（\* [已有 props] 无法重写） |
 
 ## 样式

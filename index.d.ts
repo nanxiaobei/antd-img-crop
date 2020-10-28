@@ -18,6 +18,7 @@ export interface ImgCropProps {
   modalCancel?: string;
 
   beforeCrop?: (file: File, fileList: File[]) => boolean;
+  onError?: Function;
   cropperProps?: Partial<CropperProps>;
 }
 declare const ImgCrop: React.FC<ImgCropProps>;

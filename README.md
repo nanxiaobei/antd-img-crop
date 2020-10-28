@@ -49,6 +49,7 @@ const Demo = () => (
 | modalOk      | `string`             | `'OK'`         | Text of confirm button of modal                                       |
 | modalCancel  | `string`             | `'Cancel'`     | Text of cancel button of modal                                        |
 | beforeCrop   | `function`           | -              | Call before modal open, if return `false`, it'll not open             |
+| onError      | `function`           | -              | Catch Error                                                           |
 | cropperProps | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden) |
 
 ## Styles

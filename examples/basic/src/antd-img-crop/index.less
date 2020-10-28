@@ -1,0 +1,52 @@
+@pkg: antd-img-crop;
+
+.@{pkg}-modal {
+  .ant-modal-body {
+    padding-bottom: 16px;
+  }
+  .@{pkg}-container {
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    margin-bottom: 16px;
+  }
+  .@{pkg}-control {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      font-style: normal;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      &[disabled] {
+        cursor: default;
+      }
+    }
+    &.zoom button {
+      font-size: 18px;
+    }
+    &.rotate button {
+      font-size: 16px;
+      &:first-of-type {
+        transform: rotate(-20deg);
+      }
+      &:last-of-type {
+        transform: rotate(20deg);
+      }
+    }
+    .ant-slider {
+      flex: 1;
+      margin: 0 8px;
+    }
+  }
+}
