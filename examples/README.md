@@ -1,5 +1,0 @@
-# Examples
-
-## Catalog
-
-- [Basic](./basic)
