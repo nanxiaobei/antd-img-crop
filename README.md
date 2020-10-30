@@ -44,6 +44,7 @@ const Demo = () => (
 | rotate       | `boolean`            | `false`        | Enable rotate for image                                               |
 | minZoom      | `number`             | `1`            | Minimum zoom factor                                                   |
 | maxZoom      | `number`             | `3`            | Maximum zoom factor                                                   |
+| fillColor    | `string`             | `white`        | Fill color when cropped image smaller than canvas                                                   |
 | modalTitle   | `string`             | `'Edit image'` | Title of modal                                                        |
 | modalWidth   | `number` \| `string` | `520`          | Width of modal in pixels number or percentages                        |
 | modalOk      | `string`             | `'OK'`         | Text of confirm button of modal                                       |
