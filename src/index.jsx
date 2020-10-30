@@ -116,6 +116,7 @@ const ImgCrop = forwardRef((props, ref) => {
     rotate,
     minZoom,
     maxZoom,
+    fillColor,
 
     modalTitle,
     modalWidth,
@@ -244,6 +245,9 @@ const ImgCrop = forwardRef((props, ref) => {
       ctx.rotate((rotateVal * Math.PI) / 180);
       ctx.translate(-halfMax, -halfMax);
     }
+
+    ctx.fillStyle = fillColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // draw the source image in the center of the max canvas
     const left = (maxLen - naturalWidth) / 2;
@@ -379,6 +383,7 @@ ImgCrop.propTypes = {
   rotate: t.bool,
   minZoom: t.number,
   maxZoom: t.number,
+  fillColor: t.string,
 
   modalTitle: t.string,
   modalWidth: t.oneOfType([t.number, t.string]),
@@ -401,6 +406,7 @@ ImgCrop.defaultProps = {
   rotate: false,
   minZoom: 1,
   maxZoom: 3,
+  fillColor: 'white',
 };
 
 export default ImgCrop;
