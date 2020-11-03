@@ -40,6 +40,7 @@ const Demo = () => (
 | shape        | `string`             | `'rect'`     | 裁切区域形状，`'rect'` 或 `'round'`                    |
 | grid         | `boolean`            | `false`      | 显示裁切区域网格（九宫格）                             |
 | quality      | `number`             | `0.4`        | 图片质量，`0 ~ 1`                                      |
+| fillColor    | `string`             | `white`      | 当裁切图像小于画布时的填充颜色                         |
 | zoom         | `boolean`            | `true`       | 启用图片缩放                                           |
 | rotate       | `boolean`            | `false`      | 启用图片旋转                                           |
 | minZoom      | `number`             | `1`          | 最小缩放倍数                                           |

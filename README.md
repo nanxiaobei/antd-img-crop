@@ -40,11 +40,11 @@ const Demo = () => (
 | shape        | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                             |
 | grid         | `boolean`            | `false`        | Show grid of crop area (third-lines)                                  |
 | quality      | `number`             | `0.4`          | Image quality, `0 ~ 1`                                                |
+| fillColor    | `string`             | `white`        | Fill color when cropped image smaller than canvas                     |
 | zoom         | `boolean`            | `true`         | Enable zoom for image                                                 |
 | rotate       | `boolean`            | `false`        | Enable rotate for image                                               |
 | minZoom      | `number`             | `1`            | Minimum zoom factor                                                   |
 | maxZoom      | `number`             | `3`            | Maximum zoom factor                                                   |
-| fillColor    | `string`             | `white`        | Fill color when cropped image smaller than canvas                                                   |
 | modalTitle   | `string`             | `'Edit image'` | Title of modal                                                        |
 | modalWidth   | `number` \| `string` | `520`          | Width of modal in pixels number or percentages                        |
 | modalOk      | `string`             | `'OK'`         | Text of confirm button of modal                                       |

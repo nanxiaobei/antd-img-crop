@@ -6,12 +6,12 @@ export interface ImgCropProps {
   shape?: 'rect' | 'round';
   grid?: boolean;
   quality?: number;
+  fillColor?: string;
 
   zoom?: boolean;
   rotate?: boolean;
   minZoom?: number;
   maxZoom?: number;
-  fillColor?: string;
 
   modalTitle?: string;
   modalWidth?: number | string;
