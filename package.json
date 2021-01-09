@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.1",
+    "pica": "^6.1.1",
     "react-easy-crop": "^3.3.0"
   },
   "devDependencies": {

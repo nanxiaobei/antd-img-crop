@@ -12,6 +12,7 @@ export interface ImgCropProps {
   rotate?: boolean;
   minZoom?: number;
   maxZoom?: number;
+  resizeMaxSize?: number;
 
   modalTitle?: string;
   modalWidth?: number | string;
