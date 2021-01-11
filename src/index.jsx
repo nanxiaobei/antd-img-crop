@@ -5,6 +5,7 @@ import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import Modal from 'antd/es/modal';
 import Slider from 'antd/es/slider';
 import './index.less';
+import Pica from 'pica';
 
 const pkg = 'antd-img-crop';
 const noop = () => {};
@@ -116,6 +117,7 @@ const ImgCrop = forwardRef((props, ref) => {
     rotate,
     minZoom,
     maxZoom,
+    resizeMaxSize,
     fillColor,
 
     modalTitle,
@@ -143,6 +145,17 @@ const ImgCrop = forwardRef((props, ref) => {
 
   const cropPixelsRef = useRef();
 
+  const loadImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = reject;
+      image.src = file;
+    });
+  };
+
   /**
    * Upload
    */
@@ -157,25 +170,53 @@ const ImgCrop = forwardRef((props, ref) => {
         ...restUploadProps,
         accept: accept || 'image/*',
         beforeUpload: (file, fileList) =>
-          new Promise((resolve, reject) => {
+          new Promise(async (resolve, reject) => {
             if (beforeCrop && !beforeCrop(file, fileList)) {
               reject();
               return;
             }
 
-            fileRef.current = file;
-            resolveRef.current = resolve;
-            rejectRef.current = reject;
+            let finalFile;
 
+            if (resizeMaxSize) {
+              // resize image if resizeMaxSize is set
+              const pica = new Pica();
+              const url = URL.createObjectURL(file);
+              const originalImage = await loadImage(url);
+
+              const { naturalWidth, naturalHeight } = originalImage;
+              const destination = document.createElement('canvas');
+
+              if (naturalWidth > naturalHeight) {
+                destination.width = resizeMaxSize;
+                destination.height = (naturalHeight * resizeMaxSize) / naturalWidth;
+              } else {
+                destination.height = resizeMaxSize;
+                destination.width = (naturalWidth * resizeMaxSize) / naturalHeight;
+              }
+
+              await pica.resize(originalImage, destination);
+              finalFile = await pica.toBlob(destination, 'image/png').then();
+              finalFile.name = file.name;
+              finalFile.lastModifiedDate = new Date();
+              fileRef.current = finalFile;
+              resolveRef.current = resolve;
+              rejectRef.current = reject;
+            } else {
+              finalFile = file;
+              fileRef.current = file;
+              resolveRef.current = resolve;
+              rejectRef.current = reject;
+            }
             const reader = new FileReader();
             reader.addEventListener('load', () => {
               setSrc(reader.result);
             });
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(finalFile);
           }),
       },
     };
-  }, [beforeCrop, children]);
+  }, [beforeCrop, resizeMaxSize, children]);
 
   /**
    * EasyCrop
@@ -384,6 +425,7 @@ ImgCrop.propTypes = {
   minZoom: t.number,
   maxZoom: t.number,
   fillColor: t.string,
+  resizeMaxSize: t.number,
 
   modalTitle: t.string,
   modalWidth: t.oneOfType([t.number, t.string]),
