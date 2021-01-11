@@ -334,7 +334,7 @@ const ImgCrop = forwardRef((props, ref) => {
       type,
       quality
     );
-  }, [hasRotate, onClose, quality, rotateVal]);
+  }, [hasRotate, onClose, quality, rotateVal, fillColor]);
 
   const renderComponent = (titleOfModal) => (
     <>
