@@ -69,3 +69,9 @@ import 'antd/es/slider/style';
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
 [existing props]: https://github.com/nanxiaobei/antd-img-crop/blob/master/src/index.jsx#L67-L83
+
+## Pitiless Ads
+
+If you use WeChat, please try "**FUTAKE**". It's a WeChat mini app for your inspiration moments. 🌈
+
+![FUTAKE](https://s3.jpg.cm/2021/04/19/TWOp8.jpg)
