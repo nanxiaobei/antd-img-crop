@@ -69,3 +69,9 @@ import 'antd/es/slider/style';
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
 [已有 props]: https://github.com/nanxiaobei/antd-img-crop/blob/master/src/index.jsx#L67-L83
+
+## 无情的小广告
+
+如果你使用微信，请试试 "**FUTAKE**"。这是一个微信小程序，为你的灵感瞬间。🌈
+
+![FUTAKE](https://s3.jpg.cm/2021/04/19/TWOp8.jpg)
