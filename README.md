@@ -74,4 +74,4 @@ import 'antd/es/slider/style';
 
 If you use WeChat, please try "**FUTAKE**". It's a WeChat mini app for your inspiration moments. 🌈
 
-![FUTAKE](https://s3.jpg.cm/2021/04/19/TWOp8.jpg)
+![FUTAKE](https://s3.jpg.cm/2021/04/22/TDQuS.png)
