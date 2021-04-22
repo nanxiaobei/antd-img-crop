@@ -74,4 +74,4 @@ import 'antd/es/slider/style';
 
 如果你使用微信，请试试 "**FUTAKE**"。这是一个微信小程序，为你的灵感瞬间。🌈
 
-![FUTAKE](https://s3.jpg.cm/2021/04/19/TWOp8.jpg)
+![FUTAKE](https://s3.jpg.cm/2021/04/22/TDQuS.png)
