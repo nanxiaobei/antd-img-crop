@@ -19,6 +19,9 @@ const ROTATE_STEP = 1;
 
 const EasyCrop = forwardRef((props, ref) => {
   const {
+    ratioX,
+    ratioY,
+
     src,
     aspect,
     shape,
@@ -49,14 +52,33 @@ const EasyCrop = forwardRef((props, ref) => {
 
   const onMediaLoaded = useCallback(
     (mediaSize) => {
-      const { width, height } = mediaSize;
-      const ratioWidth = height * aspect;
-
-      if (width > ratioWidth) {
-        setCropSize({ width: ratioWidth, height });
-      } else {
-        setCropSize({ width, height: width / aspect });
+      const { width, height, naturalWidth, naturalHeight } = mediaSize;
+      let cropAreaWidth = width
+      let cropAreaHeight = height
+      let cropImgWidth = naturalWidth
+      let cropImgHeight = naturalHeight
+      let cropWidth = width
+      let cropHeight = height
+      if (ratioX!=null){
+        const awg = Math.floor(cropAreaWidth / ratioX);
+        const ahg = Math.floor(cropAreaHeight / ratioY);
+        const ag = Math.min(awg,ahg);
+        cropAreaWidth = ratioX * ag;
+        cropAreaHeight = ratioY * ag; 
+        const iwg = Math.floor(cropImgWidth / ratioX); 
+        const ihg = Math.floor(cropImgHeight / ratioY);
+        const ig = Math.min(iwg,ihg);
+        cropImgWidth = ratioX * ig;
+        cropImgHeight = ratioY * ig;
       }
+      if (cropImgWidth > cropAreaWidth){
+        cropWidth = cropImgWidth / (naturalWidth / width)
+        cropHeight = cropImgHeight / (naturalHeight / height)
+      } else {
+        cropWidth = cropAreaWidth
+        cropHeight = cropAreaHeight
+      }
+      setCropSize({ width: cropWidth, height: cropHeight })
     },
     [aspect]
   );
@@ -69,6 +91,8 @@ const EasyCrop = forwardRef((props, ref) => {
       crop={crop}
       cropSize={cropSize}
       onCropChange={setCrop}
+      ratioX={ratioX}
+      ratioY={ratioY}
       aspect={aspect}
       cropShape={shape}
       showGrid={grid}
@@ -87,6 +111,9 @@ const EasyCrop = forwardRef((props, ref) => {
 });
 
 EasyCrop.propTypes = {
+  ratioX: t.number,
+  ratioY: t.number,
+
   src: t.string,
   aspect: t.number,
   shape: t.string,
@@ -106,7 +133,10 @@ EasyCrop.propTypes = {
 };
 
 const ImgCrop = forwardRef((props, ref) => {
-  const {
+  const { 
+    ratioX,
+    ratioY,
+
     aspect,
     shape,
     grid,
@@ -182,6 +212,18 @@ const ImgCrop = forwardRef((props, ref) => {
    */
   const onComplete = useCallback((croppedAreaPixels) => {
     cropPixelsRef.current = croppedAreaPixels;
+    let cropWidth = croppedAreaPixels.width
+    let cropHeight = croppedAreaPixels.height
+    if (ratioX!=null){
+      const wg = Math.floor(cropWidth / ratioX);
+      const hg = Math.floor(cropHeight / ratioY);
+      const g = Math.min(wg,hg);
+      cropWidth = ratioX * g;
+      cropHeight = ratioY * g;
+    }
+    croppedAreaPixels.width = cropWidth
+    croppedAreaPixels.height = cropHeight
+    cropPixelsRef.current = croppedAreaPixels
   }, []);
 
   /**
@@ -312,6 +354,8 @@ const ImgCrop = forwardRef((props, ref) => {
           <EasyCrop
             ref={ref}
             src={src}
+            ratioX={ratioX}
+            ratioY={ratioY}
             aspect={aspect}
             shape={shape}
             grid={grid}
@@ -374,6 +418,9 @@ const ImgCrop = forwardRef((props, ref) => {
 });
 
 ImgCrop.propTypes = {
+  ratioX: t.number,
+  ratioY: t.number,
+
   aspect: t.number,
   shape: t.oneOf(['rect', 'round']),
   grid: t.bool,
@@ -397,6 +444,9 @@ ImgCrop.propTypes = {
 };
 
 ImgCrop.defaultProps = {
+  ratioX: 1,
+  ratioY: 1,
+
   aspect: 1,
   shape: 'rect',
   grid: false,
