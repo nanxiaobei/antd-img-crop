@@ -2,6 +2,9 @@ import * as React from 'react';
 import { CropperProps } from 'react-easy-crop';
 
 export interface ImgCropProps {
+  ratioX?:number;
+  ratioY?:number;
+
   aspect?: number;
   shape?: 'rect' | 'round';
   grid?: boolean;
