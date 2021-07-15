@@ -259,6 +259,7 @@ const ImgCrop = forwardRef((props, ref) => {
     const { width, height, x, y } = cropPixelsRef.current;
     canvas.width = width;
     canvas.height = height;
+
     // fill the background once again
     ctx.fillStyle = fillColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
