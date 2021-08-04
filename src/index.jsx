@@ -399,6 +399,7 @@ ImgCrop.propTypes = {
   zoom: t.bool,
   rotate: t.bool,
   rotateStep: t.number,
+  
   minZoom: t.number,
   maxZoom: t.number,
   fillColor: t.string,
@@ -423,6 +424,7 @@ ImgCrop.defaultProps = {
   zoom: true,
   rotate: false,
   rotateStep: 1,
+
   minZoom: 1,
   maxZoom: 3,
   fillColor: 'white',
