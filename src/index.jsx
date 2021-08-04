@@ -15,7 +15,6 @@ const ZOOM_STEP = 0.1;
 
 const MIN_ROTATE = 0;
 const MAX_ROTATE = 360;
-const ROTATE_STEP = 1;
 
 const EasyCrop = forwardRef((props, ref) => {
   const {
@@ -39,14 +38,13 @@ const EasyCrop = forwardRef((props, ref) => {
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [cropSize, setCropSize] = useState({ width: 0, height: 0 });
-
   const onCropComplete = useCallback(
     (croppedArea, croppedAreaPixels) => {
       onComplete(croppedAreaPixels);
     },
     [onComplete]
   );
-
+  
   const onMediaLoaded = useCallback(
     (mediaSize) => {
       const { width, height } = mediaSize;
@@ -97,7 +95,7 @@ EasyCrop.propTypes = {
   rotateVal: t.number,
   setZoomVal: t.func,
   setRotateVal: t.func,
-
+  
   minZoom: t.number,
   maxZoom: t.number,
   onComplete: t.func,
@@ -114,6 +112,7 @@ const ImgCrop = forwardRef((props, ref) => {
 
     zoom,
     rotate,
+    rotateStep,
     minZoom,
     maxZoom,
     fillColor,
@@ -131,7 +130,7 @@ const ImgCrop = forwardRef((props, ref) => {
 
   const hasZoom = zoom === true;
   const hasRotate = rotate === true;
-
+  
   const [src, setSrc] = useState('');
   const [zoomVal, setZoomVal] = useState(1);
   const [rotateVal, setRotateVal] = useState(0);
@@ -201,11 +200,25 @@ const ImgCrop = forwardRef((props, ref) => {
   }, [isMaxZoom, zoomVal]);
 
   const subRotateVal = useCallback(() => {
-    if (!isMinRotate) setRotateVal(rotateVal - ROTATE_STEP);
+    if (!isMinRotate) {
+      const newRotateVal = rotateVal - rotateStep;
+      if(newRotateVal >= MIN_ROTATE){
+        setRotateVal(newRotateVal);
+      }else{
+        setRotateVal(MIN_ROTATE);
+      }
+    }
   }, [isMinRotate, rotateVal]);
 
   const addRotateVal = useCallback(() => {
-    if (!isMaxRotate) setRotateVal(rotateVal + ROTATE_STEP);
+    if (!isMaxRotate) {
+      const newRotateVal = rotateVal + rotateStep;
+      if(newRotateVal <= MAX_ROTATE){
+        setRotateVal(rotateVal + rotateStep);
+      }else{
+        setRotateVal(MAX_ROTATE);
+      }
+    }
   }, [isMaxRotate, rotateVal]);
 
   /**
@@ -354,7 +367,7 @@ const ImgCrop = forwardRef((props, ref) => {
               <Slider
                 min={MIN_ROTATE}
                 max={MAX_ROTATE}
-                step={ROTATE_STEP}
+                step={rotateStep}
                 value={rotateVal}
                 onChange={setRotateVal}
               />
@@ -385,6 +398,7 @@ ImgCrop.propTypes = {
 
   zoom: t.bool,
   rotate: t.bool,
+  rotateStep: t.number,
   minZoom: t.number,
   maxZoom: t.number,
   fillColor: t.string,
@@ -408,6 +422,7 @@ ImgCrop.defaultProps = {
 
   zoom: true,
   rotate: false,
+  rotateStep: 1,
   minZoom: 1,
   maxZoom: 3,
   fillColor: 'white',

@@ -43,6 +43,7 @@ const Demo = () => (
 | fillColor    | `string`             | `white`        | Fill color when cropped image smaller than canvas                     |
 | zoom         | `boolean`            | `true`         | Enable zoom for image                                                 |
 | rotate       | `boolean`            | `false`        | Enable rotate for image                                               |
+| rotateStep | `number`             | 1              | Rotation step |
 | minZoom      | `number`             | `1`            | Minimum zoom factor                                                   |
 | maxZoom      | `number`             | `3`            | Maximum zoom factor                                                   |
 | modalTitle   | `string`             | `'Edit image'` | Title of modal                                                        |
@@ -51,6 +52,7 @@ const Demo = () => (
 | modalCancel  | `string`             | `'Cancel'`     | Text of cancel button of modal                                        |
 | beforeCrop   | `function`           | -              | Call before modal open, if return `false`, it'll not open             |
 | cropperProps | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden) |
+
 
 ## Styles
 

@@ -43,6 +43,7 @@ const Demo = () => (
 | fillColor    | `string`             | `white`      | 当裁切图像小于画布时的填充颜色                         |
 | zoom         | `boolean`            | `true`       | 启用图片缩放                                           |
 | rotate       | `boolean`            | `false`      | 启用图片旋转                                           |
+| rotationStep       | `number`            | 1      | 旋转步骤                                           |
 | minZoom      | `number`             | `1`          | 最小缩放倍数                                           |
 | maxZoom      | `number`             | `3`          | 最大缩放倍数                                           |
 | modalTitle   | `string`             | `'编辑图片'` | 弹窗标题                                               |
