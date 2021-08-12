@@ -17,6 +17,7 @@ export interface ImgCropProps {
   modalWidth?: number | string;
   modalOk?: string;
   modalCancel?: string;
+  modalBody?: React.ReactNode,
 
   beforeCrop?: (file: File, fileList: File[]) => boolean;
   cropperProps?: Partial<CropperProps>;

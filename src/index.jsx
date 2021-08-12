@@ -63,6 +63,7 @@ const EasyCrop = forwardRef((props, ref) => {
 
   return (
     <Cropper
+      key={aspect}
       {...cropperProps}
       ref={ref}
       image={src}
@@ -122,6 +123,7 @@ const ImgCrop = forwardRef((props, ref) => {
     modalWidth,
     modalOk,
     modalCancel,
+    modalBody,
 
     beforeCrop,
     children,
@@ -363,6 +365,11 @@ const ImgCrop = forwardRef((props, ref) => {
               </button>
             </div>
           )}
+          {modalBody && (
+            <div className={`${pkg}-modal__custom-body`}>
+              {modalBody}
+            </div>
+          )}
         </Modal>
       )}
     </>
@@ -393,6 +400,7 @@ ImgCrop.propTypes = {
   modalWidth: t.oneOfType([t.number, t.string]),
   modalOk: t.string,
   modalCancel: t.string,
+	modalBody: t.node,
 
   beforeCrop: t.func,
   cropperProps: t.object,
