@@ -6,7 +6,7 @@ import pkg from './package.json';
 const input = 'src/index.jsx';
 const external = (id) => !/index.less$/.test(id);
 const plugins = (isEsm) => [
-  !isEsm && replace({ '/es/': '/lib/' }),
+  !isEsm && replace({ preventAssignment: true, '/es/': '/lib/' }),
   babel({
     presets: [
       ['@babel/preset-env', { targets: '> 0.25%, not dead', modules: false, loose: true }],
