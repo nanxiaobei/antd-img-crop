@@ -19,25 +19,25 @@ const MAX_ROTATE = 180;
 const EasyCrop = memo(
   forwardRef((props, ref) => {
     const {
-      src,
+      image,
       aspect,
       shape,
       grid,
 
       zoom,
       rotate,
+      minZoom,
+      maxZoom,
+
       rotateValRef,
       setZoomValRef,
       setRotateValRef,
-
-      minZoom,
-      maxZoom,
       cropPixelsRef,
 
       cropperProps,
     } = props;
 
-    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [crop, onCropChange] = useState({ x: 0, y: 0 });
     const [cropSize, setCropSize] = useState({ width: 0, height: 0 });
 
     const onCropComplete = useCallback(
@@ -75,10 +75,10 @@ const EasyCrop = memo(
         <Cropper
           {...cropperProps}
           ref={ref}
-          image={src}
+          image={image}
           crop={crop}
           cropSize={cropSize}
-          onCropChange={setCrop}
+          onCropChange={onCropChange}
           aspect={aspect}
           cropShape={shape}
           showGrid={grid}
@@ -145,19 +145,19 @@ const EasyCrop = memo(
 );
 
 EasyCrop.propTypes = {
-  src: t.string,
+  image: t.string,
   aspect: t.number,
   shape: t.string,
   grid: t.bool,
 
   zoom: t.bool,
   rotate: t.bool,
+  minZoom: t.number,
+  maxZoom: t.number,
+
   rotateValRef: t.object,
   setZoomValRef: t.object,
   setRotateValRef: t.object,
-
-  minZoom: t.number,
-  maxZoom: t.number,
   cropPixelsRef: t.object,
 
   cropperProps: t.object,
@@ -192,13 +192,13 @@ const ImgCrop = forwardRef((props, ref) => {
   /**
    * Upload
    */
-  const [src, setSrc] = useState('');
+  const [image, setImage] = useState('');
   const fileRef = useRef();
   const resolveRef = useRef();
   const rejectRef = useRef();
   const beforeUploadRef = useRef();
 
-  const renderUpload = useCallback(() => {
+  const getUpload = useCallback(() => {
     const upload = Array.isArray(children) ? children[0] : children;
     const { beforeUpload, accept, ...restUploadProps } = upload.props;
     beforeUploadRef.current = beforeUpload;
@@ -226,9 +226,7 @@ const ImgCrop = forwardRef((props, ref) => {
             };
 
             const reader = new FileReader();
-            reader.addEventListener('load', () => {
-              setSrc(reader.result);
-            });
+            reader.addEventListener('load', () => setImage(reader.result));
             reader.readAsDataURL(file);
           });
         },
@@ -256,7 +254,7 @@ const ImgCrop = forwardRef((props, ref) => {
   }, [modalCancel, modalOk, modalWidth]);
 
   const onClose = useCallback(() => {
-    setSrc('');
+    setImage('');
     setZoomValRef.current(INIT_ZOOM);
     setRotateValRef.current(INIT_ROTATE);
   }, []);
@@ -275,7 +273,7 @@ const ImgCrop = forwardRef((props, ref) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    if (rotate && rotateValRef.current !== 0) {
+    if (rotate && rotateValRef.current !== INIT_ROTATE) {
       // make canvas to cover the rotated image
       const { naturalWidth: rawWidth, naturalHeight: rawHeight } = rawImg;
 
@@ -303,7 +301,7 @@ const ImgCrop = forwardRef((props, ref) => {
       // rotate image
       const half = boxSize / 2;
       ctx.translate(half, half);
-      ctx.rotate((rotateValRef.current * Math.PI) / 180);
+      ctx.rotate((Math.PI / 180) * rotateValRef.current);
       ctx.translate(-half, -half);
 
       // draw rotated image to canvas center
@@ -334,44 +332,41 @@ const ImgCrop = forwardRef((props, ref) => {
 
     // get the new image
     const { type, name, uid } = fileRef.current;
-    canvas.toBlob(
-      async (blob) => {
-        let newFile = new File([blob], name, { type });
-        newFile.uid = uid;
+    const onBlob = async (blob) => {
+      let newFile = new File([blob], name, { type });
+      newFile.uid = uid;
 
-        if (typeof beforeUploadRef.current !== 'function') {
-          return resolveRef.current(newFile);
+      if (typeof beforeUploadRef.current !== 'function') {
+        return resolveRef.current(newFile);
+      }
+
+      const res = beforeUploadRef.current(newFile, [newFile]);
+
+      if (typeof res !== 'boolean' && !res) {
+        console.error('beforeUpload must return a boolean or Promise');
+        return;
+      }
+
+      if (res === true) return resolveRef.current(newFile);
+      if (res === false) return rejectRef.current('not upload');
+      if (res && typeof res.then === 'function') {
+        try {
+          const passedFile = await res;
+          const type = Object.prototype.toString.call(passedFile);
+          if (type === '[object File]' || type === '[object Blob]') newFile = passedFile;
+          resolveRef.current(newFile);
+        } catch (err) {
+          rejectRef.current(err);
         }
-
-        const res = beforeUploadRef.current(newFile, [newFile]);
-
-        if (typeof res !== 'boolean' && !res) {
-          console.error('beforeUpload must return a boolean or Promise');
-          return;
-        }
-
-        if (res === true) return resolveRef.current(newFile);
-        if (res === false) return rejectRef.current('not upload');
-        if (res && typeof res.then === 'function') {
-          try {
-            const passedFile = await res;
-            const type = Object.prototype.toString.call(passedFile);
-            if (type === '[object File]' || type === '[object Blob]') newFile = passedFile;
-            resolveRef.current(newFile);
-          } catch (err) {
-            rejectRef.current(err);
-          }
-        }
-      },
-      type,
-      quality
-    );
+      }
+    };
+    canvas.toBlob(onBlob, type, quality);
   }, [fillColor, onClose, quality, rotate]);
 
-  const renderComponent = (titleOfModal) => (
+  const getComponent = (titleOfModal) => (
     <>
-      {renderUpload()}
-      {src && (
+      {getUpload()}
+      {image && (
         <Modal
           visible={true}
           wrapClassName={`${pkg}-modal`}
@@ -384,7 +379,7 @@ const ImgCrop = forwardRef((props, ref) => {
         >
           <EasyCrop
             ref={ref}
-            src={src}
+            image={image}
             aspect={aspect}
             shape={shape}
             grid={grid}
@@ -403,11 +398,11 @@ const ImgCrop = forwardRef((props, ref) => {
     </>
   );
 
-  if (modalTitle) return renderComponent(modalTitle);
+  if (modalTitle) return getComponent(modalTitle);
 
   return (
     <LocaleReceiver>
-      {(locale, localeCode) => renderComponent(localeCode === 'zh-cn' ? '编辑图片' : 'Edit image')}
+      {(locale, code) => getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image')}
     </LocaleReceiver>
   );
 });
