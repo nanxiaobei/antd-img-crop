@@ -20,7 +20,7 @@ export interface ImgCropProps {
   onModalOk?: (file: File) => void;
   onModalCancel?: () => void;
 
-  beforeCrop?: (file: File, fileList: File[]) => boolean;
+  beforeCrop?: (file: File, fileList: File[]) => boolean | Promise<boolean>;
   onUploadFail?: (err: Error) => void;
   cropperProps?: Partial<CropperProps>;
 }
