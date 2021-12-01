@@ -1,3 +1,7 @@
+# @hegafaisal/antd-img-crop
+
+A fork of [antd-img-crop](https://github.com/nanxiaobei/antd-img-crop) 3.16.0
+
 # antd-img-crop
 
 An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
@@ -9,22 +13,16 @@ An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
 
 English | [简体中文](./README.zh-CN.md)
 
-## Demo
-
-[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
-
 ## Install
 
 ```sh
-yarn add antd-img-crop
-
-# npm install antd-img-crop
+npm install @hegafaisal/antd-img-crop
 ```
 
 ## Usage
 
 ```jsx harmony
-import ImgCrop from 'antd-img-crop';
+import ImgCrop from '@hegafaisal/antd-img-crop';
 import { Upload } from 'antd';
 
 const Demo = () => (
