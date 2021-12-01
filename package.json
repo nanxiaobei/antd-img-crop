@@ -1,5 +1,5 @@
 {
-  "name": "antd-img-crop",
+  "name": "@hegafaisal/antd-img-crop",
   "version": "3.16.0",
   "description": "An image cropper for Ant Design Upload",
   "keywords": [
@@ -12,10 +12,10 @@
     "cropper"
   ],
   "license": "MIT",
-  "author": "nanxiaobei <nanxiaobei@gmail.com> (https://github.com/nanxiaobei)",
-  "homepage": "https://github.com/nanxiaobei/antd-img-crop",
-  "repository": "github:nanxiaobei/antd-img-crop",
-  "bugs": "https://github.com/nanxiaobei/antd-img-crop/issues",
+  "author": "hegafaisal <hega.faisalagustian@gmail.com> (https://github.com/hegafaisal)",
+  "homepage": "https://github.com/hegafaisal/antd-img-crop",
+  "repository": "github:hegafaisal/antd-img-crop",
+  "bugs": "https://github.com/hegafaisal/antd-img-crop/issues",
   "main": "dist/antd-img-crop.cjs.js",
   "module": "dist/antd-img-crop.esm.js",
   "types": "index.d.ts",
