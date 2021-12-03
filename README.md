@@ -5,7 +5,7 @@ An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
 [![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
-[![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE)
 
 English | [简体中文](./README.zh-CN.md)
 
@@ -70,13 +70,13 @@ import 'antd/es/slider/style';
 
 ## License
 
-[MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://lee.so/)
+[MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE) (c) [nanxiaobei](https://lee.so/)
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
-[existing props]: https://github.com/nanxiaobei/antd-img-crop/blob/master/src/index.jsx#L67-L83
+[existing props]: https://github.com/nanxiaobei/antd-img-crop/blob/main/src/index.jsx#L78-L94
 
-## Pitiless Ads
+## FUTAKE
 
-If you use WeChat, please try "**FUTAKE**". It's a WeChat mini app for your inspiration moments. 🌈
+Try [**FUTAKE**](https://sotake.com/f) in WeChat. A mini app for your inspiration moments. 🌈
 
-![FUTAKE](https://s3.jpg.cm/2021/04/22/TDQuS.png)
+![FUTAKE](https://s3.jpg.cm/2021/09/21/IFG3wi.png)

@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
 [![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
-[![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE)
 
 [English](./README.md) | 简体中文
 
@@ -70,13 +70,13 @@ import 'antd/es/slider/style';
 
 ## 协议
 
-[MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/master/LICENSE) (c) [nanxiaobei](https://lee.so/)
+[MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE) (c) [nanxiaobei](https://lee.so/)
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
-[已有 props]: https://github.com/nanxiaobei/antd-img-crop/blob/master/src/index.jsx#L67-L83
+[已有 props]: https://github.com/nanxiaobei/antd-img-crop/blob/main/src/index.jsx#L78-L94
 
-## 无情的小广告
+## FUTAKE
 
-如果你使用微信，请试试 "**FUTAKE**"。这是一个微信小程序，为你的灵感瞬间。🌈
+试试 [**FUTAKE**](https://sotake.com/f) 小程序，你的灵感相册。🌈
 
-![FUTAKE](https://s3.jpg.cm/2021/04/22/TDQuS.png)
+![FUTAKE](https://s3.jpg.cm/2021/09/21/IFG3wi.png)
