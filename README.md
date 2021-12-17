@@ -9,7 +9,9 @@ An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
 
 English | [简体中文](./README.zh-CN.md)
 
-> Since 4.0, no need to manually import Modal & Slider style files.
+---
+
+> 👉 Since 4.0, no need to manually import Modal & Slider style files.
 
 ## Demo
 
