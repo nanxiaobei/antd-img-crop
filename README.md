@@ -9,6 +9,8 @@ An image cropper for Ant Design [Upload](https://ant.design/components/upload/).
 
 English | [简体中文](./README.zh-CN.md)
 
+> Since 4.0, no need to manually import Modal & Slider style files.
+
 ## Demo
 
 [![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
@@ -56,17 +58,6 @@ const Demo = () => (
 | beforeCrop    | `function`           | -              | Call before modal open, if return `false`, it'll not open             |
 | onUploadFail  | `function`           | -              | Call when upload failed                                               |
 | cropperProps  | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden) |
-
-## Styles
-
-To prevent overwriting the custom styles to `antd`, `antd-img-crop` does not import the style files of components.
-
-Therefore, if your project configured `babel-plugin-import` and no `Modal` or `Slider` were used, you need to import the styles manually:
-
-```js
-import 'antd/es/modal/style';
-import 'antd/es/slider/style';
-```
 
 ## License
 
