@@ -24,5 +24,7 @@ export interface ImgCropProps {
   onUploadFail?: (err: Error) => void;
   cropperProps?: Partial<CropperProps>;
 }
+
 declare const ImgCrop: React.FC<ImgCropProps>;
+
 export default ImgCrop;
