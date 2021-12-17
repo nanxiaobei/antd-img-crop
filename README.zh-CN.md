@@ -9,12 +9,6 @@
 
 [English](./README.md) | 简体中文
 
----
-
-> 👉 4.0 版本起，无需再手动引入 Modal 和 Slider 样式文件。
->
-> 如有问题，请查看 [没有样式，或 ConfigProvider 没有生效？](#没有样式或-configprovider-没有生效)
-
 ## 示例
 
 [![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
@@ -62,6 +56,17 @@ const Demo = () => (
 | beforeCrop    | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开         |
 | onUploadFail  | `function`           | -            | 上传失败时的回调                                       |
 | cropperProps  | `object`             | -            | [react-easy-crop] 的 props（\* [已有 props] 无法重写） |
+
+## 样式
+
+为防止覆盖 `antd` 自定义样式，`antd-img-crop` 没有引入组件样式。
+
+因此，若项目配置了 `babel-plugin-import` 且未使用 `Modal` 或 `Slider`，请手动引入样式：
+
+```js
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
+```
 
 ## FAQ
 
