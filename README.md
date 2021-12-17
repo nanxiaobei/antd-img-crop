@@ -12,6 +12,8 @@ English | [简体中文](./README.zh-CN.md)
 ---
 
 > 👉 Since 4.0, no need to manually import Modal & Slider style files.
+>
+> If having problem, Please read [No style, or ConfigProvider not work?](#no-style-or-configprovider-not-work)
 
 ## Demo
 
@@ -60,6 +62,36 @@ const Demo = () => (
 | beforeCrop    | `function`           | -              | Call before modal open, if return `false`, it'll not open             |
 | onUploadFail  | `function`           | -              | Call when upload failed                                               |
 | cropperProps  | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden) |
+
+## FAQ
+
+### No style, or ConfigProvider not work?
+
+If using `craco-antd`, please try to add `libraryDirectory: 'es'` to `craco.config.js`:
+
+```diff
+module.exports = {
+  plugins: [
+    {
+      plugin: CracoAntDesignPlugin,
+      options: {
+        // other options...
++       babelPluginImportOptions: {
++         libraryDirectory: 'es',
++       },
+      },
+    },
+  ],
+};
+```
+
+Or if configuring `babel-plugin-import` manually, please try to set `libraryDirectory: 'es'` to `.babelrc.js`:
+
+```js
+module.exports = {
+  plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
+};
+```
 
 ## License
 

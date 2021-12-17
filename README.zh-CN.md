@@ -12,6 +12,8 @@
 ---
 
 > 👉 4.0 版本起，无需再手动引入 Modal 和 Slider 样式文件。
+>
+> 如有问题，请查看 [没有样式，或 ConfigProvider 没有生效？](#没有样式或-configprovider-没有生效)
 
 ## 示例
 
@@ -60,6 +62,36 @@ const Demo = () => (
 | beforeCrop    | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开         |
 | onUploadFail  | `function`           | -            | 上传失败时的回调                                       |
 | cropperProps  | `object`             | -            | [react-easy-crop] 的 props（\* [已有 props] 无法重写） |
+
+## FAQ
+
+### 没有样式，或 ConfigProvider 没有生效？
+
+若使用 `craco-antd`，请在 `craco.config.js` 中添加 `libraryDirectory: 'es'`：
+
+```diff
+module.exports = {
+  plugins: [
+    {
+      plugin: CracoAntDesignPlugin,
+      options: {
+        // 其它配置...
++       babelPluginImportOptions: {
++         libraryDirectory: 'es',
++       },
+      },
+    },
+  ],
+};
+```
+
+若手动配置 `babel-plugin-import`，请在 `.babelrc.js` 中设置 `libraryDirectory: 'es'`：
+
+```js
+module.exports = {
+  plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
+};
+```
 
 ## 协议
 
