@@ -70,7 +70,7 @@ import 'antd/es/slider/style';
 
 ## FAQ
 
-### No style, or ConfigProvider not work?
+### ConfigProvider not work?
 
 If using `craco-antd`, please try to add `libraryDirectory: 'es'` to `craco.config.js`:
 
