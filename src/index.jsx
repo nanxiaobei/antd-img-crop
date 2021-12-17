@@ -3,8 +3,6 @@ import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import AntModal from 'antd/es/modal';
 import AntSlider from 'antd/es/slider';
-import 'antd/es/modal/style';
-import 'antd/es/slider/style';
 import './index.less';
 
 const cls = 'img-crop';
