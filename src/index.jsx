@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef, memo } from 'react';
 import Cropper from 'react-easy-crop';
-import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
-import AntModal from 'antd/lib/modal';
-import AntSlider from 'antd/lib/slider';
-import 'antd/lib/modal/style';
-import 'antd/lib/slider/style';
+import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
+import AntModal from 'antd/es/modal';
+import AntSlider from 'antd/es/slider';
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
 import './index.less';
 
 const cls = 'img-crop';
@@ -142,20 +142,20 @@ const EasyCrop = forwardRef((props, ref) => {
   );
 });
 
-const MemoEasyCrop = memo(EasyCrop);
+const EasyCropMemo = memo(EasyCrop);
 
 const ImgCrop = forwardRef((props, ref) => {
   const {
-    aspect,
-    shape,
-    grid,
-    quality,
+    aspect = 1,
+    shape = 'rect',
+    grid = false,
+    quality = 0.4,
+    fillColor = 'white',
 
-    zoom,
-    rotate,
-    minZoom,
-    maxZoom,
-    fillColor,
+    zoom = true,
+    rotate = false,
+    minZoom = 1,
+    maxZoom = 3,
 
     modalTitle,
     modalWidth,
@@ -366,7 +366,7 @@ const ImgCrop = forwardRef((props, ref) => {
           destroyOnClose
           {...modalProps}
         >
-          <MemoEasyCrop
+          <EasyCropMemo
             ref={ref}
             image={image}
             aspect={aspect}
@@ -395,18 +395,5 @@ const ImgCrop = forwardRef((props, ref) => {
     </LocaleReceiver>
   );
 });
-
-ImgCrop.defaultProps = {
-  aspect: 1,
-  shape: 'rect',
-  grid: false,
-  quality: 0.4,
-  fillColor: 'white',
-
-  zoom: true,
-  rotate: false,
-  minZoom: 1,
-  maxZoom: 3,
-};
 
 export default ImgCrop;
