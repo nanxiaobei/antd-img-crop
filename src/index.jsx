@@ -155,6 +155,8 @@ const ImgCrop = forwardRef((props, ref) => {
     minZoom = 1,
     maxZoom = 3,
 
+    gifCrop,
+
     modalTitle,
     modalWidth,
     modalOk,
@@ -211,6 +213,11 @@ const ImgCrop = forwardRef((props, ref) => {
               cb.current.onUploadFail?.(uploadErr);
               reject(uploadErr);
             };
+
+            if (!gifCrop && (file.type === 'image/gif')) { //gifCrop : false ignore crop
+              resolve(file);
+              return;
+            }
 
             const reader = new FileReader();
             reader.addEventListener('load', () => setImage(reader.result));

@@ -13,6 +13,8 @@ export interface ImgCropProps {
   minZoom?: number;
   maxZoom?: number;
 
+  gifCrop?: boolean;
+
   modalTitle?: string;
   modalWidth?: number | string;
   modalOk?: string;

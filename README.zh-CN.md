@@ -47,6 +47,7 @@ const Demo = () => (
 | rotate        | `boolean`            | `false`      | 启用图片旋转                                           |
 | minZoom       | `number`             | `1`          | 最小缩放倍数                                           |
 | maxZoom       | `number`             | `3`          | 最大缩放倍数                                           |
+| gifCrop       | `boolean`             | true          | 裁切 .gif                                             |
 | modalTitle    | `string`             | `'编辑图片'` | 弹窗标题                                               |
 | modalWidth    | `number` \| `string` | `520`        | 弹窗宽度，`px` 的数值或百分比                          |
 | modalOk       | `string`             | `'确定'`     | 弹窗确定按钮文字                                       |
