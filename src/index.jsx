@@ -214,7 +214,7 @@ const ImgCrop = forwardRef((props, ref) => {
               reject(uploadErr);
             };
 
-            if (!gifCrop && (file.type === 'image/gif')) { //gifCrop : false ignore crop
+            if (gifCrop === false && (file.type === 'image/gif')) { //gifCrop : false ignore .gif crop
               resolve(file);
               return;
             }
