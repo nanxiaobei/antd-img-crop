@@ -169,12 +169,10 @@ const ImgCrop = forwardRef((props, ref) => {
   } = props;
 
   const cb = useRef({});
-  useEffect(() => {
-    cb.current.onModalOk = onModalOk;
-    cb.current.onModalCancel = onModalCancel;
-    cb.current.beforeCrop = beforeCrop;
-    cb.current.onUploadFail = onUploadFail;
-  }, [beforeCrop, onModalCancel, onModalOk, onUploadFail]);
+  cb.current.onModalOk = onModalOk;
+  cb.current.onModalCancel = onModalCancel;
+  cb.current.beforeCrop = beforeCrop;
+  cb.current.onUploadFail = onUploadFail;
 
   /**
    * Upload
@@ -254,67 +252,51 @@ const ImgCrop = forwardRef((props, ref) => {
   const onOk = useCallback(async () => {
     onClose();
 
-    const rawImg = document.querySelector(`.${cls}-media`);
-    let { width: cropWidth, height: cropHeight, x: cropX, y: cropY } = cropPixelsRef.current;
-
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
+    const imgSource = document.querySelector(`.${cls}-media`);
+    const { width: cropWidth, height: cropHeight, x: cropX, y: cropY } = cropPixelsRef.current;
+
     if (rotate && rotateValRef.current !== INIT_ROTATE) {
-      // make canvas to cover the rotated image
-      const { naturalWidth: rawWidth, naturalHeight: rawHeight } = rawImg;
+      const { naturalWidth: imgWidth, naturalHeight: imgHeight } = imgSource;
+      const angle = rotateValRef.current * (Math.PI / 180);
 
-      let boxSize = Math.sqrt(Math.pow(rawWidth, 2) + Math.pow(rawHeight, 2));
-      let imgWidth = rawWidth;
-      let imgHeight = rawHeight;
+      // get container for rotated image
+      const sine = Math.abs(Math.sin(angle));
+      const cosine = Math.abs(Math.cos(angle));
+      const squareWidth = imgWidth * cosine + imgHeight * sine;
+      const squareHeight = imgHeight * cosine + imgWidth * sine;
 
-      // fit the long image
-      if (boxSize > 4096) {
-        const ratio = 4096 / boxSize;
-
-        boxSize = 4096;
-        imgWidth = rawWidth * ratio;
-        imgHeight = rawHeight * ratio;
-
-        cropWidth = cropWidth * ratio;
-        cropHeight = cropHeight * ratio;
-        cropX = cropX * ratio;
-        cropY = cropY * ratio;
-      }
-
-      canvas.width = boxSize;
-      canvas.height = boxSize;
-
-      // rotate image
-      const half = boxSize / 2;
-      ctx.translate(half, half);
-      ctx.rotate((Math.PI / 180) * rotateValRef.current);
-      ctx.translate(-half, -half);
-
-      // draw rotated image to canvas center
+      canvas.width = squareWidth;
+      canvas.height = squareHeight;
       ctx.fillStyle = fillColor;
-      ctx.fillRect(0, 0, boxSize, boxSize);
+      ctx.fillRect(0, 0, squareWidth, squareHeight);
 
-      const imgX = (boxSize - imgWidth) / 2;
-      const imgY = (boxSize - imgHeight) / 2;
+      // rotate container
+      const squareHalfWidth = squareWidth / 2;
+      const squareHalfHeight = squareHeight / 2;
+      ctx.translate(squareHalfWidth, squareHalfHeight);
+      ctx.rotate(angle);
+      ctx.translate(-squareHalfWidth, -squareHalfHeight);
 
-      ctx.drawImage(rawImg, 0, 0, rawWidth, rawHeight, imgX, imgY, imgWidth, imgHeight);
-      const rotatedImg = ctx.getImageData(0, 0, boxSize, boxSize);
+      // draw rotated image
+      const imgX = (squareWidth - imgWidth) / 2;
+      const imgY = (squareHeight - imgHeight) / 2;
+      ctx.drawImage(imgSource, 0, 0, imgWidth, imgHeight, imgX, imgY, imgWidth, imgHeight);
 
-      // resize canvas to crop size
+      // crop rotated image
+      const imgData = ctx.getImageData(0, 0, squareWidth, squareHeight);
       canvas.width = cropWidth;
       canvas.height = cropHeight;
-
-      ctx.fillStyle = fillColor;
-      ctx.fillRect(0, 0, cropWidth, cropHeight);
-      ctx.putImageData(rotatedImg, -(imgX + cropX), -(imgY + cropY));
+      ctx.putImageData(imgData, -cropX, -cropY);
     } else {
       canvas.width = cropWidth;
       canvas.height = cropHeight;
-
       ctx.fillStyle = fillColor;
       ctx.fillRect(0, 0, cropWidth, cropHeight);
-      ctx.drawImage(rawImg, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+      ctx.drawImage(imgSource, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
     }
 
     // get the new image
