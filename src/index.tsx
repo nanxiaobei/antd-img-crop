@@ -330,11 +330,13 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps & { children?: ReactNode }>((pr
 
       if (res === true) return resolveRef.current(newFile);
       if (res === false) return rejectRef.current(new Error('not upload'));
-      if (res && typeof res.then === 'function') {
+      if (res && res instanceof Promise) {
         try {
           const passedFile = await res;
           const type = Object.prototype.toString.call(passedFile);
-          if (type === '[object File]' || type === '[object Blob]') newFile = passedFile;
+          if (type instanceof File || type instanceof Blob) {
+            return resolveRef.current(passedFile);
+          }
           resolveRef.current(newFile);
         } catch (err) {
           rejectRef.current(err);
