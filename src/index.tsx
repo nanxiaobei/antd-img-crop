@@ -333,8 +333,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps & { children?: ReactNode }>((pr
       if (res && res instanceof Promise) {
         try {
           const passedFile = await res;
-          const type = Object.prototype.toString.call(passedFile);
-          if (type instanceof File || type instanceof Blob) {
+          if (passedFile instanceof File || passedFile instanceof Blob) {
             return resolveRef.current(passedFile);
           }
           resolveRef.current(newFile);
