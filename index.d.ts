@@ -1,5 +1,21 @@
 import * as React from 'react';
 import { CropperProps } from 'react-easy-crop';
+import type { Area } from 'react-easy-crop/types';
+
+export type BeforeUploadValueType = void | boolean | string | Blob | File;
+
+export type EasyCropProps = Pick<ImgCropProps, 'cropperProps'> &
+  Required<
+    Pick<ImgCropProps, 'aspect' | 'shape' | 'grid' | 'zoom' | 'rotate' | 'minZoom' | 'maxZoom'>
+  > & {
+    image?: string;
+    rotateValRef: React.MutableRefObject<number | undefined>;
+    setZoomValRef: React.MutableRefObject<React.Dispatch<React.SetStateAction<number>> | undefined>;
+    setRotateValRef: React.MutableRefObject<
+      React.Dispatch<React.SetStateAction<number>> | undefined
+    >;
+    cropPixelsRef: React.MutableRefObject<Area | undefined>;
+  };
 
 export interface ImgCropProps {
   aspect?: number;
@@ -17,7 +33,7 @@ export interface ImgCropProps {
   modalWidth?: number | string;
   modalOk?: string;
   modalCancel?: string;
-  onModalOk?: (file: File) => void;
+  onModalOk?: (file: BeforeUploadValueType) => void;
   onModalCancel?: () => void;
 
   beforeCrop?: (file: File, fileList: File[]) => boolean | Promise<boolean>;

@@ -41,6 +41,8 @@
     "@babel/preset-env": "^7.16.8",
     "@babel/preset-react": "^7.16.7",
     "@rollup/plugin-replace": "^3.0.1",
+    "@types/react": "^17.0.39",
+    "antd": ">=4.0.0",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^7.0.0",

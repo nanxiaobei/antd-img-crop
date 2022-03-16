@@ -4,6 +4,11 @@ import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import AntModal from 'antd/es/modal';
 import AntSlider from 'antd/es/slider';
 import './index.less';
+import type { ReactNode } from 'react';
+import type { UploadProps } from 'antd';
+import type { RcFile } from 'antd/lib/upload';
+import type { BeforeUploadValueType, EasyCropProps, ImgCropProps } from '../index.d';
+import { Area } from 'react-easy-crop/types';
 
 const cls = 'img-crop';
 
@@ -14,7 +19,7 @@ const ROTATE_STEP = 1;
 const MIN_ROTATE = -180;
 const MAX_ROTATE = 180;
 
-const EasyCrop = forwardRef((props, ref) => {
+const EasyCrop = forwardRef<Cropper, EasyCropProps>((props, ref) => {
   const {
     image,
     aspect,
@@ -142,7 +147,7 @@ const EasyCrop = forwardRef((props, ref) => {
 
 const EasyCropMemo = memo(EasyCrop);
 
-const ImgCrop = forwardRef((props, ref) => {
+const ImgCrop = forwardRef<Cropper, ImgCropProps & { children?: ReactNode }>((props, ref) => {
   const {
     aspect = 1,
     shape = 'rect',
@@ -168,7 +173,9 @@ const ImgCrop = forwardRef((props, ref) => {
     children,
   } = props;
 
-  const cb = useRef({});
+  const cb = useRef<
+    Pick<ImgCropProps, 'onModalOk' | 'onModalCancel' | 'beforeCrop' | 'onUploadFail'>
+  >({});
   cb.current.onModalOk = onModalOk;
   cb.current.onModalCancel = onModalCancel;
   cb.current.beforeCrop = beforeCrop;
@@ -178,10 +185,10 @@ const ImgCrop = forwardRef((props, ref) => {
    * Upload
    */
   const [image, setImage] = useState('');
-  const fileRef = useRef();
-  const resolveRef = useRef();
-  const rejectRef = useRef();
-  const beforeUploadRef = useRef();
+  const fileRef = useRef<RcFile>();
+  const resolveRef = useRef<(file: BeforeUploadValueType) => void>();
+  const rejectRef = useRef<(err: Error) => void>();
+  const beforeUploadRef = useRef<UploadProps['beforeUpload']>();
 
   const uploadComponent = useMemo(() => {
     const upload = Array.isArray(children) ? children[0] : children;
@@ -211,7 +218,10 @@ const ImgCrop = forwardRef((props, ref) => {
             };
 
             const reader = new FileReader();
-            reader.addEventListener('load', () => setImage(reader.result));
+            reader.addEventListener(
+              'load',
+              () => typeof reader.result === 'string' && setImage(reader.result)
+            );
             reader.readAsDataURL(file);
           });
         },
@@ -222,10 +232,10 @@ const ImgCrop = forwardRef((props, ref) => {
   /**
    * Crop
    */
-  const rotateValRef = useRef();
-  const setZoomValRef = useRef();
-  const setRotateValRef = useRef();
-  const cropPixelsRef = useRef();
+  const rotateValRef = useRef<number>();
+  const setZoomValRef = useRef<React.Dispatch<React.SetStateAction<number>>>();
+  const setRotateValRef = useRef<React.Dispatch<React.SetStateAction<number>>>();
+  const cropPixelsRef = useRef<Area>();
 
   /**
    * Modal
@@ -255,7 +265,10 @@ const ImgCrop = forwardRef((props, ref) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    const imgSource = document.querySelector(`.${cls}-media`);
+    const imgSource = document.querySelector(`.${cls}-media`) as CanvasImageSource & {
+      naturalWidth: number;
+      naturalHeight: number;
+    };
     const { width: cropWidth, height: cropHeight, x: cropX, y: cropY } = cropPixelsRef.current;
 
     if (rotate && rotateValRef.current !== INIT_ROTATE) {
@@ -301,9 +314,8 @@ const ImgCrop = forwardRef((props, ref) => {
 
     // get the new image
     const { type, name, uid } = fileRef.current;
-    const onBlob = async (blob) => {
-      let newFile = new File([blob], name, { type });
-      newFile.uid = uid;
+    const onBlob = async (blob: Blob | null) => {
+      let newFile = Object.assign(new File([blob], name, { type }), { uid }) as RcFile;
 
       if (typeof beforeUploadRef.current !== 'function') {
         return resolveRef.current(newFile);
@@ -317,12 +329,13 @@ const ImgCrop = forwardRef((props, ref) => {
       }
 
       if (res === true) return resolveRef.current(newFile);
-      if (res === false) return rejectRef.current('not upload');
-      if (res && typeof res.then === 'function') {
+      if (res === false) return rejectRef.current(new Error('not upload'));
+      if (res && res instanceof Promise) {
         try {
           const passedFile = await res;
-          const type = Object.prototype.toString.call(passedFile);
-          if (type === '[object File]' || type === '[object Blob]') newFile = passedFile;
+          if (passedFile instanceof File || passedFile instanceof Blob) {
+            return resolveRef.current(passedFile);
+          }
           resolveRef.current(newFile);
         } catch (err) {
           rejectRef.current(err);
