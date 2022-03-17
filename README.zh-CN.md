@@ -1,11 +1,12 @@
 # antd-img-crop
 
-图片裁切工具，用于 Ant Design [Upload](https://ant.design/components/upload-cn/) 组件。
+图片裁切工具，用于 Ant Design [Upload](https://ant.design/components/upload-cn/) 组件
 
 [![npm](https://img.shields.io/npm/v/antd-img-crop.svg?style=flat-square)](https://www.npmjs.com/package/antd-img-crop)
 [![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
 [![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE)
+[![npm type definitions](https://img.shields.io/npm/types/typescript?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/index.d.ts)
 
 [English](./README.md) | 简体中文
 
