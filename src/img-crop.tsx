@@ -78,7 +78,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
             };
             rejectRef.current = (uploadErr) => {
               cb.current.onUploadFail?.(uploadErr);
-              reject(uploadErr);
+              reject();
             };
 
             const reader = new FileReader();
