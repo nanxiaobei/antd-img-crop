@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useRef, forwardRef } from 'react';
 import AntModal from 'antd/es/modal';
+import AntUpload from 'antd/es/upload';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import type Cropper from 'react-easy-crop';
 import type { UploadProps } from 'antd';
@@ -65,9 +66,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
         accept: accept || 'image/*',
         beforeUpload: (file, fileList) => {
           return new Promise(async (resolve, reject) => {
-            if (cb.current.beforeCrop && !(await cb.current.beforeCrop(file, fileList))) {
-              reject();
-              return;
+            if (cb.current.beforeCrop) {
+              const shouldCrop = await cb.current.beforeCrop(file, fileList);
+              if (!shouldCrop) return reject();
             }
 
             fileRef.current = file;
@@ -81,10 +82,11 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
             };
 
             const reader = new FileReader();
-            reader.addEventListener(
-              'load',
-              () => typeof reader.result === 'string' && setImage(reader.result)
-            );
+            reader.addEventListener('load', () => {
+              if (typeof reader.result === 'string') {
+                setImage(reader.result);
+              }
+            });
             reader.readAsDataURL(file);
           });
         },
@@ -179,35 +181,40 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
 
     // get the new image
     const { type, name, uid } = fileRef.current;
-    const onBlob = async (blob: Blob | null) => {
-      let newFile = Object.assign(new File([blob], name, { type }), { uid }) as RcFile;
+    canvas.toBlob(
+      async (blob: Blob | null) => {
+        const newFile = Object.assign(new File([blob], name, { type }), { uid }) as RcFile;
 
-      if (typeof beforeUploadRef.current !== 'function') {
-        return resolveRef.current(newFile);
-      }
-
-      const res = beforeUploadRef.current(newFile, [newFile]);
-
-      if (typeof res !== 'boolean' && !res) {
-        console.error('beforeUpload must return a boolean or Promise');
-        return;
-      }
-
-      if (res === true) return resolveRef.current(newFile);
-      if (res === false) return rejectRef.current(new Error('not upload'));
-      if (res && res instanceof Promise) {
-        try {
-          const passedFile = await res;
-          if (passedFile instanceof File || passedFile instanceof Blob) {
-            return resolveRef.current(passedFile);
-          }
-          resolveRef.current(newFile);
-        } catch (err) {
-          rejectRef.current(err);
+        if (!beforeUploadRef.current) {
+          return resolveRef.current(newFile);
         }
-      }
-    };
-    canvas.toBlob(onBlob, type, quality);
+
+        const result = await beforeUploadRef.current(newFile, [newFile]);
+
+        if (result === true) {
+          return resolveRef.current(newFile);
+        }
+
+        if (result === false) {
+          return rejectRef.current(new Error('beforeUpload return false'));
+        }
+
+        delete newFile[AntUpload.LIST_IGNORE];
+        if (result === AntUpload.LIST_IGNORE) {
+          Object.defineProperty(newFile, AntUpload.LIST_IGNORE, {
+            value: true,
+            configurable: true,
+          });
+          return rejectRef.current(new Error('beforeUpload return LIST_IGNORE'));
+        }
+
+        if (typeof result === 'object' && result !== null) {
+          return resolveRef.current(result);
+        }
+      },
+      type,
+      quality
+    );
   }, [fillColor, quality, rotate]);
 
   const getComponent = (titleOfModal) => (
