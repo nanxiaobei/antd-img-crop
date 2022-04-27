@@ -116,7 +116,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       if (!obj[key]) delete obj[key];
     });
     return obj;
-  }, [modalCancel, modalOk, modalWidth, modalMaskTransitionName, modalTransitionName]);
+  }, [modalCancel, modalMaskTransitionName, modalOk, modalTransitionName, modalWidth]);
 
   const onClose = () => {
     setImage('');
