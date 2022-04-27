@@ -28,6 +28,8 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     modalWidth,
     modalOk,
     modalCancel,
+    modalMaskTransitionName,
+    modalTransitionName,
     onModalOk,
     onModalCancel,
 
@@ -103,12 +105,18 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
    * Modal
    */
   const modalProps = useMemo(() => {
-    const obj = { width: modalWidth, okText: modalOk, cancelText: modalCancel };
+    const obj = {
+      width: modalWidth,
+      okText: modalOk,
+      cancelText: modalCancel,
+      maskTransitionName: modalMaskTransitionName,
+      transitionName: modalTransitionName,
+    };
     Object.keys(obj).forEach((key) => {
       if (!obj[key]) delete obj[key];
     });
     return obj;
-  }, [modalCancel, modalOk, modalWidth]);
+  }, [modalCancel, modalOk, modalWidth, modalMaskTransitionName, modalTransitionName]);
 
   const onClose = () => {
     setImage('');

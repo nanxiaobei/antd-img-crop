@@ -17,6 +17,8 @@ export interface ImgCropProps {
   modalWidth?: number | string;
   modalOk?: string;
   modalCancel?: string;
+  modalMaskTransitionName?: string;
+  modalTransitionName?: string;
   onModalOk?: (file: void | boolean | string | Blob | File) => void;
   onModalCancel?: () => void;
 
