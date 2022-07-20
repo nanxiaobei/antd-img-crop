@@ -112,4 +112,4 @@ module.exports = {
 
 试试 [**FUTAKE**](https://sotake.com/f) 小程序，你的灵感相册。🌈
 
-![FUTAKE](https://s3.jpg.cm/2021/09/21/IFG3wi.png)
+![](https://s3.bmp.ovh/imgs/2022/07/21/452dd47aeb790abd.png)
