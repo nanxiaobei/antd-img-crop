@@ -54,6 +54,7 @@ const Demo = () => (
 | modalCancel             | `string`             | `'Cancel'`     | Text of modal cancel button                                                        |
 | modalMaskTransitionName | `string`             | `'fade'`       | MaskTransitionName of modal, use `'none'` to disable the default transition effect |
 | modalTransitionName     | `string`             | `'fade'`       | TransitionName of modal, use `'none'` to disable the default transition effect     |
+| modalClassName          | `string`             | `''`           | Provide your own classname for the Modal container                                 |
 | onModalOk               | `function`           | -              | Call when click modal confirm button                                               |
 | onModalCancel           | `function`           | -              | Call when click modal mask, top right "x", or cancel button                        |
 | beforeCrop              | `function`           | -              | Call before modal open, if return `false`, it'll not open                          |

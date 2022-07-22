@@ -30,6 +30,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     modalCancel,
     modalMaskTransitionName,
     modalTransitionName,
+    modalClassName,
     onModalOk,
     onModalCancel,
 
@@ -231,7 +232,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       {image && (
         <AntModal
           visible={true}
-          wrapClassName={`${PREFIX}-modal`}
+          wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
           title={titleOfModal}
           onOk={onOk}
           onCancel={onCancel}
