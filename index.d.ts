@@ -1,4 +1,5 @@
-import type { FC } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import type Cropper from 'react-easy-crop';
 import type { CropperProps } from 'react-easy-crop';
 
 export interface ImgCropProps {
@@ -30,6 +31,7 @@ export interface ImgCropProps {
   children: JSX.Element;
 }
 
-declare const ImgCrop: FC<ImgCropProps>;
-
+declare const ImgCrop: ForwardRefExoticComponent<
+  ImgCropProps & RefAttributes<Cropper>
+>;
 export default ImgCrop;
