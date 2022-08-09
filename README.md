@@ -98,7 +98,9 @@ Or if configuring `babel-plugin-import` manually, please try to set `libraryDire
 
 ```js
 module.exports = {
-  plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
+  plugins: [
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+  ],
 };
 ```
 

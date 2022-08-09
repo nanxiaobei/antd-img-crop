@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useRef, forwardRef } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  forwardRef,
+} from 'react';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
@@ -41,7 +47,10 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
   } = props;
 
   const cb = useRef<
-    Pick<ImgCropProps, 'onModalOk' | 'onModalCancel' | 'beforeCrop' | 'onUploadFail'>
+    Pick<
+      ImgCropProps,
+      'onModalOk' | 'onModalCancel' | 'beforeCrop' | 'onUploadFail'
+    >
   >({});
   cb.current.onModalOk = onModalOk;
   cb.current.onModalCancel = onModalCancel;
@@ -117,7 +126,13 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       if (!obj[key]) delete obj[key];
     });
     return obj;
-  }, [modalCancel, modalMaskTransitionName, modalOk, modalTransitionName, modalWidth]);
+  }, [
+    modalCancel,
+    modalMaskTransitionName,
+    modalOk,
+    modalTransitionName,
+    modalWidth,
+  ]);
 
   const onClose = () => {
     setImage('');
@@ -136,7 +151,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    const imgSource = document.querySelector(`.${PREFIX}-media`) as CanvasImageSource & {
+    const imgSource = document.querySelector(
+      `.${PREFIX}-media`
+    ) as CanvasImageSource & {
       naturalWidth: number;
       naturalHeight: number;
     };
@@ -172,7 +189,17 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       // draw rotated image
       const imgX = (squareWidth - imgWidth) / 2;
       const imgY = (squareHeight - imgHeight) / 2;
-      ctx.drawImage(imgSource, 0, 0, imgWidth, imgHeight, imgX, imgY, imgWidth, imgHeight);
+      ctx.drawImage(
+        imgSource,
+        0,
+        0,
+        imgWidth,
+        imgHeight,
+        imgX,
+        imgY,
+        imgWidth,
+        imgHeight
+      );
 
       // crop rotated image
       const imgData = ctx.getImageData(0, 0, squareWidth, squareHeight);
@@ -185,14 +212,26 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       ctx.fillStyle = fillColor;
       ctx.fillRect(0, 0, cropWidth, cropHeight);
 
-      ctx.drawImage(imgSource, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+      ctx.drawImage(
+        imgSource,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        cropWidth,
+        cropHeight
+      );
     }
 
     // get the new image
     const { type, name, uid } = fileRef.current;
     canvas.toBlob(
       async (blob: Blob | null) => {
-        const newFile = Object.assign(new File([blob], name, { type }), { uid }) as RcFile;
+        const newFile = Object.assign(new File([blob], name, { type }), {
+          uid,
+        }) as RcFile;
 
         if (!beforeUploadRef.current) {
           return resolveRef.current(newFile);
@@ -214,7 +253,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
             value: true,
             configurable: true,
           });
-          return rejectRef.current(new Error('beforeUpload return LIST_IGNORE'));
+          return rejectRef.current(
+            new Error('beforeUpload return LIST_IGNORE')
+          );
         }
 
         if (typeof result === 'object' && result !== null) {
@@ -262,7 +303,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
 
   return (
     <LocaleReceiver>
-      {(locale, code) => getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image')}
+      {(locale, code) =>
+        getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image')
+      }
     </LocaleReceiver>
   );
 });

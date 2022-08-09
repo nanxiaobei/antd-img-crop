@@ -5,7 +5,10 @@ import pkg from './package.json';
 
 const input = 'src/img-crop.tsx';
 const exports = 'auto';
-const deps = [...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)];
+const deps = [
+  ...Object.keys(pkg.dependencies),
+  ...Object.keys(pkg.peerDependencies),
+];
 const external = (id) => deps.includes(id) || id.startsWith('antd');
 const plugins = (isESM) => [
   typescript(),
@@ -14,6 +17,16 @@ const plugins = (isESM) => [
 ];
 
 export default [
-  { input, output: { file: pkg.main, format: 'cjs', exports }, external, plugins: plugins(false) },
-  { input, output: { file: pkg.module, format: 'es' }, external, plugins: plugins(true) },
+  {
+    input,
+    output: { file: pkg.main, format: 'cjs', exports },
+    external,
+    plugins: plugins(false),
+  },
+  {
+    input,
+    output: { file: pkg.module, format: 'es' },
+    external,
+    plugins: plugins(true),
+  },
 ];

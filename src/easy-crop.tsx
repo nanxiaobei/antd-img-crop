@@ -33,7 +33,14 @@ interface EasyCropProps
   extends Required<
     Pick<
       ImgCropProps,
-      'aspect' | 'shape' | 'grid' | 'zoom' | 'rotate' | 'minZoom' | 'maxZoom' | 'cropperProps'
+      | 'aspect'
+      | 'shape'
+      | 'grid'
+      | 'zoom'
+      | 'rotate'
+      | 'minZoom'
+      | 'maxZoom'
+      | 'cropperProps'
     >
   > {
   cropperRef: ForwardedRef<Cropper>;
@@ -111,7 +118,10 @@ const EasyCrop = forwardRef<EasyCropHandle, EasyCropProps>((props, ref) => {
         maxZoom={maxZoom}
         onMediaLoaded={onMediaLoaded}
         onCropComplete={onCropComplete}
-        classes={{ containerClassName: `${PREFIX}-container`, mediaClassName: `${PREFIX}-media` }}
+        classes={{
+          containerClassName: `${PREFIX}-container`,
+          mediaClassName: `${PREFIX}-media`,
+        }}
       />
       {zoom && (
         <section className={`${PREFIX}-control ${PREFIX}-control-zoom`}>

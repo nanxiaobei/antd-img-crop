@@ -53,7 +53,7 @@ const Demo = () => (
 | modalOk                 | `string`             | `'确定'`     | 弹窗确定按钮文字                                       |
 | modalCancel             | `string`             | `'取消'`     | 弹窗取消按钮文字                                       |
 | modalMaskTransitionName | `string`             | `'fade'`     | 弹窗遮罩过渡效果, 设为 `'none'` 可禁用默认过渡效果     |
-| modalClassName          | `string`             | `''`         | 为 Modal 容器提供您自己的类名                           |
+| modalClassName          | `string`             | `''`         | 为 Modal 容器提供您自己的类名                          |
 | modalTransitionName     | `string`             | `'fade'`     | 弹窗过渡效果, 设为 `'none'` 可禁用默认过渡效果         |
 | onModalOK               | `function`           | -            | 点击弹窗确定回调                                       |
 | onModalCancel           | `function`           | -            | 点击弹窗遮罩层、右上角叉、取消的回调                   |
@@ -98,7 +98,9 @@ module.exports = {
 
 ```js
 module.exports = {
-  plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
+  plugins: [
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+  ],
 };
 ```
 
