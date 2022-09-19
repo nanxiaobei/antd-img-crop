@@ -272,7 +272,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       {uploadComponent}
       {image && (
         <AntModal
-          visible={true}
+          open={true}
           wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
           title={titleOfModal}
           onOk={onOk}

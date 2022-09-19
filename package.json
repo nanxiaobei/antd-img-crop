@@ -39,7 +39,7 @@
     "@rollup/plugin-typescript": "^8.3.4",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "antd": "^4.22.4",
+    "antd": "^4.23.2",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
