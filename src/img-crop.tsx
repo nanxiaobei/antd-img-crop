@@ -80,7 +80,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
           return new Promise(async (resolve, reject) => {
             if (cb.current.beforeCrop) {
               const shouldCrop = await cb.current.beforeCrop(file, fileList);
-              if (!shouldCrop) return reject();
+              if (!shouldCrop) {
+                return reject();
+              }
             }
 
             fileRef.current = file;
@@ -299,7 +301,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     </>
   );
 
-  if (modalTitle) return getComponent(modalTitle);
+  if (modalTitle) {
+    return getComponent(modalTitle);
+  }
 
   return (
     <LocaleReceiver>
