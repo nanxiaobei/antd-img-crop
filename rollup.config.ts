@@ -4,7 +4,6 @@ import less from 'rollup-plugin-less';
 import pkg from './package.json';
 
 const input = 'src/img-crop.tsx';
-const exports = 'auto';
 const deps = [
   ...Object.keys(pkg.dependencies),
   ...Object.keys(pkg.peerDependencies),
@@ -19,7 +18,7 @@ const plugins = (isESM) => [
 export default [
   {
     input,
-    output: { file: pkg.main, format: 'cjs', exports },
+    output: { file: pkg.main, format: 'cjs', exports: 'auto' },
     external,
     plugins: plugins(false),
   },
