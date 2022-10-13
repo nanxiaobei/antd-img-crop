@@ -275,6 +275,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       {image && (
         <AntModal
           open={true}
+          visible={true}
           wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
           title={titleOfModal}
           onOk={onOk}
