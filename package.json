@@ -24,7 +24,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "rm -rf dist && rollup -c"
+    "build": "rm -rf dist && rollup -c --bundleConfigAsCjs"
   },
   "peerDependencies": {
     "antd": ">=4.0.0",
