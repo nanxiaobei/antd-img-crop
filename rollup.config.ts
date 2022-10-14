@@ -1,7 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
 import less from 'rollup-plugin-less';
-import pkg from './package.json';
+import pkg from './package.json' assert { type: 'json' };
 
 const input = 'src/img-crop.tsx';
 const deps = [

@@ -24,7 +24,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "rm -rf dist && rollup -c --bundleConfigAsCjs"
+    "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript"
   },
   "peerDependencies": {
     "antd": ">=4.0.0",
