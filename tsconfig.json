@@ -2,6 +2,9 @@
   "compilerOptions": {
     "jsx": "react",
     "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
