@@ -3,29 +3,32 @@ import replace from '@rollup/plugin-replace';
 import less from 'rollup-plugin-less';
 import pkg from './package.json' assert { type: 'json' };
 
-const input = 'src/img-crop.tsx';
+const input = 'src/ImgCrop.tsx';
 const deps = [
   ...Object.keys(pkg.dependencies),
   ...Object.keys(pkg.peerDependencies),
 ];
 const external = (id) => deps.includes(id) || id.startsWith('antd');
-const plugins = (isESM) => [
-  typescript(),
-  !isESM && replace({ preventAssignment: true, '/es/': '/lib/' }),
-  less({ insert: true, output: false }),
-];
+const plugins = [typescript(), less({ insert: true, output: false })];
 
 export default [
   {
     input,
     output: { file: pkg.main, format: 'cjs', exports: 'auto' },
     external,
-    plugins: plugins(false),
+    plugins: [
+      ...plugins,
+      replace({
+        preventAssignment: true,
+        '/es/': '/lib/',
+        'LocaleReceiver, null': 'LocaleReceiver.default, null',
+      }),
+    ],
   },
   {
     input,
     output: { file: pkg.module, format: 'es' },
     external,
-    plugins: plugins(true),
+    plugins,
   },
 ];
