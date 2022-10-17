@@ -12,10 +12,10 @@ import type Cropper from 'react-easy-crop';
 import type { UploadProps } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import type { ImgCropProps } from '../index';
-import type { EasyCropHandle } from './easy-crop';
+import type { EasyCropHandle } from './EasyCrop';
 import { PREFIX, INIT_ZOOM, INIT_ROTATE } from './constants';
-import EasyCrop from './easy-crop';
-import './img-crop.less';
+import EasyCrop from './EasyCrop';
+import './ImgCrop.less';
 
 const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
   const {
@@ -308,9 +308,9 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
 
   return (
     <LocaleReceiver>
-      {(locale, code) =>
-        getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image')
-      }
+      {(locale, code) => {
+        return getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image');
+      }}
     </LocaleReceiver>
   );
 });
