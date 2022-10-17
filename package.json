@@ -24,6 +24,7 @@
     "index.d.ts"
   ],
   "scripts": {
+    "watch": "rollup -wc --configPlugin @rollup/plugin-typescript",
     "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript"
   },
   "peerDependencies": {
@@ -39,14 +40,14 @@
     "@rollup/plugin-typescript": "^9.0.1",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
-    "antd": "^4.23.5",
+    "antd": "^4.23.6",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rollup": "^3.1.0",
+    "rollup": "3.2.2",
     "rollup-plugin-less": "^1.1.3",
     "tslib": "^2.4.0",
     "typescript": "^4.8.4"
