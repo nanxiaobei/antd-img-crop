@@ -8,6 +8,7 @@ export interface ImgCropProps {
   grid?: boolean;
   quality?: number;
   fillColor?: string;
+  outputType?: string;
 
   zoom?: boolean;
   rotate?: boolean;

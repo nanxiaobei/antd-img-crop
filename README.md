@@ -44,6 +44,7 @@ const Demo = () => (
 | grid                    | `boolean`            | `false`        | Show grid of crop area (third-lines)                                               |
 | quality                 | `number`             | `0.4`          | Image quality, `0 ~ 1`                                                             |
 | fillColor               | `string`             | `'white'`      | Fill color when cropped image smaller than canvas                                  |
+| outputType              | `string`             | -              | cropped image output type                                                          |
 | zoom                    | `boolean`            | `true`         | Enable zoom for image                                                              |
 | rotate                  | `boolean`            | `false`        | Enable rotate for image                                                            |
 | minZoom                 | `number`             | `1`            | Minimum zoom factor                                                                |

@@ -24,6 +24,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     grid = false,
     quality = 0.4,
     fillColor = 'white',
+    outputType,
 
     zoom = true,
     rotate = false,
@@ -231,7 +232,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     const { type, name, uid } = fileRef.current;
     canvas.toBlob(
       async (blob: Blob | null) => {
-        const newFile = Object.assign(new File([blob], name, { type }), {
+        const newFile = Object.assign(new File([blob], name, { type: outputType || type }), {
           uid,
         }) as RcFile;
 
@@ -264,7 +265,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
           return resolveRef.current(result);
         }
       },
-      type,
+      outputType || type,
       quality
     );
   }, [fillColor, quality, rotate]);
