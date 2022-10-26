@@ -11,10 +11,12 @@ import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import type Cropper from 'react-easy-crop';
 import type { UploadProps } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
+import { version as AntdVersion } from 'antd';
 import type { ImgCropProps } from '../index';
 import type { EasyCropHandle } from './EasyCrop';
 import { PREFIX, INIT_ZOOM, INIT_ROTATE } from './constants';
 import EasyCrop from './EasyCrop';
+import { compareVersion } from './helper';
 import './ImgCrop.less';
 
 const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
@@ -269,13 +271,14 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     );
   }, [fillColor, quality, rotate]);
 
+  const visibleProp = compareVersion(AntdVersion, "4.23.0") === -1 ? { visible: true } : { open: true }
+
   const getComponent = (titleOfModal) => (
     <>
       {uploadComponent}
       {image && (
         <AntModal
-          open={true}
-          visible={true}
+          {...visibleProp}
           wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
           title={titleOfModal}
           onOk={onOk}
