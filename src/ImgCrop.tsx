@@ -149,13 +149,14 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     onClose();
   }, []);
 
-  const onOk = useCallback(async () => {
+  const onOk = useCallback(async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     onClose();
-
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-
-    const imgSource = document.querySelector(
+    const target = event.target;
+    // @ts-ignore
+    const context = target && target.getRootNode ? target.getRootNode() : document;
+    const imgSource = context.querySelector(
       `.${PREFIX}-media`
     ) as CanvasImageSource & {
       naturalWidth: number;
