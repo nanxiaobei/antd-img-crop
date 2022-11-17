@@ -1,25 +1,25 @@
 import React, {
-  useState,
-  useCallback,
-  useRef,
-  useImperativeHandle,
   forwardRef,
   memo,
   MutableRefObject,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from 'react';
-import AntSlider from 'antd/es/slider';
+import type { Dispatch, ForwardedRef, SetStateAction } from 'react';
 import Cropper from 'react-easy-crop';
-import type { Dispatch, SetStateAction, ForwardedRef } from 'react';
-import type { Point, Size, Area } from 'react-easy-crop/types';
+import type { Area, Point, Size } from 'react-easy-crop/types';
+import AntSlider from 'antd/es/slider';
 import type { ImgCropProps } from '../index';
 import {
-  PREFIX,
-  INIT_ZOOM,
-  ZOOM_STEP,
   INIT_ROTATE,
-  ROTATE_STEP,
-  MIN_ROTATE,
+  INIT_ZOOM,
   MAX_ROTATE,
+  MIN_ROTATE,
+  PREFIX,
+  ROTATE_STEP,
+  ZOOM_STEP,
 } from './constants';
 
 export type EasyCropHandle = {
@@ -86,16 +86,12 @@ const EasyCrop = forwardRef<EasyCropHandle, EasyCropProps>((props, ref) => {
     cropPixelsRef.current = croppedAreaPixels;
   }, []);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      rotateVal,
-      setZoomVal,
-      setRotateVal,
-      cropPixelsRef,
-    }),
-    [rotateVal]
-  );
+  useImperativeHandle(ref, () => ({
+    rotateVal,
+    setZoomVal,
+    setRotateVal,
+    cropPixelsRef,
+  }));
 
   return (
     <>
