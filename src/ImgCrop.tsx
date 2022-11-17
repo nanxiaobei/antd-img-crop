@@ -1,23 +1,28 @@
 import React, {
-  useState,
+  forwardRef,
   useCallback,
   useMemo,
   useRef,
-  forwardRef,
+  useState,
 } from 'react';
-import AntModal from 'antd/es/modal';
-import AntUpload from 'antd/es/upload';
-import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import type Cropper from 'react-easy-crop';
 import type { UploadProps } from 'antd';
+import { version } from 'antd';
+import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
+import AntModal from 'antd/es/modal';
+import AntUpload from 'antd/es/upload';
 import type { RcFile } from 'antd/lib/upload';
-import { version as AntdVersion } from 'antd';
+import { compareVersions } from 'compare-versions';
 import type { ImgCropProps } from '../index';
+import { INIT_ROTATE, INIT_ZOOM, PREFIX } from './constants';
 import type { EasyCropHandle } from './EasyCrop';
-import { PREFIX, INIT_ZOOM, INIT_ROTATE } from './constants';
 import EasyCrop from './EasyCrop';
-import { compareVersion } from './helper';
 import './ImgCrop.less';
+
+const propVisible =
+  compareVersions(version, '4.23.0') === -1
+    ? { visible: true }
+    : { open: true };
 
 const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
   const {
@@ -149,137 +154,140 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     onClose();
   }, []);
 
-  const onOk = useCallback(async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    onClose();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const target = event.target;
-    // @ts-ignore
-    const context = target && target.getRootNode ? target.getRootNode() : document;
-    const imgSource = context.querySelector(
-      `.${PREFIX}-media`
-    ) as CanvasImageSource & {
-      naturalWidth: number;
-      naturalHeight: number;
-    };
-    const {
-      width: cropWidth,
-      height: cropHeight,
-      x: cropX,
-      y: cropY,
-    } = easyCropRef.current.cropPixelsRef.current;
+  const onOk = useCallback(
+    async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      onClose();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const target = event.target;
+      const context =
+        ((target as ShadowRoot)?.getRootNode?.() as ShadowRoot) || document;
 
-    if (rotate && easyCropRef.current.rotateVal !== INIT_ROTATE) {
-      const { naturalWidth: imgWidth, naturalHeight: imgHeight } = imgSource;
-      const angle = easyCropRef.current.rotateVal * (Math.PI / 180);
+      const imgSource = context.querySelector(
+        `.${PREFIX}-media`
+      ) as CanvasImageSource & {
+        naturalWidth: number;
+        naturalHeight: number;
+      };
 
-      // get container for rotated image
-      const sine = Math.abs(Math.sin(angle));
-      const cosine = Math.abs(Math.cos(angle));
-      const squareWidth = imgWidth * cosine + imgHeight * sine;
-      const squareHeight = imgHeight * cosine + imgWidth * sine;
+      const {
+        width: cropWidth,
+        height: cropHeight,
+        x: cropX,
+        y: cropY,
+      } = easyCropRef.current.cropPixelsRef.current;
 
-      canvas.width = squareWidth;
-      canvas.height = squareHeight;
-      ctx.fillStyle = fillColor;
-      ctx.fillRect(0, 0, squareWidth, squareHeight);
+      if (rotate && easyCropRef.current.rotateVal !== INIT_ROTATE) {
+        const { naturalWidth: imgWidth, naturalHeight: imgHeight } = imgSource;
+        const angle = easyCropRef.current.rotateVal * (Math.PI / 180);
 
-      // rotate container
-      const squareHalfWidth = squareWidth / 2;
-      const squareHalfHeight = squareHeight / 2;
-      ctx.translate(squareHalfWidth, squareHalfHeight);
-      ctx.rotate(angle);
-      ctx.translate(-squareHalfWidth, -squareHalfHeight);
+        // get container for rotated image
+        const sine = Math.abs(Math.sin(angle));
+        const cosine = Math.abs(Math.cos(angle));
+        const squareWidth = imgWidth * cosine + imgHeight * sine;
+        const squareHeight = imgHeight * cosine + imgWidth * sine;
 
-      // draw rotated image
-      const imgX = (squareWidth - imgWidth) / 2;
-      const imgY = (squareHeight - imgHeight) / 2;
-      ctx.drawImage(
-        imgSource,
-        0,
-        0,
-        imgWidth,
-        imgHeight,
-        imgX,
-        imgY,
-        imgWidth,
-        imgHeight
+        canvas.width = squareWidth;
+        canvas.height = squareHeight;
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, squareWidth, squareHeight);
+
+        // rotate container
+        const squareHalfWidth = squareWidth / 2;
+        const squareHalfHeight = squareHeight / 2;
+        ctx.translate(squareHalfWidth, squareHalfHeight);
+        ctx.rotate(angle);
+        ctx.translate(-squareHalfWidth, -squareHalfHeight);
+
+        // draw rotated image
+        const imgX = (squareWidth - imgWidth) / 2;
+        const imgY = (squareHeight - imgHeight) / 2;
+        ctx.drawImage(
+          imgSource,
+          0,
+          0,
+          imgWidth,
+          imgHeight,
+          imgX,
+          imgY,
+          imgWidth,
+          imgHeight
+        );
+
+        // crop rotated image
+        const imgData = ctx.getImageData(0, 0, squareWidth, squareHeight);
+        canvas.width = cropWidth;
+        canvas.height = cropHeight;
+        ctx.putImageData(imgData, -cropX, -cropY);
+      } else {
+        canvas.width = cropWidth;
+        canvas.height = cropHeight;
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, cropWidth, cropHeight);
+
+        ctx.drawImage(
+          imgSource,
+          cropX,
+          cropY,
+          cropWidth,
+          cropHeight,
+          0,
+          0,
+          cropWidth,
+          cropHeight
+        );
+      }
+
+      // get the new image
+      const { type, name, uid } = fileRef.current;
+      canvas.toBlob(
+        async (blob: Blob | null) => {
+          const newFile = Object.assign(new File([blob], name, { type }), {
+            uid,
+          }) as RcFile;
+
+          if (!beforeUploadRef.current) {
+            return resolveRef.current(newFile);
+          }
+
+          const result = await beforeUploadRef.current(newFile, [newFile]);
+
+          if (result === true) {
+            return resolveRef.current(newFile);
+          }
+
+          if (result === false) {
+            return rejectRef.current(new Error('beforeUpload return false'));
+          }
+
+          delete newFile[AntUpload.LIST_IGNORE];
+          if (result === AntUpload.LIST_IGNORE) {
+            Object.defineProperty(newFile, AntUpload.LIST_IGNORE, {
+              value: true,
+              configurable: true,
+            });
+            return rejectRef.current(
+              new Error('beforeUpload return LIST_IGNORE')
+            );
+          }
+
+          if (typeof result === 'object' && result !== null) {
+            return resolveRef.current(result);
+          }
+        },
+        type,
+        quality
       );
-
-      // crop rotated image
-      const imgData = ctx.getImageData(0, 0, squareWidth, squareHeight);
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
-      ctx.putImageData(imgData, -cropX, -cropY);
-    } else {
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
-      ctx.fillStyle = fillColor;
-      ctx.fillRect(0, 0, cropWidth, cropHeight);
-
-      ctx.drawImage(
-        imgSource,
-        cropX,
-        cropY,
-        cropWidth,
-        cropHeight,
-        0,
-        0,
-        cropWidth,
-        cropHeight
-      );
-    }
-
-    // get the new image
-    const { type, name, uid } = fileRef.current;
-    canvas.toBlob(
-      async (blob: Blob | null) => {
-        const newFile = Object.assign(new File([blob], name, { type }), {
-          uid,
-        }) as RcFile;
-
-        if (!beforeUploadRef.current) {
-          return resolveRef.current(newFile);
-        }
-
-        const result = await beforeUploadRef.current(newFile, [newFile]);
-
-        if (result === true) {
-          return resolveRef.current(newFile);
-        }
-
-        if (result === false) {
-          return rejectRef.current(new Error('beforeUpload return false'));
-        }
-
-        delete newFile[AntUpload.LIST_IGNORE];
-        if (result === AntUpload.LIST_IGNORE) {
-          Object.defineProperty(newFile, AntUpload.LIST_IGNORE, {
-            value: true,
-            configurable: true,
-          });
-          return rejectRef.current(
-            new Error('beforeUpload return LIST_IGNORE')
-          );
-        }
-
-        if (typeof result === 'object' && result !== null) {
-          return resolveRef.current(result);
-        }
-      },
-      type,
-      quality
-    );
-  }, [fillColor, quality, rotate]);
-
-  const visibleProp = compareVersion(AntdVersion, "4.23.0") === -1 ? { visible: true } : { open: true }
+    },
+    [fillColor, quality, rotate]
+  );
 
   const getComponent = (titleOfModal) => (
     <>
       {uploadComponent}
       {image && (
         <AntModal
-          {...visibleProp}
+          {...propVisible}
           wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
           title={titleOfModal}
           onOk={onOk}
