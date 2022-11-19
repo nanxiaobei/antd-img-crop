@@ -1,30 +1,25 @@
-import React, {
-  forwardRef,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import type Cropper from 'react-easy-crop';
+import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+import type CropperRef from 'react-easy-crop';
 import type { UploadProps } from 'antd';
 import { version } from 'antd';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
-import type { RcFile } from 'antd/lib/upload';
+import type { RcFile, UploadFile } from 'antd/es/upload';
 import { compareVersions } from 'compare-versions';
-import type { ImgCropProps } from '../index';
 import { INIT_ROTATE, INIT_ZOOM, PREFIX } from './constants';
-import type { EasyCropHandle } from './EasyCrop';
+import type { EasyCropProps, EasyCropRef, ImgCropProps } from './types';
 import EasyCrop from './EasyCrop';
 import './ImgCrop.less';
 
-const propVisible =
+type OnModalOk = NonNullable<ImgCropProps['onModalOk']>;
+
+const modalVisibleProp =
   compareVersions(version, '4.23.0') === -1
     ? { visible: true }
     : { open: true };
 
-const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
+const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const {
     aspect = 1,
     shape = 'rect',
@@ -68,10 +63,10 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
    * Upload
    */
   const [image, setImage] = useState('');
-  const fileRef = useRef<RcFile>();
+  const fileRef = useRef<UploadFile>({} as UploadFile);
   const beforeUploadRef = useRef<UploadProps['beforeUpload']>();
-  const resolveRef = useRef<ImgCropProps['onModalOk']>();
-  const rejectRef = useRef<(err: Error) => void>();
+  const resolveRef = useRef<OnModalOk>(() => {});
+  const rejectRef = useRef<(err: Error) => void>(() => {});
 
   const uploadComponent = useMemo(() => {
     const upload = Array.isArray(children) ? children[0] : children;
@@ -83,7 +78,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       props: {
         ...restUploadProps,
         accept: accept || 'image/*',
-        beforeUpload: (file, fileList) => {
+        beforeUpload: (file: RcFile, fileList: RcFile[]) => {
           return new Promise(async (resolve, reject) => {
             if (cb.current.beforeCrop) {
               const shouldCrop = await cb.current.beforeCrop(file, fileList);
@@ -92,7 +87,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
               }
             }
 
-            fileRef.current = file;
+            fileRef.current = file as UploadFile;
             resolveRef.current = (newFile) => {
               cb.current.onModalOk?.(newFile);
               resolve(newFile);
@@ -108,7 +103,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
                 setImage(reader.result);
               }
             });
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file as unknown as Blob);
           });
         },
       },
@@ -118,7 +113,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
   /**
    * Crop
    */
-  const easyCropRef = useRef<EasyCropHandle>({} as EasyCropHandle);
+  const easyCropRef = useRef<EasyCropRef>({} as EasyCropRef);
 
   /**
    * Modal
@@ -131,8 +126,11 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       maskTransitionName: modalMaskTransitionName,
       transitionName: modalTransitionName,
     };
-    Object.keys(obj).forEach((key) => {
-      if (!obj[key]) delete obj[key];
+    Object.keys(obj).forEach((prop) => {
+      const key = prop as keyof typeof obj;
+      if (obj[key] === undefined) {
+        delete obj[key];
+      }
     });
     return obj;
   }, [
@@ -158,7 +156,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
       onClose();
       const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
       const target = event.target;
       const context =
         ((target as ShadowRoot)?.getRootNode?.() as ShadowRoot) || document;
@@ -239,28 +237,31 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
       }
 
       // get the new image
-      const { type, name, uid } = fileRef.current;
+      const { type, name, uid, lastModifiedDate } = fileRef.current;
       canvas.toBlob(
-        async (blob: Blob | null) => {
-          const newFile = Object.assign(new File([blob], name, { type }), {
-            uid,
-          }) as RcFile;
+        async (blob) => {
+          const newFile = Object.assign(
+            new File([blob as BlobPart], name, { type }),
+            { uid, lastModifiedDate }
+          );
 
           if (!beforeUploadRef.current) {
             return resolveRef.current(newFile);
           }
 
-          const result = await beforeUploadRef.current(newFile, [newFile]);
+          const rcFile = newFile as RcFile;
+          const result = await beforeUploadRef.current(rcFile, [rcFile]);
 
           if (result === true) {
-            return resolveRef.current(newFile);
+            return resolveRef.current(newFile as File);
           }
 
           if (result === false) {
             return rejectRef.current(new Error('beforeUpload return false'));
           }
 
-          delete newFile[AntUpload.LIST_IGNORE];
+          delete newFile[AntUpload.LIST_IGNORE as keyof typeof newFile];
+
           if (result === AntUpload.LIST_IGNORE) {
             Object.defineProperty(newFile, AntUpload.LIST_IGNORE, {
               value: true,
@@ -282,12 +283,12 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
     [fillColor, quality, rotate]
   );
 
-  const getComponent = (titleOfModal) => (
+  const getComponent = (titleOfModal: string) => (
     <>
       {uploadComponent}
       {image && (
         <AntModal
-          {...propVisible}
+          {...modalVisibleProp}
           wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
           title={titleOfModal}
           onOk={onOk}
@@ -298,7 +299,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
         >
           <EasyCrop
             ref={easyCropRef}
-            cropperRef={ref}
+            cropperRef={cropperRef}
             image={image}
             aspect={aspect}
             shape={shape}
@@ -307,7 +308,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
             rotate={rotate}
             minZoom={minZoom}
             maxZoom={maxZoom}
-            cropperProps={cropperProps}
+            cropperProps={cropperProps as EasyCropProps['cropperProps']}
           />
         </AntModal>
       )}
@@ -320,7 +321,7 @@ const ImgCrop = forwardRef<Cropper, ImgCropProps>((props, ref) => {
 
   return (
     <LocaleReceiver>
-      {(locale, code) => {
+      {(_, code) => {
         return getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image');
       }}
     </LocaleReceiver>

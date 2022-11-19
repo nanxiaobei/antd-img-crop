@@ -1,17 +1,14 @@
-import React, {
+import {
   forwardRef,
   memo,
-  MutableRefObject,
   useCallback,
   useImperativeHandle,
   useRef,
   useState,
 } from 'react';
-import type { Dispatch, ForwardedRef, SetStateAction } from 'react';
 import Cropper from 'react-easy-crop';
-import type { Area, Point, Size } from 'react-easy-crop/types';
+import type { Area, MediaSize, Point, Size } from 'react-easy-crop/types';
 import AntSlider from 'antd/es/slider';
-import type { ImgCropProps } from '../index';
 import {
   INIT_ROTATE,
   INIT_ZOOM,
@@ -21,33 +18,9 @@ import {
   ROTATE_STEP,
   ZOOM_STEP,
 } from './constants';
+import type { EasyCropProps, EasyCropRef } from './types';
 
-export type EasyCropHandle = {
-  rotateVal: number;
-  setZoomVal: Dispatch<SetStateAction<number>>;
-  setRotateVal: Dispatch<SetStateAction<number>>;
-  cropPixelsRef: MutableRefObject<Area>;
-};
-
-interface EasyCropProps
-  extends Required<
-    Pick<
-      ImgCropProps,
-      | 'aspect'
-      | 'shape'
-      | 'grid'
-      | 'zoom'
-      | 'rotate'
-      | 'minZoom'
-      | 'maxZoom'
-      | 'cropperProps'
-    >
-  > {
-  cropperRef: ForwardedRef<Cropper>;
-  image: string;
-}
-
-const EasyCrop = forwardRef<EasyCropHandle, EasyCropProps>((props, ref) => {
+const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
   const {
     cropperRef,
     image,
@@ -69,7 +42,7 @@ const EasyCrop = forwardRef<EasyCropHandle, EasyCropProps>((props, ref) => {
   const cropPixelsRef = useRef<Area>({ width: 0, height: 0, x: 0, y: 0 });
 
   const onMediaLoaded = useCallback(
-    (mediaSize) => {
+    (mediaSize: MediaSize) => {
       const { width, height } = mediaSize;
       const ratioWidth = height * aspect;
 
@@ -82,7 +55,7 @@ const EasyCrop = forwardRef<EasyCropHandle, EasyCropProps>((props, ref) => {
     [aspect]
   );
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+  const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
     cropPixelsRef.current = croppedAreaPixels;
   }, []);
 
