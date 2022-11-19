@@ -61,16 +61,16 @@ const Demo = () => (
 | onUploadFail            | `function`           | -            | 上传失败时的回调                                       |
 | cropperProps            | `object`             | -            | [react-easy-crop] 的 props（\* [已有 props] 无法重写） |
 
-## 样式 (antd v5 之前)
+## 在 antd v5 之前
 
-在 antd v5 之前，若项目使用 `babel-plugin-import` 且未引入 `Modal` 或 `Slider`，请手动引入样式：
+### 没有样式？
+
+若项目使用 `babel-plugin-import` 且未引入 `Modal` 或 `Slider`，请手动引入样式：
 
 ```js
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 ```
-
-## FAQ
 
 ### ConfigProvider 未生效？
 

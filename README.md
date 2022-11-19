@@ -61,16 +61,16 @@ const Demo = () => (
 | onUploadFail            | `function`           | -              | Call when upload failed                                                            |
 | cropperProps            | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden)              |
 
-## Styles (before antd v5)
+## Before antd v5
 
-Before antd v5, if you use `babel-plugin-import` and no `Modal` or `Slider` were used, please import the styles manually:
+### No style?
+
+If you use `babel-plugin-import` and no `Modal` or `Slider` were imported, please import the styles manually:
 
 ```js
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 ```
-
-## FAQ
 
 ### ConfigProvider not work?
 
