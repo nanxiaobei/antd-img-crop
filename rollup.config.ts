@@ -1,34 +1,35 @@
-import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
+import dts from 'rollup-plugin-dts';
 import less from 'rollup-plugin-less';
-import pkg from './package.json' assert { type: 'json' };
+import { readFileSync } from 'fs';
+
+const pkg = JSON.parse(readFileSync('./package.json') as unknown as string);
 
 const input = 'src/ImgCrop.tsx';
-const deps = [
-  ...Object.keys(pkg.dependencies),
-  ...Object.keys(pkg.peerDependencies),
+
+const cjsOutput = { file: pkg.main, format: 'cjs', exports: 'auto' };
+const esmOutput = { file: pkg.module, format: 'es' };
+const dtsOutput = { file: pkg.types, format: 'es' };
+
+const tsPlugin = typescript();
+const lessPlugin = less({ insert: true, output: false });
+const replacePlugin = replace({
+  preventAssignment: true,
+  'LocaleReceiver, null': 'LocaleReceiver.default, null',
+});
+
+const cjsPlugins = [tsPlugin, lessPlugin, replacePlugin];
+const esmPlugins = [tsPlugin, lessPlugin];
+
+const external = [
+  ...Object.keys({ ...pkg.dependencies, ...pkg.peerDependencies }),
+  'react/jsx-runtime',
+  /^antd/,
 ];
-const external = (id) => deps.includes(id) || id.startsWith('antd');
-const plugins = [typescript(), less({ insert: true, output: false })];
 
 export default [
-  {
-    input,
-    output: { file: pkg.main, format: 'cjs', exports: 'auto' },
-    external,
-    plugins: [
-      ...plugins,
-      replace({
-        preventAssignment: true,
-        '/es/': '/lib/',
-        'LocaleReceiver, null': 'LocaleReceiver.default, null',
-      }),
-    ],
-  },
-  {
-    input,
-    output: { file: pkg.module, format: 'es' },
-    external,
-    plugins,
-  },
+  { input, output: cjsOutput, plugins: cjsPlugins, external },
+  { input, output: esmOutput, plugins: esmPlugins, external },
+  { input, output: dtsOutput, plugins: [dts()], external: [/\.less$/] },
 ];
