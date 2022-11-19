@@ -6,7 +6,7 @@ An image cropper for Ant Design [Upload](https://ant.design/components/upload/)
 [![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
 [![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE)
-[![npm type definitions](https://img.shields.io/npm/types/typescript?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/index.d.ts)
+[![npm type definitions](https://img.shields.io/npm/types/typescript?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/src/types.ts)
 
 English | [简体中文](./README.zh-CN.md)
 
@@ -25,8 +25,8 @@ yarn add antd-img-crop
 ## Usage
 
 ```jsx harmony
-import ImgCrop from 'antd-img-crop';
 import { Upload } from 'antd';
+import ImgCrop from 'antd-img-crop';
 
 const Demo = () => (
   <ImgCrop>
@@ -61,11 +61,9 @@ const Demo = () => (
 | onUploadFail            | `function`           | -              | Call when upload failed                                                            |
 | cropperProps            | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden)              |
 
-## Styles
+## Styles (before antd v5)
 
-To prevent overwriting the custom styles to `antd`, `antd-img-crop` does not import the style files of components.
-
-Therefore, if you configured `babel-plugin-import` and no `Modal` or `Slider` were used, please import the styles manually:
+Before antd v5, if you use `babel-plugin-import` and no `Modal` or `Slider` were used, please import the styles manually:
 
 ```js
 import 'antd/es/modal/style';

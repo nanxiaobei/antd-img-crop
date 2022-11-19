@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dt/antd-img-crop?style=flat-square)](https://www.npmtrends.com/antd-img-crop)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/antd-img-crop?style=flat-square)](https://bundlephobia.com/result?p=antd-img-crop)
 [![GitHub](https://img.shields.io/github/license/nanxiaobei/antd-img-crop?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE)
-[![npm type definitions](https://img.shields.io/npm/types/typescript?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/index.d.ts)
+[![npm type definitions](https://img.shields.io/npm/types/typescript?style=flat-square)](https://github.com/nanxiaobei/antd-img-crop/blob/main/src/types.ts)
 
 [English](./README.md) | 简体中文
 
@@ -25,8 +25,8 @@ yarn add antd-img-crop
 ## 使用
 
 ```jsx harmony
-import ImgCrop from 'antd-img-crop';
 import { Upload } from 'antd';
+import ImgCrop from 'antd-img-crop';
 
 const Demo = () => (
   <ImgCrop>
@@ -61,11 +61,9 @@ const Demo = () => (
 | onUploadFail            | `function`           | -            | 上传失败时的回调                                       |
 | cropperProps            | `object`             | -            | [react-easy-crop] 的 props（\* [已有 props] 无法重写） |
 
-## 样式
+## 样式 (antd v5 之前)
 
-为防止覆盖 `antd` 自定义样式，`antd-img-crop` 没有引入组件样式。
-
-因此，若项目配置了 `babel-plugin-import` 且未使用 `Modal` 或 `Slider`，请手动引入样式：
+在 antd v5 之前，若项目使用 `babel-plugin-import` 且未引入 `Modal` 或 `Slider`，请手动引入样式：
 
 ```js
 import 'antd/es/modal/style';
