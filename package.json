@@ -23,7 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "watch": "rm -rf dist && rollup -wc --configPlugin @rollup/plugin-typescript",
+    "watch": "rollup -wc --configPlugin @rollup/plugin-typescript",
     "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript"
   },
   "peerDependencies": {
