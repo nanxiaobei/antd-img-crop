@@ -237,23 +237,23 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
       }
 
       // get the new image
-      const { type, name, uid, lastModifiedDate } = fileRef.current;
+      const { type, name, uid } = fileRef.current;
       canvas.toBlob(
         async (blob) => {
           const newFile = Object.assign(
             new File([blob as BlobPart], name, { type }),
-            { uid, lastModifiedDate }
-          );
+            { uid }
+          ) as File;
 
           if (!beforeUploadRef.current) {
             return resolveRef.current(newFile);
           }
 
-          const rcFile = newFile as RcFile;
+          const rcFile = newFile as unknown as RcFile;
           const result = await beforeUploadRef.current(rcFile, [rcFile]);
 
           if (result === true) {
-            return resolveRef.current(newFile as File);
+            return resolveRef.current(newFile);
           }
 
           if (result === false) {
