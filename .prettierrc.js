@@ -5,8 +5,10 @@ module.exports = {
   importOrder: [
     '^react',
     '^antd',
-    '^@rollup',
     '^rollup',
+    '^@rollup',
+    '^vite',
+    '^@vite',
     '<THIRD_PARTY_MODULES>',
     'constants',
     'types',
