@@ -1,12 +1,13 @@
-import {
+import type {
   Dispatch,
   ForwardedRef,
   MutableRefObject,
   SetStateAction,
 } from 'react';
-import Cropper, { CropperProps } from 'react-easy-crop';
-import { Area } from 'react-easy-crop/types';
-import { RcFile } from 'antd/es/upload/interface';
+import type { default as Cropper } from 'react-easy-crop';
+import type { CropperProps } from 'react-easy-crop';
+import type { Area } from 'react-easy-crop/types';
+import type { RcFile } from 'antd/es/upload/interface';
 
 export type ImgCropProps = {
   aspect?: number;
@@ -60,3 +61,5 @@ export type EasyCropProps = Required<
   cropperRef: ForwardedRef<Cropper>;
   image: string;
 };
+
+export type OnModalOk = NonNullable<ImgCropProps['onModalOk']>;

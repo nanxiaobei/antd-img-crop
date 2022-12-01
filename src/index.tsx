@@ -8,11 +8,16 @@ import AntUpload from 'antd/es/upload';
 import type { RcFile, UploadFile } from 'antd/es/upload';
 import { compareVersions } from 'compare-versions';
 import { INIT_ROTATE, INIT_ZOOM, PREFIX } from './constants';
-import type { EasyCropProps, EasyCropRef, ImgCropProps } from './types';
+import type {
+  EasyCropProps,
+  EasyCropRef,
+  ImgCropProps,
+  OnModalOk,
+} from './types';
 import EasyCrop from './EasyCrop';
-import './ImgCrop.less';
+import './index.less';
 
-type OnModalOk = NonNullable<ImgCropProps['onModalOk']>;
+export type { ImgCropProps } from './types';
 
 const modalVisibleProp =
   compareVersions(version, '4.23.0') === -1
