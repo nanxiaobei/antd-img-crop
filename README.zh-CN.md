@@ -10,16 +10,14 @@
 
 [English](./README.md) | 简体中文
 
-## 示例
-
-[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
-
 ## 安装
 
 ```sh
+pnpm add antd-img-crop
+# or
 yarn add antd-img-crop
-
-# npm install antd-img-crop
+# or
+npm i antd-img-crop
 ```
 
 ## 使用
@@ -34,6 +32,8 @@ const Demo = () => (
   </ImgCrop>
 );
 ```
+
+[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
 
 ## Props
 

@@ -10,16 +10,14 @@ An image cropper for Ant Design [Upload](https://ant.design/components/upload/)
 
 English | [简体中文](./README.zh-CN.md)
 
-## Demo
-
-[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
-
 ## Install
 
 ```sh
+pnpm add antd-img-crop
+# or
 yarn add antd-img-crop
-
-# npm install antd-img-crop
+# or
+npm i antd-img-crop
 ```
 
 ## Usage
@@ -34,6 +32,8 @@ const Demo = () => (
   </ImgCrop>
 );
 ```
+
+[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/antd-img-crop-4qoom5p9x4?fontsize=14&hidenavigation=1&theme=dark)
 
 ## Props
 
