@@ -107,7 +107,7 @@ module.exports = {
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE) (c) [nanxiaobei](https://lee.so/)
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
-[已有 props]: https://github.com/nanxiaobei/antd-img-crop/blob/main/src/easy-crop.tsx#L98-L114
+[已有 props]: https://github.com/nanxiaobei/antd-img-crop/blob/main/src/EasyCrop.tsx#L74-L93
 
 ## FUTAKE
 
