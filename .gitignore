@@ -1,6 +1,6 @@
-node_modules/
-example/
-dist/
+node_modules
+dist
 
+example
 index.html
 vite.config.ts
