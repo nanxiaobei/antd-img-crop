@@ -23,7 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c --configPlugin @rollup/plugin-typescript"
+    "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript"
   },
   "peerDependencies": {
     "antd": ">=4.0.0",
