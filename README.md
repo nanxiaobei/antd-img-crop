@@ -111,6 +111,6 @@ module.exports = {
 
 ## FUTAKE
 
-Try [**FUTAKE**](https://sotake.com/f) in WeChat. A mini app for your inspiration moments. 🌈
+Try [**FUTAKE**](https://sotake.com/futake) in WeChat. A mini app for your inspiration moments. 🌈
 
 ![](https://s3.bmp.ovh/imgs/2022/07/21/452dd47aeb790abd.png)
