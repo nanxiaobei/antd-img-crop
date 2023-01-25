@@ -2,10 +2,10 @@ import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import type CropperRef from 'react-easy-crop';
 import type { UploadProps } from 'antd';
 import { version } from 'antd';
-import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
-import AntModal from 'antd/es/modal';
-import AntUpload from 'antd/es/upload';
-import type { RcFile, UploadFile } from 'antd/es/upload';
+import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
+import AntModal from 'antd/lib/modal';
+import type { RcFile, UploadFile } from 'antd/lib/upload';
+import AntUpload from 'antd/lib/upload';
 import { compareVersions } from 'compare-versions';
 import { INIT_ROTATE, INIT_ZOOM, PREFIX } from './constants';
 import type {

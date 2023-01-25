@@ -4,10 +4,9 @@ import type {
   MutableRefObject,
   SetStateAction,
 } from 'react';
-import type { default as Cropper } from 'react-easy-crop';
-import type { CropperProps } from 'react-easy-crop';
+import type { default as Cropper, CropperProps } from 'react-easy-crop';
 import type { Area } from 'react-easy-crop/types';
-import type { RcFile } from 'antd/es/upload/interface';
+import type { RcFile } from 'antd/lib/upload/interface';
 
 export type ImgCropProps = {
   aspect?: number;
