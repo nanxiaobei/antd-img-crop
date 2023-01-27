@@ -8,7 +8,7 @@ import {
 } from 'react';
 import Cropper from 'react-easy-crop';
 import type { Area, MediaSize, Point, Size } from 'react-easy-crop/types';
-import AntSlider from 'antd/es/slider';
+import AntSlider from 'antd/lib/slider';
 import {
   INIT_ROTATE,
   INIT_ZOOM,
