@@ -63,43 +63,11 @@ const Demo = () => (
 
 ## Before antd v5
 
-### No style?
-
-If you use `babel-plugin-import` and no `Modal` or `Slider` were imported, please import the styles manually:
+If you use `antd<=v4` with `babel-plugin-import`, and no `Modal` or `Slider` were used in project, please import these styles manually:
 
 ```js
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-```
-
-### ConfigProvider not work?
-
-If using `craco-antd`, please try to add `libraryDirectory: 'es'` to `craco.config.js`:
-
-```diff
-module.exports = {
-  plugins: [
-    {
-      plugin: CracoAntDesignPlugin,
-      options: {
-        // other options...
-+       babelPluginImportOptions: {
-+         libraryDirectory: 'es',
-+       },
-      },
-    },
-  ],
-};
-```
-
-Or if configuring `babel-plugin-import` manually, please try to set `libraryDirectory: 'es'` to `.babelrc.js`:
-
-```js
-module.exports = {
-  plugins: [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-  ],
-};
 ```
 
 ## License
@@ -114,3 +82,7 @@ module.exports = {
 Try [**FUTAKE**](https://sotake.com/futake) in WeChat. A mini app for your inspiration moments. 🌈
 
 ![](https://s3.bmp.ovh/imgs/2022/07/21/452dd47aeb790abd.png)
+
+```
+
+```

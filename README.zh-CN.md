@@ -63,43 +63,11 @@ const Demo = () => (
 
 ## 在 antd v5 之前
 
-### 没有样式？
-
-若项目使用 `babel-plugin-import` 且未引入 `Modal` 或 `Slider`，请手动引入样式：
+若使用 `antd<=v4` & `babel-plugin-import`，且未使用 `Modal` 或 `Slider`，请手动引入这些样式：
 
 ```js
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-```
-
-### ConfigProvider 未生效？
-
-若使用 `craco-antd`，请在 `craco.config.js` 中添加 `libraryDirectory: 'es'`：
-
-```diff
-module.exports = {
-  plugins: [
-    {
-      plugin: CracoAntDesignPlugin,
-      options: {
-        // 其它配置...
-+       babelPluginImportOptions: {
-+         libraryDirectory: 'es',
-+       },
-      },
-    },
-  ],
-};
-```
-
-若手动配置 `babel-plugin-import`，请在 `.babelrc.js` 中设置 `libraryDirectory: 'es'`：
-
-```js
-module.exports = {
-  plugins: [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-  ],
-};
 ```
 
 ## 协议
