@@ -2,7 +2,6 @@ import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import type CropperRef from 'react-easy-crop';
 import type { UploadProps } from 'antd';
 import { version } from 'antd';
-import LocaleReceiver from 'antd/lib/locale-provider/LocaleReceiver';
 import AntModal from 'antd/lib/modal';
 import type { RcFile, UploadFile } from 'antd/lib/upload';
 import AntUpload from 'antd/lib/upload';
@@ -65,7 +64,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   cb.current.onUploadFail = onUploadFail;
 
   /**
-   * Upload
+   * upload
    */
   const [image, setImage] = useState('');
   const fileRef = useRef<UploadFile>({} as UploadFile);
@@ -116,12 +115,12 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   }, [children]);
 
   /**
-   * Crop
+   * crop
    */
   const easyCropRef = useRef<EasyCropRef>({} as EasyCropRef);
 
   /**
-   * Modal
+   * modal
    */
   const modalProps = useMemo(() => {
     const obj = {
@@ -288,14 +287,27 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     [fillColor, quality, rotate]
   );
 
-  const getComponent = (titleOfModal: string) => (
+  const wrapClassName = `${PREFIX}-modal${
+    modalClassName ? ` ${modalClassName}` : ''
+  }`;
+
+  const title = useMemo(() => {
+    if (modalTitle) {
+      return modalTitle;
+    }
+
+    const lang = typeof window !== 'undefined' ? window.navigator.language : '';
+    return lang === 'zh-CN' ? '编辑图片' : 'Edit image';
+  }, [modalTitle]);
+
+  return (
     <>
       {uploadComponent}
       {image && (
         <AntModal
           {...modalVisibleProp}
-          wrapClassName={`${PREFIX}-modal ${modalClassName || ''}`}
-          title={titleOfModal}
+          wrapClassName={wrapClassName}
+          title={title}
           onOk={onOk}
           onCancel={onCancel}
           maskClosable={false}
@@ -318,18 +330,6 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         </AntModal>
       )}
     </>
-  );
-
-  if (modalTitle) {
-    return getComponent(modalTitle);
-  }
-
-  return (
-    <LocaleReceiver>
-      {(_, code) => {
-        return getComponent(code === 'zh-cn' ? '编辑图片' : 'Edit image');
-      }}
-    </LocaleReceiver>
   );
 });
 
