@@ -7,8 +7,9 @@ import {
   useState,
 } from 'react';
 import Cropper from 'react-easy-crop';
+import AntSlider from 'antd/es/slider';
+import type { EasyCropProps, EasyCropRef } from './types';
 import type { Area, MediaSize, Point, Size } from 'react-easy-crop/types';
-import AntSlider from 'antd/lib/slider';
 import {
   INIT_ROTATE,
   INIT_ZOOM,
@@ -18,7 +19,6 @@ import {
   ROTATE_STEP,
   ZOOM_STEP,
 } from './constants';
-import type { EasyCropProps, EasyCropRef } from './types';
 
 const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
   const {
@@ -32,6 +32,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     rotate,
     minZoom,
     maxZoom,
+
     cropperProps,
   } = props;
 
