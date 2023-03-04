@@ -1,18 +1,13 @@
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
-import type CropperRef from 'react-easy-crop';
-import type { UploadProps } from 'antd';
 import { version } from 'antd';
-import AntModal from 'antd/lib/modal';
-import type { RcFile, UploadFile } from 'antd/lib/upload';
-import AntUpload from 'antd/lib/upload';
+import AntModal from 'antd/es/modal';
+import AntUpload from 'antd/es/upload';
+import type { EasyCropRef, ImgCropProps, OnModalOk } from './types';
+import type { UploadProps } from 'antd';
+import type { RcFile, UploadFile } from 'antd/es/upload';
 import { compareVersions } from 'compare-versions';
+import type CropperRef from 'react-easy-crop';
 import { INIT_ROTATE, INIT_ZOOM, PREFIX } from './constants';
-import type {
-  EasyCropProps,
-  EasyCropRef,
-  ImgCropProps,
-  OnModalOk,
-} from './types';
 import EasyCrop from './EasyCrop';
 import './index.less';
 
@@ -325,7 +320,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             rotate={rotate}
             minZoom={minZoom}
             maxZoom={maxZoom}
-            cropperProps={cropperProps as EasyCropProps['cropperProps']}
+            cropperProps={cropperProps}
           />
         </AntModal>
       )}

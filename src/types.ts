@@ -1,3 +1,4 @@
+import type { RcFile } from 'antd/es/upload/interface';
 import type {
   Dispatch,
   ForwardedRef,
@@ -6,7 +7,6 @@ import type {
 } from 'react';
 import type { default as Cropper, CropperProps } from 'react-easy-crop';
 import type { Area } from 'react-easy-crop/types';
-import type { RcFile } from 'antd/lib/upload/interface';
 
 export type ImgCropProps = {
   aspect?: number;
@@ -44,21 +44,15 @@ export type EasyCropRef = {
   cropPixelsRef: MutableRefObject<Area>;
 };
 
-export type EasyCropProps = Required<
-  Pick<
-    ImgCropProps,
-    | 'aspect'
-    | 'shape'
-    | 'grid'
-    | 'zoom'
-    | 'rotate'
-    | 'minZoom'
-    | 'maxZoom'
-    | 'cropperProps'
-  >
-> & {
+export type EasyCropProps = {
   cropperRef: ForwardedRef<Cropper>;
   image: string;
-};
+} & Required<
+  Pick<
+    ImgCropProps,
+    'aspect' | 'shape' | 'grid' | 'zoom' | 'rotate' | 'minZoom' | 'maxZoom'
+  >
+> &
+  Pick<ImgCropProps, 'cropperProps'>;
 
 export type OnModalOk = NonNullable<ImgCropProps['onModalOk']>;
