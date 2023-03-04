@@ -61,9 +61,21 @@ const Demo = () => (
 | onUploadFail            | `function`           | -              | Call when upload failed                                                            |
 | cropperProps            | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden)              |
 
-## Before antd v5
+### `ConfigProvider` not work?
 
-If you use `antd<=v4` with `babel-plugin-import`, and no `Modal` or `Slider` were used in project, please import these styles manually:
+Try to set `libraryDirectory`(`'es'` or `'lib'`) to `babel-plugin-import` config, see which one will work.
+
+```js
+module.exports = {
+  plugins: [
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+  ],
+};
+```
+
+## No style? (only `antd<=v4`)
+
+If you use `antd<=v4` + `babel-plugin-import`, and no `Modal` or `Slider` were imported, please import these styles manually:
 
 ```js
 import 'antd/es/modal/style';

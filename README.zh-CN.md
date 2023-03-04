@@ -61,9 +61,28 @@ const Demo = () => (
 | onUploadFail            | `function`           | -            | 上传失败时的回调                                       |
 | cropperProps            | `object`             | -            | [react-easy-crop] 的 props（\* [已有 props] 无法重写） |
 
-## 在 antd v5 之前
+### `ConfigProvider` 无效？
 
-若使用 `antd<=v4` & `babel-plugin-import`，且未使用 `Modal` 或 `Slider`，请手动引入这些样式：
+尝试设置 `libraryDirectory`（`'es'` 或 `'lib'`）到 `babel-plugin-import` 的配置项，看看哪个会生效。
+
+```js
+module.exports = {
+  plugins: [
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+  ],
+};
+```
+
+## 没有样式？（仅 `antd<=v4`）
+
+若使用 `antd<=v4` + `babel-plugin-import`，且未引入 `Modal` 或 `Slider`，请手动引入这些样式：
+
+```js
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
+```
+
+## 在 antd v5 之前
 
 ```js
 import 'antd/es/modal/style';
