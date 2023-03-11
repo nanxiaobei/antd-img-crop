@@ -46,6 +46,7 @@ const Demo = () => (
 | fillColor               | `string`             | `'white'`      | Fill color when cropped image smaller than canvas                                  |
 | zoom                    | `boolean`            | `true`         | Enable zoom for image                                                              |
 | rotate                  | `boolean`            | `false`        | Enable rotate for image                                                            |
+| aspectAdjust            | `boolean`            | `false`        | Enable aspect adjustment for image                                                 |
 | minZoom                 | `number`             | `1`            | Minimum zoom factor                                                                |
 | maxZoom                 | `number`             | `3`            | Maximum zoom factor                                                                |
 | modalTitle              | `string`             | `'Edit image'` | Title of modal                                                                     |
