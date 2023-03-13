@@ -15,6 +15,7 @@ export type ImgCropProps = {
   quality?: number;
   fillColor?: string;
 
+  aspectAdjust?: boolean;
   zoom?: boolean;
   rotate?: boolean;
   minZoom?: number;
@@ -50,7 +51,7 @@ export type EasyCropProps = {
 } & Required<
   Pick<
     ImgCropProps,
-    'aspect' | 'shape' | 'grid' | 'zoom' | 'rotate' | 'minZoom' | 'maxZoom'
+    'aspect' | 'shape' | 'grid' | 'zoom' | 'rotate' | 'minZoom' | 'maxZoom' | 'aspectAdjust'
   >
 > &
   Pick<ImgCropProps, 'cropperProps'>;

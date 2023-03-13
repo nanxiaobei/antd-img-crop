@@ -26,6 +26,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     quality = 0.4,
     fillColor = 'white',
 
+    aspectAdjust = false,
     zoom = true,
     rotate = false,
     minZoom = 1,
@@ -64,8 +65,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const [image, setImage] = useState('');
   const fileRef = useRef<UploadFile>({} as UploadFile);
   const beforeUploadRef = useRef<UploadProps['beforeUpload']>();
-  const resolveRef = useRef<OnModalOk>(() => {});
-  const rejectRef = useRef<(err: Error) => void>(() => {});
+  const resolveRef = useRef<OnModalOk>(() => { });
+  const rejectRef = useRef<(err: Error) => void>(() => { });
 
   const uploadComponent = useMemo(() => {
     const upload = Array.isArray(children) ? children[0] : children;
@@ -282,9 +283,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     [fillColor, quality, rotate]
   );
 
-  const wrapClassName = `${PREFIX}-modal${
-    modalClassName ? ` ${modalClassName}` : ''
-  }`;
+  const wrapClassName = `${PREFIX}-modal${modalClassName ? ` ${modalClassName}` : ''}`;
 
   const title = useMemo(() => {
     if (modalTitle) {
@@ -317,6 +316,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             shape={shape}
             grid={grid}
             zoom={zoom}
+            aspectAdjust={aspectAdjust}
             rotate={rotate}
             minZoom={minZoom}
             maxZoom={maxZoom}
