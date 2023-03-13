@@ -37,30 +37,29 @@ const Demo = () => (
 
 ## Props
 
-| Prop                    | Type                 | Default        | Description                                                                        |
-| ----------------------- | -------------------- | -------------- | ---------------------------------------------------------------------------------- |
-| aspect                  | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                                             |
-| shape                   | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                                          |
-| grid                    | `boolean`            | `false`        | Show grid of crop area (third-lines)                                               |
-| quality                 | `number`             | `0.4`          | Image quality, `0 ~ 1`                                                             |
-| fillColor               | `string`             | `'white'`      | Fill color when cropped image smaller than canvas                                  |
-| zoom                    | `boolean`            | `true`         | Enable zoom for image                                                              |
-| rotate                  | `boolean`            | `false`        | Enable rotate for image                                                            |
-| aspectAdjust            | `boolean`            | `false`        | Enable aspect adjustment for image                                                 |
-| minZoom                 | `number`             | `1`            | Minimum zoom factor                                                                |
-| maxZoom                 | `number`             | `3`            | Maximum zoom factor                                                                |
-| modalTitle              | `string`             | `'Edit image'` | Title of modal                                                                     |
-| modalWidth              | `number` \| `string` | `520`          | Width of modal in pixels number or percentages                                     |
-| modalOk                 | `string`             | `'OK'`         | Text of modal confirm button                                                       |
-| modalCancel             | `string`             | `'Cancel'`     | Text of modal cancel button                                                        |
-| modalMaskTransitionName | `string`             | `'fade'`       | MaskTransitionName of modal, use `'none'` to disable the default transition effect |
-| modalTransitionName     | `string`             | `'fade'`       | TransitionName of modal, use `'none'` to disable the default transition effect     |
-| modalClassName          | `string`             | `''`           | Provide your own classname for the Modal container                                 |
-| onModalOk               | `function`           | -              | Call when click modal confirm button                                               |
-| onModalCancel           | `function`           | -              | Call when click modal mask, top right "x", or cancel button                        |
-| beforeCrop              | `function`           | -              | Call before modal open, if return `false`, it'll not open                          |
-| onUploadFail            | `function`           | -              | Call when upload failed                                                            |
-| cropperProps            | `object`             | -              | Props of [react-easy-crop] (\* [existing props] cannot be overridden)              |
+| Prop           | Type                 | Default        | Description                                                       |
+| -------------- | -------------------- | -------------- | ----------------------------------------------------------------- |
+| quality        | `number`             | `0.4`          | Cropped image quality, `0` to `1`                                 |
+| fillColor      | `string`             | `'white'`      | Fill color when cropped image smaller than canvas                 |
+| zoomSlider     | `boolean`            | `true`         | Enable zoom adjustment for image                                  |
+| rotationSlider | `boolean`            | `false`        | Enable rotation adjustment for image                              |
+| aspectSlider   | `boolean`            | `false`        | Enable aspect adjustment for crop area                            |
+| aspect         | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                            |
+| minZoom        | `number`             | `1`            | Minimum zoom factor                                               |
+| maxZoom        | `number`             | `3`            | Maximum zoom factor                                               |
+| cropShape      | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                         |
+| showGrid       | `boolean`            | `false`        | Show grid of crop area (third-lines)                              |
+| cropperProps   | `object`             | -              | [react-easy-crop] props (\* existing props cannot be overridden)  |
+| modalClassName | `string`             | `''`           | Provide your own classname for the Modal container                |
+| modalTitle     | `string`             | `'Edit image'` | Title of modal                                                    |
+| modalWidth     | `number` \| `string` |                | Width of modal in pixels number or percentages                    |
+| modalOk        | `string`             |                | Text of modal confirm button                                      |
+| modalCancel    | `string`             |                | Text of modal cancel button                                       |
+| onModalOk      | `function`           | -              | Call when click modal confirm button                              |
+| onModalCancel  | `function`           | -              | Call when click modal mask, top right "x", or cancel button       |
+| modalProps     | `object`             |                | [Ant Design Modal] props (\* existing props cannot be overridden) |
+| beforeCrop     | `function`           | -              | Call before modal open, if return `false`, it'll not open         |
+| onUploadFail   | `function`           | -              | Call when upload failed                                           |
 
 ### `ConfigProvider` not work?
 
@@ -88,7 +87,7 @@ import 'antd/es/slider/style';
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE) (c) [nanxiaobei](https://lee.so/)
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
-[existing props]: https://github.com/nanxiaobei/antd-img-crop/blob/main/src/EasyCrop.tsx#L74-L93
+[Ant Design Modal]: https://ant.design/components/modal#api
 
 ## FUTAKE
 

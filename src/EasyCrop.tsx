@@ -7,43 +7,44 @@ import {
   useState,
 } from 'react';
 import Cropper from 'react-easy-crop';
-import AntSlider from 'antd/es/slider';
-import type { EasyCropProps, EasyCropRef } from './types';
 import type { Area, Point } from 'react-easy-crop/types';
+import AntSlider from 'antd/es/slider';
 import {
-  INIT_ROTATE,
-  INIT_ZOOM,
-  MAX_RATIO,
-  MAX_ROTATE,
-  MIN_RATIO,
-  MIN_ROTATE,
+  ASPECT_MAX,
+  ASPECT_MIN,
+  ASPECT_STEP,
   PREFIX,
-  RATIO_STEP,
-  ROTATE_STEP,
+  ROTATION_INITIAL,
+  ROTATION_MAX,
+  ROTATION_MIN,
+  ROTATION_STEP,
+  ZOOM_INITIAL,
   ZOOM_STEP,
 } from './constants';
+import type { EasyCropProps, EasyCropRef } from './types';
 
 const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
   const {
     cropperRef,
-    image,
+    zoomSlider,
+    rotationSlider,
+    aspectSlider,
 
-    aspect,
-    aspectAdjust,
-    shape,
-    grid,
-    zoom,
-    rotate,
+    image,
+    aspect: propAspect,
     minZoom,
     maxZoom,
+    cropShape,
+    showGrid,
 
     cropperProps,
   } = props;
 
   const [crop, onCropChange] = useState<Point>({ x: 0, y: 0 });
-  const [zoomVal, setZoomVal] = useState(INIT_ZOOM);
-  const [ratioVal, setRatioVal] = useState(aspect);
-  const [rotateVal, setRotateVal] = useState(INIT_ROTATE);
+  const [zoom, setZoom] = useState(ZOOM_INITIAL);
+  const [rotation, setRotation] = useState(ROTATION_INITIAL);
+  const [aspect, setAspect] = useState(propAspect);
+
   const cropPixelsRef = useRef<Area>({ width: 0, height: 0, x: 0, y: 0 });
 
   const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
@@ -51,9 +52,9 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
   }, []);
 
   useImperativeHandle(ref, () => ({
-    rotateVal,
-    setZoomVal,
-    setRotateVal,
+    setZoom,
+    rotation,
+    setRotation,
     cropPixelsRef,
   }));
 
@@ -64,28 +65,31 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         ref={cropperRef}
         image={image}
         crop={crop}
-        onCropChange={onCropChange}
-        aspect={ratioVal}
-        cropShape={shape}
-        showGrid={grid}
-        zoomWithScroll={zoom}
-        zoom={zoomVal}
-        rotation={rotateVal}
-        onZoomChange={setZoomVal}
-        onRotationChange={setRotateVal}
+        //
+        zoom={zoom}
+        rotation={rotation}
+        aspect={aspect}
         minZoom={minZoom}
         maxZoom={maxZoom}
+        zoomWithScroll={zoomSlider}
+        //
+        cropShape={cropShape}
+        showGrid={showGrid}
+        onCropChange={onCropChange}
+        onZoomChange={setZoom}
+        onRotationChange={setRotation}
         onCropComplete={onCropComplete}
         classes={{
           containerClassName: `${PREFIX}-container`,
           mediaClassName: `${PREFIX}-media`,
         }}
       />
-      {zoom && (
+
+      {zoomSlider && (
         <section className={`${PREFIX}-control ${PREFIX}-control-zoom`}>
           <button
-            onClick={() => setZoomVal(zoomVal - ZOOM_STEP)}
-            disabled={zoomVal - ZOOM_STEP < minZoom}
+            onClick={() => setZoom(zoom - ZOOM_STEP)}
+            disabled={zoom - ZOOM_STEP < minZoom}
           >
             －
           </button>
@@ -93,58 +97,62 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
             min={minZoom}
             max={maxZoom}
             step={ZOOM_STEP}
-            value={zoomVal}
-            onChange={setZoomVal}
+            value={zoom}
+            onChange={setZoom}
           />
           <button
-            onClick={() => setZoomVal(zoomVal + ZOOM_STEP)}
-            disabled={zoomVal + ZOOM_STEP > maxZoom}
+            onClick={() => setZoom(zoom + ZOOM_STEP)}
+            disabled={zoom + ZOOM_STEP > maxZoom}
           >
             ＋
           </button>
         </section>
       )}
-      {aspectAdjust && <section className={`${PREFIX}-control ${PREFIX}-control-zoom`}>
-        <button
-          onClick={() => setRatioVal(ratioVal - RATIO_STEP)}
-          disabled={ratioVal - RATIO_STEP < MIN_RATIO}
-        >
-          ↕️
-        </button>
-        <AntSlider
-          min={MIN_RATIO}
-          max={MAX_RATIO}
-          step={RATIO_STEP}
-          value={ratioVal}
-          onChange={setRatioVal}
-        />
-        <button
-          onClick={() => setRatioVal(ratioVal + RATIO_STEP)}
-          disabled={ratioVal + RATIO_STEP > MAX_RATIO}
-        >
-          ↔️
-        </button>
-      </section>}
-      {rotate && (
-        <section className={`${PREFIX}-control ${PREFIX}-control-rotate`}>
+
+      {rotationSlider && (
+        <section className={`${PREFIX}-control ${PREFIX}-control-rotation`}>
           <button
-            onClick={() => setRotateVal(rotateVal - ROTATE_STEP)}
-            disabled={rotateVal === MIN_ROTATE}
+            onClick={() => setRotation(rotation - ROTATION_STEP)}
+            disabled={rotation === ROTATION_MIN}
           >
             ↺
           </button>
           <AntSlider
-            min={MIN_ROTATE}
-            max={MAX_ROTATE}
-            step={ROTATE_STEP}
-            value={rotateVal}
-            onChange={setRotateVal}
+            min={ROTATION_MIN}
+            max={ROTATION_MAX}
+            step={ROTATION_STEP}
+            value={rotation}
+            onChange={setRotation}
           />
           <button
-            onClick={() => setRotateVal(rotateVal + ROTATE_STEP)}
-            disabled={rotateVal === MAX_ROTATE}
+            onClick={() => setRotation(rotation + ROTATION_STEP)}
+            disabled={rotation === ROTATION_MAX}
           >
             ↻
+          </button>
+        </section>
+      )}
+
+      {aspectSlider && (
+        <section className={`${PREFIX}-control ${PREFIX}-control-aspect`}>
+          <button
+            onClick={() => setAspect(aspect - ASPECT_STEP)}
+            disabled={aspect - ASPECT_STEP < ASPECT_MIN}
+          >
+            ↕️
+          </button>
+          <AntSlider
+            min={ASPECT_MIN}
+            max={ASPECT_MAX}
+            step={ASPECT_STEP}
+            value={aspect}
+            onChange={setAspect}
+          />
+          <button
+            onClick={() => setAspect(aspect + ASPECT_STEP)}
+            disabled={aspect + ASPECT_STEP > ASPECT_MAX}
+          >
+            ↔️
           </button>
         </section>
       )}

@@ -1,52 +1,70 @@
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+import type CropperRef from 'react-easy-crop';
 import { version } from 'antd';
+import type { ModalProps } from 'antd';
+import type { UploadProps } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
-import type { EasyCropRef, ImgCropProps, OnModalOk } from './types';
-import type { UploadProps } from 'antd';
 import type { RcFile, UploadFile } from 'antd/es/upload';
 import { compareVersions } from 'compare-versions';
-import type CropperRef from 'react-easy-crop';
-import { INIT_ROTATE, INIT_ZOOM, PREFIX } from './constants';
+import { PREFIX, ROTATION_INITIAL, ZOOM_INITIAL } from './constants';
+import type { EasyCropRef, ImgCropProps, OnModalOk } from './types';
 import EasyCrop from './EasyCrop';
 import './index.less';
 
 export type { ImgCropProps } from './types';
 
-const modalVisibleProp =
-  compareVersions(version, '4.23.0') === -1
-    ? { visible: true }
-    : { open: true };
+const openKey = compareVersions(version, '4.23.0') === -1 ? 'visible' : 'open';
+
+const deprecate = (obj: Record<string, any>, old: string, now: string) => {
+  if (old in obj) {
+    console.error(`\`${old}\` is deprecated, please use \`${now}\` instead`);
+    return obj[old];
+  }
+  return obj[now];
+};
 
 const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const {
-    aspect = 1,
-    shape = 'rect',
-    grid = false,
     quality = 0.4,
     fillColor = 'white',
 
-    aspectAdjust = false,
-    zoom = true,
-    rotate = false,
+    // @ts-ignore
+    zoomSlider: ZOOM_SLIDER = true,
+    // @ts-ignore
+    rotationSlider: ROTATION_SLIDER = false,
+    aspectSlider = false,
+
+    aspect = 1,
     minZoom = 1,
     maxZoom = 3,
+    // @ts-ignore
+    cropShape: CROP_SHAPE = 'rect',
+    // @ts-ignore
+    showGrid: SHOW_GRID = false,
+    cropperProps,
 
+    modalClassName,
     modalTitle,
     modalWidth,
     modalOk,
     modalCancel,
-    modalMaskTransitionName,
-    modalTransitionName,
-    modalClassName,
     onModalOk,
     onModalCancel,
+    modalProps,
 
     beforeCrop,
     onUploadFail,
-    cropperProps,
     children,
   } = props;
+
+  const cropShape = deprecate(props, 'shape', 'cropShape');
+  const showGrid = deprecate(props, 'grid', 'showGrid');
+  const zoomSlider = deprecate(props, 'zoom', 'zoomSlider');
+  const rotationSlider = deprecate(props, 'rotate', 'rotationSlider');
+
+  deprecate(props, 'modalMaskTransitionName', 'modalProps.maskTransitionName');
+  deprecate(props, 'modalTransitionName', 'modalProps.transitionName');
 
   const cb = useRef<
     Pick<
@@ -65,8 +83,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const [image, setImage] = useState('');
   const fileRef = useRef<UploadFile>({} as UploadFile);
   const beforeUploadRef = useRef<UploadProps['beforeUpload']>();
-  const resolveRef = useRef<OnModalOk>(() => { });
-  const rejectRef = useRef<(err: Error) => void>(() => { });
+  const resolveRef = useRef<OnModalOk>(() => {});
+  const rejectRef = useRef<(err: Error) => void>(() => {});
 
   const uploadComponent = useMemo(() => {
     const upload = Array.isArray(children) ? children[0] : children;
@@ -118,33 +136,18 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   /**
    * modal
    */
-  const modalProps = useMemo(() => {
-    const obj = {
-      width: modalWidth,
-      okText: modalOk,
-      cancelText: modalCancel,
-      maskTransitionName: modalMaskTransitionName,
-      transitionName: modalTransitionName,
-    };
-    Object.keys(obj).forEach((prop) => {
-      const key = prop as keyof typeof obj;
-      if (obj[key] === undefined) {
-        delete obj[key];
-      }
-    });
+  const modalBaseProps = useMemo(() => {
+    const obj: Pick<ModalProps, 'width' | 'okText' | 'cancelText'> = {};
+    if (modalWidth !== undefined) obj.width = modalWidth;
+    if (modalOk !== undefined) obj.okText = modalOk;
+    if (modalCancel !== undefined) obj.cancelText = modalCancel;
     return obj;
-  }, [
-    modalCancel,
-    modalMaskTransitionName,
-    modalOk,
-    modalTransitionName,
-    modalWidth,
-  ]);
+  }, [modalCancel, modalOk, modalWidth]);
 
   const onClose = () => {
     setImage('');
-    easyCropRef.current.setZoomVal(INIT_ZOOM);
-    easyCropRef.current.setRotateVal(INIT_ROTATE);
+    easyCropRef.current.setZoom(ZOOM_INITIAL);
+    easyCropRef.current.setRotation(ROTATION_INITIAL);
   };
 
   const onCancel = useCallback(() => {
@@ -175,9 +178,9 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         y: cropY,
       } = easyCropRef.current.cropPixelsRef.current;
 
-      if (rotate && easyCropRef.current.rotateVal !== INIT_ROTATE) {
+      if (rotationSlider && easyCropRef.current.rotation !== ROTATION_INITIAL) {
         const { naturalWidth: imgWidth, naturalHeight: imgHeight } = imgSource;
-        const angle = easyCropRef.current.rotateVal * (Math.PI / 180);
+        const angle = easyCropRef.current.rotation * (Math.PI / 180);
 
         // get container for rotated image
         const sine = Math.abs(Math.sin(angle));
@@ -280,10 +283,12 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         quality
       );
     },
-    [fillColor, quality, rotate]
+    [fillColor, quality, rotationSlider]
   );
 
-  const wrapClassName = `${PREFIX}-modal${modalClassName ? ` ${modalClassName}` : ''}`;
+  const wrapClassName = `${PREFIX}-modal${
+    modalClassName ? ` ${modalClassName}` : ''
+  }`;
 
   const title = useMemo(() => {
     if (modalTitle) {
@@ -299,27 +304,28 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
       {uploadComponent}
       {image && (
         <AntModal
-          {...modalVisibleProp}
-          wrapClassName={wrapClassName}
+          {...modalProps}
+          {...modalBaseProps}
+          {...{ [openKey]: true }}
           title={title}
           onOk={onOk}
           onCancel={onCancel}
+          wrapClassName={wrapClassName}
           maskClosable={false}
           destroyOnClose
-          {...modalProps}
         >
           <EasyCrop
             ref={easyCropRef}
             cropperRef={cropperRef}
+            zoomSlider={zoomSlider}
+            rotationSlider={rotationSlider}
+            aspectSlider={aspectSlider}
             image={image}
             aspect={aspect}
-            shape={shape}
-            grid={grid}
-            zoom={zoom}
-            aspectAdjust={aspectAdjust}
-            rotate={rotate}
             minZoom={minZoom}
             maxZoom={maxZoom}
+            cropShape={cropShape}
+            showGrid={showGrid}
             cropperProps={cropperProps}
           />
         </AntModal>

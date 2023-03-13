@@ -1,11 +1,13 @@
 export const PREFIX = 'img-crop';
 
-export const INIT_ZOOM = 1;
+export const ZOOM_INITIAL = 1;
 export const ZOOM_STEP = 0.1;
-export const INIT_ROTATE = 0;
-export const ROTATE_STEP = 1;
-export const MIN_ROTATE = -180;
-export const MAX_ROTATE = 180;
-export const MIN_RATIO = 0.5;
-export const MAX_RATIO = 2;
-export const RATIO_STEP = 0.01;
+
+export const ROTATION_INITIAL = 0;
+export const ROTATION_MIN = -180;
+export const ROTATION_MAX = 180;
+export const ROTATION_STEP = 1;
+
+export const ASPECT_MIN = 0.5;
+export const ASPECT_MAX = 2;
+export const ASPECT_STEP = 0.01;
