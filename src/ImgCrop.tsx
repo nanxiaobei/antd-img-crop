@@ -59,10 +59,10 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     children,
   } = props;
 
-  const cropShape = deprecate(props, 'shape', 'cropShape');
-  const showGrid = deprecate(props, 'grid', 'showGrid');
-  const zoomSlider = deprecate(props, 'zoom', 'zoomSlider');
-  const rotationSlider = deprecate(props, 'rotate', 'rotationSlider');
+  const zoomSlider = deprecate(props, 'zoom', 'zoomSlider') || true;
+  const rotationSlider = deprecate(props, 'rotate', 'rotationSlider') || false;
+  const cropShape = deprecate(props, 'shape', 'cropShape') || 'rect';
+  const showGrid = deprecate(props, 'grid', 'showGrid') || false;
 
   deprecate(props, 'modalMaskTransitionName', 'modalProps.maskTransitionName');
   deprecate(props, 'modalTransitionName', 'modalProps.transitionName');
