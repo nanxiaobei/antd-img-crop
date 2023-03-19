@@ -1,7 +1,12 @@
 module.exports = {
   singleQuote: true,
 
-  plugins: [require.resolve('@trivago/prettier-plugin-sort-imports')],
+  plugins: [
+    require.resolve('@trivago/prettier-plugin-sort-imports'),
+    require.resolve('prettier-plugin-tailwindcss'),
+  ],
+  pluginSearchDirs: false,
+
   importOrder: [
     '^react',
     '^antd',
