@@ -44,7 +44,7 @@ const Demo = () => (
 | zoomSlider     | `boolean`            | `true`       | 启用图片缩放调整                                      |
 | rotationSlider | `boolean`            | `false`      | 启用图片旋转调整                                      |
 | aspectSlider   | `boolean`            | `false`      | 启用裁切比率调整                                      |
-| showReset      | `boolean`            |              | 显示重置按钮，用以重置缩放、旋转及比率                |
+| showReset      | `boolean`            | `false`      | 显示重置按钮，用以重置缩放、旋转、比率                |
 | aspect         | `number`             | `1 / 1`      | 裁切区域宽高比，`width / height`                      |
 | minZoom        | `number`             | `1`          | 最小缩放倍数                                          |
 | maxZoom        | `number`             | `3`          | 最大缩放倍数                                          |
@@ -62,6 +62,8 @@ const Demo = () => (
 | beforeCrop     | `function`           | -            | 弹窗打开前调用，若返回 `false`，弹框将不会打开        |
 | onUploadFail   | `function`           | -            | 上传失败时的回调                                      |
 
+## FAQ
+
 ### `ConfigProvider` 无效？
 
 尝试设置 `libraryDirectory`（`'es'` 或 `'lib'`）到 `babel-plugin-import` 的配置项，看看哪个会生效。
@@ -74,16 +76,9 @@ module.exports = {
 };
 ```
 
-## 没有样式？（仅 `antd<=v4`）
+### 没有样式？（仅 `antd<=v4`）
 
 若使用 `antd<=v4` + `babel-plugin-import`，且未引入 `Modal` 或 `Slider`，请手动引入这些样式：
-
-```js
-import 'antd/es/modal/style';
-import 'antd/es/slider/style';
-```
-
-## 在 antd v5 之前
 
 ```js
 import 'antd/es/modal/style';
