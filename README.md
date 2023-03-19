@@ -37,29 +37,30 @@ const Demo = () => (
 
 ## Props
 
-| Prop           | Type                 | Default        | Description                                                       |
-| -------------- | -------------------- | -------------- | ----------------------------------------------------------------- |
-| quality        | `number`             | `0.4`          | Cropped image quality, `0` to `1`                                 |
-| fillColor      | `string`             | `'white'`      | Fill color when cropped image smaller than canvas                 |
-| zoomSlider     | `boolean`            | `true`         | Enable zoom adjustment for image                                  |
-| rotationSlider | `boolean`            | `false`        | Enable rotation adjustment for image                              |
-| aspectSlider   | `boolean`            | `false`        | Enable aspect adjustment for crop area                            |
-| aspect         | `number`             | `1 / 1`        | Aspect of crop area , `width / height`                            |
-| minZoom        | `number`             | `1`            | Minimum zoom factor                                               |
-| maxZoom        | `number`             | `3`            | Maximum zoom factor                                               |
-| cropShape      | `string`             | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                         |
-| showGrid       | `boolean`            | `false`        | Show grid of crop area (third-lines)                              |
-| cropperProps   | `object`             | -              | [react-easy-crop] props (\* existing props cannot be overridden)  |
-| modalClassName | `string`             | `''`           | Provide your own classname for the Modal container                |
-| modalTitle     | `string`             | `'Edit image'` | Title of modal                                                    |
-| modalWidth     | `number` \| `string` |                | Width of modal in pixels number or percentages                    |
-| modalOk        | `string`             |                | Text of modal confirm button                                      |
-| modalCancel    | `string`             |                | Text of modal cancel button                                       |
-| onModalOk      | `function`           | -              | Call when click modal confirm button                              |
-| onModalCancel  | `function`           | -              | Call when click modal mask, top right "x", or cancel button       |
-| modalProps     | `object`             |                | [Ant Design Modal] props (\* existing props cannot be overridden) |
-| beforeCrop     | `function`           | -              | Call before modal open, if return `false`, it'll not open         |
-| onUploadFail   | `function`           | -              | Call when upload failed                                           |
+| Prop           | Type        | Default        | Description                                                       |
+| -------------- | ----------- | -------------- | ----------------------------------------------------------------- | ---------------------------------------------- |
+| quality        | `number`    | `0.4`          | Cropped image quality, `0` to `1`                                 |
+| fillColor      | `string`    | `'white'`      | Fill color when cropped image smaller than canvas                 |
+| zoomSlider     | `boolean`   | `true`         | Enable zoom adjustment for image                                  |
+| rotationSlider | `boolean`   | `false`        | Enable rotation adjustment for image                              |
+| aspectSlider   | `boolean`   | `false`        | Enable aspect adjustment for crop area                            |
+| showReset      | `boolean`   |                | show a reset button to reset zoom, rotation & aspect              |
+| aspect         | `number`    | `1 / 1`        | Aspect of crop area , `width / height`                            |
+| minZoom        | `number`    | `1`            | Minimum zoom factor                                               |
+| maxZoom        | `number`    | `3`            | Maximum zoom factor                                               |
+| cropShape      | `string`    | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                         |
+| showGrid       | `boolean`   | `false`        | Show grid of crop area (third-lines)                              |
+| cropperProps   | `object`    | -              | [react-easy-crop] props (\* existing props cannot be overridden)  |
+| modalClassName | `string`    | `''`           | Provide your own classname for the Modal container                |
+| modalTitle     | `string`    | `'Edit image'` | Title of modal                                                    |
+| modalWidth     | `number` \  | `string`       |                                                                   | Width of modal in pixels number or percentages |
+| modalOk        | `string`    |                | Text of modal confirm button                                      |
+| modalCancel    | `string`    |                | Text of modal cancel button                                       |
+| onModalOk      | `function`  | -              | Call when click modal confirm button                              |
+| onModalCancel  | `function`  | -              | Call when click modal mask, top right "x", or cancel button       |
+| modalProps     | `object`    |                | [Ant Design Modal] props (\* existing props cannot be overridden) |
+| beforeCrop     | `function`  | -              | Call before modal open, if return `false`, it'll not open         |
+| onUploadFail   | `function`  | -              | Call when upload failed                                           |
 
 ### `ConfigProvider` not work?
 

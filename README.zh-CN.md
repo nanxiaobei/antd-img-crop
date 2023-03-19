@@ -44,6 +44,7 @@ const Demo = () => (
 | zoomSlider     | `boolean`            | `true`       | 启用图片缩放调整                                      |
 | rotationSlider | `boolean`            | `false`      | 启用图片旋转调整                                      |
 | aspectSlider   | `boolean`            | `false`      | 启用裁切比率调整                                      |
+| showReset      | `boolean`            |              | 显示重置按钮，用以重置缩放、旋转及比率                |
 | aspect         | `number`             | `1 / 1`      | 裁切区域宽高比，`width / height`                      |
 | minZoom        | `number`             | `1`          | 最小缩放倍数                                          |
 | maxZoom        | `number`             | `3`          | 最大缩放倍数                                          |
