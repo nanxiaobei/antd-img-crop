@@ -10,7 +10,7 @@ import { compareVersions } from 'compare-versions';
 import { PREFIX, ROTATION_INITIAL, ZOOM_INITIAL } from './constants';
 import type { EasyCropRef, ImgCropProps, OnModalOk } from './types';
 import EasyCrop from './EasyCrop';
-import './index.less';
+import './ImgCrop.css';
 
 export type { ImgCropProps } from './types';
 
@@ -49,6 +49,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     modalWidth,
     modalOk,
     modalCancel,
+    showReset = false,
     onModalOk,
     onModalCancel,
     modalProps,
@@ -290,17 +291,13 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     modalClassName ? ` ${modalClassName}` : ''
   }`;
 
-  const title = useMemo(() => {
-    if (modalTitle) {
-      return modalTitle;
-    }
-
-    const lang = typeof window !== 'undefined' ? window.navigator.language : '';
-    return lang === 'zh-CN' ? '编辑图片' : 'Edit image';
-  }, [modalTitle]);
+  const lang = typeof window === 'undefined' ? '' : window.navigator.language;
+  const isCN = lang === 'zh-CN';
+  const title = modalTitle || (isCN ? '编辑图片' : 'Edit image');
 
   return (
     <>
+      <div className="text-amber-200">123</div>
       {uploadComponent}
       {image && (
         <AntModal
@@ -320,6 +317,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             zoomSlider={zoomSlider}
             rotationSlider={rotationSlider}
             aspectSlider={aspectSlider}
+            showReset={showReset}
             image={image}
             aspect={aspect}
             minZoom={minZoom}
@@ -327,6 +325,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             cropShape={cropShape}
             showGrid={showGrid}
             cropperProps={cropperProps}
+            isCN={isCN}
           />
         </AntModal>
       )}

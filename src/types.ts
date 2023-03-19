@@ -16,6 +16,7 @@ export type ImgCropProps = {
   zoomSlider?: boolean;
   rotationSlider?: boolean;
   aspectSlider?: boolean;
+  showReset?: boolean;
 
   aspect?: number;
   minZoom?: number;
@@ -86,6 +87,7 @@ export type EasyCropProps = {
     | 'zoomSlider'
     | 'rotationSlider'
     | 'aspectSlider'
+    | 'showReset'
     | 'aspect'
     | 'minZoom'
     | 'maxZoom'
@@ -93,6 +95,6 @@ export type EasyCropProps = {
     | 'showGrid'
   >
 > &
-  Pick<ImgCropProps, 'cropperProps'>;
+  Pick<ImgCropProps, 'cropperProps'> & { isCN: boolean };
 
 export type OnModalOk = NonNullable<ImgCropProps['onModalOk']>;
