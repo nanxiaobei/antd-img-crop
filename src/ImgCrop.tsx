@@ -297,7 +297,6 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
 
   return (
     <>
-      <div className="text-amber-200">123</div>
       {uploadComponent}
       {image && (
         <AntModal
