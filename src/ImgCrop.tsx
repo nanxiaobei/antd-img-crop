@@ -4,7 +4,6 @@ import { version } from 'antd';
 import type { ModalProps } from 'antd';
 import type { UploadProps } from 'antd';
 import AntModal from 'antd/es/modal';
-import AntUpload from 'antd/es/upload';
 import type { RcFile, UploadFile } from 'antd/es/upload';
 import { compareVersions } from 'compare-versions';
 import { PREFIX, ROTATION_INITIAL, ZOOM_INITIAL } from './constants';
@@ -99,7 +98,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         accept: accept || 'image/*',
         beforeUpload: (file: RcFile, fileList: RcFile[]) => {
           return new Promise(async (resolve, reject) => {
-            if (cb.current.beforeCrop) {
+            if (typeof cb.current.beforeCrop === 'function') {
               const shouldCrop = await cb.current.beforeCrop(file, fileList);
               if (!shouldCrop) {
                 return reject();
@@ -244,40 +243,29 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
       const { type, name, uid } = fileRef.current;
       canvas.toBlob(
         async (blob) => {
-          const newFile = Object.assign(
-            new File([blob as BlobPart], name, { type }),
-            { uid }
-          ) as File;
+          const newFile = new File([blob as BlobPart], name, { type });
+          Object.assign(newFile, { uid });
 
-          if (!beforeUploadRef.current) {
-            return resolveRef.current(newFile);
+          if (typeof beforeUploadRef.current !== 'function') {
+            resolveRef.current(newFile);
+            return;
           }
 
-          const rcFile = newFile as unknown as RcFile;
-          const result = await beforeUploadRef.current(rcFile, [rcFile]);
+          // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx
+          // https://ant.design/components/upload-cn#api
+          try {
+            const rcFile = newFile as unknown as RcFile;
+            const result = await beforeUploadRef.current(rcFile, [rcFile]);
 
-          if (result === true) {
-            return resolveRef.current(newFile);
-          }
-
-          if (result === false) {
-            return rejectRef.current(new Error('beforeUpload return false'));
-          }
-
-          delete newFile[AntUpload.LIST_IGNORE as keyof typeof newFile];
-
-          if (result === AntUpload.LIST_IGNORE) {
-            Object.defineProperty(newFile, AntUpload.LIST_IGNORE, {
-              value: true,
-              configurable: true,
-            });
-            return rejectRef.current(
-              new Error('beforeUpload return LIST_IGNORE')
-            );
-          }
-
-          if (typeof result === 'object' && result !== null) {
-            return resolveRef.current(result);
+            if (result === true) {
+              resolveRef.current(newFile); // true
+            } else if (result === false) {
+              rejectRef.current(new Error('beforeUpload → false')); // false
+            } else {
+              resolveRef.current(result); // resolve(File), resolve(Upload.LIST_IGNORE)
+            }
+          } catch (err) {
+            rejectRef.current(new Error('beforeUpload → reject')); // reject
           }
         },
         type,
