@@ -262,7 +262,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             } else if (result === false) {
               rejectRef.current(new Error('beforeUpload → false')); // false
             } else {
-              resolveRef.current(result); // resolve(File), resolve(Upload.LIST_IGNORE)
+              resolveRef.current(result); // File, Upload.LIST_IGNORE
             }
           } catch (err) {
             rejectRef.current(new Error('beforeUpload → reject')); // reject
