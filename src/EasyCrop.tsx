@@ -110,7 +110,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
           <button
             className={buttonClass}
             onClick={() => setZoom(zoom - ZOOM_STEP)}
-            disabled
+            disabled={zoom - ZOOM_STEP < minZoom}
           >
             －
           </button>
