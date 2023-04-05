@@ -1,13 +1,10 @@
-import type {
-  Dispatch,
-  ForwardedRef,
-  MutableRefObject,
-  SetStateAction,
-} from 'react';
+import type { ForwardedRef, MutableRefObject } from 'react';
 import type { default as Cropper, CropperProps } from 'react-easy-crop';
 import type { Area } from 'react-easy-crop/types';
-import type { ModalProps } from 'antd';
-import type { RcFile } from 'antd/es/upload/interface';
+import type { ModalProps, UploadProps } from 'antd';
+
+export type BeforeUpload = Exclude<UploadProps['beforeUpload'], undefined>;
+export type BeforeUploadReturnType = ReturnType<BeforeUpload>;
 
 export type ImgCropProps = {
   quality?: number;
@@ -47,7 +44,7 @@ export type ImgCropProps = {
   modalWidth?: number | string;
   modalOk?: string;
   modalCancel?: string;
-  onModalOk?: (file: void | boolean | string | Blob | File) => void;
+  onModalOk?: (value: BeforeUploadReturnType) => void;
   onModalCancel?: () => void;
   modalProps?: Omit<
     ModalProps,
@@ -65,22 +62,19 @@ export type ImgCropProps = {
     | 'destroyOnClose'
   >;
 
-  beforeCrop?: (file: RcFile, fileList: RcFile[]) => boolean | Promise<boolean>;
-  onUploadFail?: (err: Error) => void;
-
+  beforeCrop?: BeforeUpload;
   children: JSX.Element;
 };
 
 export type EasyCropRef = {
   rotation: number;
-  setZoom: Dispatch<SetStateAction<number>>;
-  setRotation: Dispatch<SetStateAction<number>>;
   cropPixelsRef: MutableRefObject<Area>;
+  onReset: () => void;
 };
 
 export type EasyCropProps = {
   cropperRef: ForwardedRef<Cropper>;
-  image: string;
+  modalImage: string;
 } & Required<
   Pick<
     ImgCropProps,
@@ -96,5 +90,3 @@ export type EasyCropProps = {
   >
 > &
   Pick<ImgCropProps, 'cropperProps'> & { isCN: boolean };
-
-export type OnModalOk = NonNullable<ImgCropProps['onModalOk']>;

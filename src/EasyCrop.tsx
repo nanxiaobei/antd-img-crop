@@ -32,7 +32,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     aspectSlider,
     showReset,
 
-    image,
+    modalImage,
     aspect: ASPECT_INITIAL,
     minZoom,
     maxZoom,
@@ -51,6 +51,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     zoom !== ZOOM_INITIAL ||
     rotation !== ROTATION_INITIAL ||
     aspect !== ASPECT_INITIAL;
+
   const onReset = () => {
     setZoom(ZOOM_INITIAL);
     setRotation(ROTATION_INITIAL);
@@ -65,10 +66,9 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
   }, []);
 
   useImperativeHandle(ref, () => ({
-    setZoom,
     rotation,
-    setRotation,
     cropPixelsRef,
+    onReset,
   }));
 
   const wrapperClass = 'flex items-center w-3/5 mx-auto';
@@ -81,7 +81,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
       <Cropper
         {...cropperProps}
         ref={cropperRef}
-        image={image}
+        image={modalImage}
         crop={crop}
         //
         zoom={zoom}

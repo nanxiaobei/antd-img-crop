@@ -1,13 +1,18 @@
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 import type CropperRef from 'react-easy-crop';
 import { version } from 'antd';
 import type { ModalProps } from 'antd';
-import type { UploadProps } from 'antd';
 import AntModal from 'antd/es/modal';
-import type { RcFile, UploadFile } from 'antd/es/upload';
+import AntUpload from 'antd/es/upload';
 import { compareVersions } from 'compare-versions';
-import { PREFIX, ROTATION_INITIAL, ZOOM_INITIAL } from './constants';
-import type { EasyCropRef, ImgCropProps, OnModalOk } from './types';
+import { PREFIX, ROTATION_INITIAL } from './constants';
+import type {
+  BeforeUpload,
+  BeforeUploadReturnType,
+  EasyCropRef,
+  ImgCropProps,
+} from './types';
 import EasyCrop from './EasyCrop';
 import './ImgCrop.css';
 
@@ -54,133 +59,62 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     modalProps,
 
     beforeCrop,
-    onUploadFail,
     children,
   } = props;
 
+  /**
+   * init
+   */
   const zoomSlider = deprecate(props, 'zoom', 'zoomSlider') || true;
   const rotationSlider = deprecate(props, 'rotate', 'rotationSlider') || false;
   const cropShape = deprecate(props, 'shape', 'cropShape') || 'rect';
   const showGrid = deprecate(props, 'grid', 'showGrid') || false;
 
+  if ('onUploadFail' in props) {
+    console.error(
+      `\`onUploadFail\` is removed, because the only way it is called, is when the file is rejected by beforeUpload`
+    );
+  }
+
   deprecate(props, 'modalMaskTransitionName', 'modalProps.maskTransitionName');
   deprecate(props, 'modalTransitionName', 'modalProps.transitionName');
 
   const cb = useRef<
-    Pick<
-      ImgCropProps,
-      'onModalOk' | 'onModalCancel' | 'beforeCrop' | 'onUploadFail'
-    >
+    Pick<ImgCropProps, 'onModalOk' | 'onModalCancel' | 'beforeCrop'>
   >({});
   cb.current.onModalOk = onModalOk;
   cb.current.onModalCancel = onModalCancel;
   cb.current.beforeCrop = beforeCrop;
-  cb.current.onUploadFail = onUploadFail;
-
-  /**
-   * upload
-   */
-  const [image, setImage] = useState('');
-  const fileRef = useRef<UploadFile>({} as UploadFile);
-  const beforeUploadRef = useRef<UploadProps['beforeUpload']>();
-  const resolveRef = useRef<OnModalOk>(() => {});
-  const rejectRef = useRef<(err: Error) => void>(() => {});
-
-  const uploadComponent = useMemo(() => {
-    const upload = Array.isArray(children) ? children[0] : children;
-    const { beforeUpload, accept, ...restUploadProps } = upload.props;
-    beforeUploadRef.current = beforeUpload;
-
-    return {
-      ...upload,
-      props: {
-        ...restUploadProps,
-        accept: accept || 'image/*',
-        beforeUpload: (file: RcFile, fileList: RcFile[]) => {
-          return new Promise(async (resolve, reject) => {
-            if (typeof cb.current.beforeCrop === 'function') {
-              const shouldCrop = await cb.current.beforeCrop(file, fileList);
-              if (!shouldCrop) {
-                return reject();
-              }
-            }
-
-            fileRef.current = file as UploadFile;
-            resolveRef.current = (newFile) => {
-              cb.current.onModalOk?.(newFile);
-              resolve(newFile);
-            };
-            rejectRef.current = (uploadErr) => {
-              cb.current.onUploadFail?.(uploadErr);
-              reject();
-            };
-
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-              if (typeof reader.result === 'string') {
-                setImage(reader.result);
-              }
-            });
-            reader.readAsDataURL(file as unknown as Blob);
-          });
-        },
-      },
-    };
-  }, [children]);
 
   /**
    * crop
    */
-  const easyCropRef = useRef<EasyCropRef>({} as EasyCropRef);
-
-  /**
-   * modal
-   */
-  const modalBaseProps = useMemo(() => {
-    const obj: Pick<ModalProps, 'width' | 'okText' | 'cancelText'> = {};
-    if (modalWidth !== undefined) obj.width = modalWidth;
-    if (modalOk !== undefined) obj.okText = modalOk;
-    if (modalCancel !== undefined) obj.cancelText = modalCancel;
-    return obj;
-  }, [modalCancel, modalOk, modalWidth]);
-
-  const onClose = () => {
-    setImage('');
-    easyCropRef.current.setZoom(ZOOM_INITIAL);
-    easyCropRef.current.setRotation(ROTATION_INITIAL);
-  };
-
-  const onCancel = useCallback(() => {
-    cb.current.onModalCancel?.();
-    onClose();
-  }, []);
-
-  const onOk = useCallback(
-    async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-      onClose();
+  const easyCropRef = useRef<EasyCropRef>(null);
+  const getCropCanvas = useCallback(
+    (target: ShadowRoot) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-      const target = event.target;
-      const context =
-        ((target as ShadowRoot)?.getRootNode?.() as ShadowRoot) || document;
+      const context = (target?.getRootNode?.() as ShadowRoot) || document;
 
-      const imgSource = context.querySelector(
-        `.${PREFIX}-media`
-      ) as CanvasImageSource & {
+      type ImgSource = CanvasImageSource & {
         naturalWidth: number;
         naturalHeight: number;
       };
+      const imgSource = context.querySelector(`.${PREFIX}-media`) as ImgSource;
 
       const {
         width: cropWidth,
         height: cropHeight,
         x: cropX,
         y: cropY,
-      } = easyCropRef.current.cropPixelsRef.current;
+      } = easyCropRef.current!.cropPixelsRef.current;
 
-      if (rotationSlider && easyCropRef.current.rotation !== ROTATION_INITIAL) {
+      if (
+        rotationSlider &&
+        easyCropRef.current!.rotation !== ROTATION_INITIAL
+      ) {
         const { naturalWidth: imgWidth, naturalHeight: imgHeight } = imgSource;
-        const angle = easyCropRef.current.rotation * (Math.PI / 180);
+        const angle = easyCropRef.current!.rotation * (Math.PI / 180);
 
         // get container for rotated image
         const sine = Math.abs(Math.sin(angle));
@@ -239,41 +173,111 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         );
       }
 
-      // get the new image
-      const { type, name, uid } = fileRef.current;
-      canvas.toBlob(
-        async (blob) => {
-          const newFile = new File([blob as BlobPart], name, { type });
-          Object.assign(newFile, { uid });
+      return canvas;
+    },
+    [fillColor, rotationSlider]
+  );
 
-          if (typeof beforeUploadRef.current !== 'function') {
-            resolveRef.current(newFile);
-            return;
-          }
+  /**
+   * upload
+   */
+  const [modalImage, setModalImage] = useState('');
+  const onCancel = useRef<ModalProps['onCancel']>();
+  const onOk = useRef<ModalProps['onOk']>();
 
-          // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx
-          // https://ant.design/components/upload-cn#api
+  const uploadComponent = useMemo(() => {
+    const upload = Array.isArray(children) ? children[0] : children;
+    const { beforeUpload, accept, ...restUploadProps } = upload.props;
+
+    const innerBeforeUpload: BeforeUpload = (file, fileList) => {
+      return new Promise(async (resolve) => {
+        if (typeof cb.current.beforeCrop === 'function') {
           try {
-            const rcFile = newFile as unknown as RcFile;
-            const result = await beforeUploadRef.current(rcFile, [rcFile]);
-
-            if (result === true) {
-              resolveRef.current(newFile); // true
-            } else if (result === false) {
-              rejectRef.current(new Error('beforeUpload → false')); // false
-            } else {
-              resolveRef.current(result); // File, Upload.LIST_IGNORE
+            const result = await cb.current.beforeCrop(file, fileList);
+            if (result !== true) {
+              return resolve(result);
             }
           } catch (err) {
-            rejectRef.current(new Error('beforeUpload → reject')); // reject
+            return resolve(err as BeforeUploadReturnType);
           }
-        },
-        type,
-        quality
-      );
-    },
-    [fillColor, quality, rotationSlider]
-  );
+        }
+
+        // get file result
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+          if (typeof reader.result === 'string') {
+            setModalImage(reader.result); // open modal
+          }
+        });
+        reader.readAsDataURL(file);
+
+        // on modal cancel
+        onCancel.current = () => {
+          setModalImage('');
+          easyCropRef.current!.onReset();
+
+          resolve(AntUpload.LIST_IGNORE);
+          cb.current.onModalCancel?.();
+        };
+
+        // on modal confirm
+        onOk.current = async (event: MouseEvent<HTMLElement>) => {
+          setModalImage('');
+          easyCropRef.current!.onReset();
+
+          const canvas = getCropCanvas(event.target as ShadowRoot);
+
+          const { type, name, uid } = file;
+          canvas.toBlob(
+            async (blob) => {
+              const newFile = new File([blob as BlobPart], name, { type });
+              Object.assign(newFile, { uid });
+
+              if (typeof beforeUpload !== 'function') {
+                resolve(newFile);
+                cb.current.onModalOk?.(newFile);
+                return;
+              }
+
+              try {
+                // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx#L128-L148
+                // https://ant.design/components/upload-cn#api
+                const result = await beforeUpload(newFile, [newFile]);
+                const value = result === true ? newFile : result;
+                resolve(value);
+                cb.current.onModalOk?.(value);
+              } catch (err) {
+                resolve(err as BeforeUploadReturnType);
+                cb.current.onModalOk?.(err as BeforeUploadReturnType);
+              }
+            },
+            type,
+            quality
+          );
+        };
+      });
+    };
+
+    return {
+      ...upload,
+      props: {
+        ...restUploadProps,
+        accept: accept || 'image/*',
+        beforeUpload: innerBeforeUpload,
+      },
+    };
+  }, [children, getCropCanvas, quality]);
+
+  /**
+   * modal
+   */
+  const modalBaseProps = useMemo(() => {
+    const obj: Pick<ModalProps, 'width' | 'okText' | 'cancelText'> = {};
+    if (modalWidth !== undefined) obj.width = modalWidth;
+    if (modalOk !== undefined) obj.okText = modalOk;
+    if (modalCancel !== undefined) obj.cancelText = modalCancel;
+    return obj;
+  }, [modalCancel, modalOk, modalWidth]);
 
   const wrapClassName = `${PREFIX}-modal${
     modalClassName ? ` ${modalClassName}` : ''
@@ -286,14 +290,14 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   return (
     <>
       {uploadComponent}
-      {image && (
+      {modalImage && (
         <AntModal
           {...modalProps}
           {...modalBaseProps}
           {...{ [openKey]: true }}
           title={title}
-          onOk={onOk}
-          onCancel={onCancel}
+          onCancel={onCancel.current}
+          onOk={onOk.current}
           wrapClassName={wrapClassName}
           maskClosable={false}
           destroyOnClose
@@ -305,7 +309,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             rotationSlider={rotationSlider}
             aspectSlider={aspectSlider}
             showReset={showReset}
-            image={image}
+            modalImage={modalImage}
             aspect={aspect}
             minZoom={minZoom}
             maxZoom={maxZoom}
