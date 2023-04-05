@@ -5,6 +5,7 @@ import { version } from 'antd';
 import type { ModalProps } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 import { compareVersions } from 'compare-versions';
 import { PREFIX, ROTATION_INITIAL } from './constants';
 import type {
@@ -209,7 +210,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             setModalImage(reader.result); // open modal
           }
         });
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file as unknown as Blob);
 
         // on modal cancel
         onCancel.current = () => {
@@ -227,7 +228,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
 
           const canvas = getCropCanvas(event.target as ShadowRoot);
 
-          const { type, name, uid } = file;
+          const { type, name, uid } = file as UploadFile;
           canvas.toBlob(
             async (blob) => {
               const newFile = new File([blob as BlobPart], name, { type });
