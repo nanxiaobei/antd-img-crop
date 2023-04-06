@@ -71,10 +71,13 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     onReset,
   }));
 
-  const wrapperClass = 'flex items-center w-3/5 mx-auto';
+  const wrapperClass =
+    '[display:flex] [align-items:center] [width:60%] [margin-inline:auto]';
+
   const buttonClass =
-    'flex items-center justify-center w-8 h-8 bg-transparent border-0 font-[inherit] text-[18px] cursor-pointer disabled:opacity-20 disabled:cursor-default';
-  const sliderClass = 'flex-1 mx-2';
+    '[display:flex] [align-items:center] [justify-content:center] [height:32px] [width:32px] [background:transparent] [border:0] [font-family:inherit] [font-size:18px] [cursor:pointer] disabled:[opacity:20%] disabled:[cursor:default]';
+
+  const sliderClass = '[flex:1]';
 
   return (
     <>
@@ -98,7 +101,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         onRotationChange={setRotation}
         onCropComplete={onCropComplete}
         classes={{
-          containerClassName: `${PREFIX}-container !relative w-full h-[40vh] [&~section:first-of-type]:mt-4 [&~section:last-of-type]:mb-4`,
+          containerClassName: `${PREFIX}-container ![position:relative] [width:100%] [height:40vh] [&~section:first-of-type]:[margin-top:16px] [&~section:last-of-type]:[margin-bottom:16px]`,
           mediaClassName: `${PREFIX}-media`,
         }}
       />
@@ -137,7 +140,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
           className={`${PREFIX}-control ${PREFIX}-control-rotation ${wrapperClass}`}
         >
           <button
-            className={`${buttonClass} !text-[16px]`}
+            className={`${buttonClass} [font-size:16px]`}
             onClick={() => setRotation(rotation - ROTATION_STEP)}
             disabled={rotation === ROTATION_MIN}
           >
@@ -152,7 +155,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
             onChange={setRotation}
           />
           <button
-            className={`${buttonClass} !text-[16px]`}
+            className={`${buttonClass} [font-size:16px]`}
             onClick={() => setRotation(rotation + ROTATION_STEP)}
             disabled={rotation === ROTATION_MAX}
           >
@@ -192,7 +195,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
 
       {showReset && (zoomSlider || rotationSlider || aspectSlider) && (
         <AntButton
-          className="absolute bottom-[20px]"
+          className="[position:absolute] [bottom:20px]"
           style={isResetActive ? {} : { opacity: 0.3, pointerEvents: 'none' }}
           onClick={onReset}
         >
