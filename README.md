@@ -44,7 +44,8 @@ const Demo = () => (
 | zoomSlider     | `boolean`  | `true`         | Enable zoom adjustment for image                                    |
 | rotationSlider | `boolean`  | `false`        | Enable rotation adjustment for image                                |
 | aspectSlider   | `boolean`  | `false`        | Enable aspect adjustment for crop area                              |
-| showReset      | `boolean`  | `false`        | show a reset button to reset zoom, rotation, aspect                 |
+| showReset      | `boolean`  | `false`        | Show a reset button to reset zoom, rotation, aspect                 |
+| resetText      | `string`   | `Reset`        | Reset button text                                                   |
 | aspect         | `number`   | `1 / 1`        | Aspect of crop area , `width / height`                              |
 | minZoom        | `number`   | `1`            | Minimum zoom factor                                                 |
 | maxZoom        | `number`   | `3`            | Maximum zoom factor                                                 |

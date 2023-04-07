@@ -31,6 +31,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     rotationSlider,
     aspectSlider,
     showReset,
+    resetBtnText,
 
     modalImage,
     aspect: ASPECT_INITIAL,
@@ -40,7 +41,6 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     showGrid,
 
     cropperProps,
-    isCN,
   } = props;
 
   const [zoom, setZoom] = useState(ZOOM_INITIAL);
@@ -195,11 +195,11 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
 
       {showReset && (zoomSlider || rotationSlider || aspectSlider) && (
         <AntButton
-          className="[position:absolute] [bottom:20px]"
+          className="[bottom:20px] [position:absolute]"
           style={isResetActive ? {} : { opacity: 0.3, pointerEvents: 'none' }}
           onClick={onReset}
         >
-          {isCN ? '重置' : 'Reset'}
+          {resetBtnText}
         </AntButton>
       )}
     </>

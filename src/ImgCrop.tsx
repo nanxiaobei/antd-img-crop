@@ -19,7 +19,7 @@ import './ImgCrop.css';
 
 export type { ImgCropProps } from './types';
 
-const openKey = compareVersions(version, '4.23.0') === -1 ? 'visible' : 'open';
+const openProp = compareVersions(version, '4.23.0') === -1 ? 'visible' : 'open';
 
 const deprecate = (obj: Record<string, any>, old: string, now: string) => {
   if (old in obj) {
@@ -39,6 +39,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     // @ts-ignore
     rotationSlider: ROTATION_SLIDER = false,
     aspectSlider = false,
+    showReset = false,
+    resetText,
 
     aspect = 1,
     minZoom = 1,
@@ -54,7 +56,6 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     modalWidth,
     modalOk,
     modalCancel,
-    showReset = false,
     onModalOk,
     onModalCancel,
     modalProps,
@@ -287,6 +288,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const lang = typeof window === 'undefined' ? '' : window.navigator.language;
   const isCN = lang === 'zh-CN';
   const title = modalTitle || (isCN ? '编辑图片' : 'Edit image');
+  const resetBtnText = resetText || (isCN ? '重置' : 'Reset');
 
   return (
     <>
@@ -295,7 +297,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         <AntModal
           {...modalProps}
           {...modalBaseProps}
-          {...{ [openKey]: true }}
+          {...{ [openProp]: true }}
           title={title}
           onCancel={onCancel.current}
           onOk={onOk.current}
@@ -310,6 +312,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             rotationSlider={rotationSlider}
             aspectSlider={aspectSlider}
             showReset={showReset}
+            resetBtnText={resetBtnText}
             modalImage={modalImage}
             aspect={aspect}
             minZoom={minZoom}
@@ -317,7 +320,6 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             cropShape={cropShape}
             showGrid={showGrid}
             cropperProps={cropperProps}
-            isCN={isCN}
           />
         </AntModal>
       )}

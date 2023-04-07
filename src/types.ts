@@ -14,6 +14,7 @@ export type ImgCropProps = {
   rotationSlider?: boolean;
   aspectSlider?: boolean;
   showReset?: boolean;
+  resetText?: string;
 
   aspect?: number;
   minZoom?: number;
@@ -89,4 +90,4 @@ export type EasyCropProps = {
     | 'showGrid'
   >
 > &
-  Pick<ImgCropProps, 'cropperProps'> & { isCN: boolean };
+  Pick<ImgCropProps, 'cropperProps'> & { resetBtnText: string };
