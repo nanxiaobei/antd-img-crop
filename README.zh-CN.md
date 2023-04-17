@@ -40,11 +40,11 @@ const Demo = () => (
 | 属性           | 类型                 | 默认         | 说明                                                     |
 | -------------- | -------------------- | ------------ | -------------------------------------------------------- |
 | quality        | `number`             | `0.4`        | 裁切图片质量，`0` 到 `1` 之间                            |
-| fillColor      | `string`             | `'white'`    | 裁切图像小于画布时的填充颜色                             |
-| zoomSlider     | `boolean`            | `true`       | 启用图片缩放调整                                         |
-| rotationSlider | `boolean`            | `false`      | 启用图片旋转调整                                         |
-| aspectSlider   | `boolean`            | `false`      | 启用裁切比率调整                                         |
-| showReset      | `boolean`            | `false`      | 显示重置按钮，用以重置缩放、旋转、比率                   |
+| fillColor      | `string`             | `'white'`    | 裁切图像填充色                                           |
+| zoomSlider     | `boolean`            | `true`       | 图片缩放控制                                             |
+| rotationSlider | `boolean`            | `false`      | 图片旋转控制                                             |
+| aspectSlider   | `boolean`            | `false`      | 裁切比率控制                                             |
+| showReset      | `boolean`            | `false`      | 显示重置按钮，重置缩放旋转及比率                         |
 | resetText      | `string`             | `重置`       | 重置按钮文字                                             |
 | aspect         | `number`             | `1 / 1`      | 裁切区域宽高比，`width / height`                         |
 | minZoom        | `number`             | `1`          | 最小缩放倍数                                             |
@@ -52,15 +52,15 @@ const Demo = () => (
 | cropShape      | `string`             | `'rect'`     | 裁切区域形状，`'rect'` 或 `'round'`                      |
 | showGrid       | `boolean`            | `false`      | 显示裁切区域网格（九宫格）                               |
 | cropperProps   | `object`             | -            | [react-easy-crop] 的 props（\* 已有 props 无法重写）     |
-| modalClassName | `string`             | `''`         | 为 Modal 容器提供您自己的类名                            |
+| modalClassName | `string`             | `''`         | 弹窗 className                                           |
 | modalTitle     | `string`             | `'编辑图片'` | 弹窗标题                                                 |
-| modalWidth     | `number` \| `string` |              | 弹窗宽度，`px` 的数值或百分比                            |
-| modalOk        | `string`             |              | 弹窗确定按钮文字                                         |
-| modalCancel    | `string`             |              | 弹窗取消按钮文字                                         |
-| onModalOK      | `function`           | -            | 点击弹窗确定回调                                         |
-| onModalCancel  | `function`           | -            | 点击弹窗遮罩层、右上角叉、取消的回调                     |
+| modalWidth     | `number` \| `string` |              | 弹窗宽度                                                 |
+| modalOk        | `string`             |              | 确定按钮文字                                             |
+| modalCancel    | `string`             |              | 取消按钮文字                                             |
+| onModalOK      | `function`           | -            | 确定按钮回调                                             |
+| onModalCancel  | `function`           | -            | 取消按钮、遮罩层、或右上角叉回调                         |
 | modalProps     | `object`             |              | [Ant Design Modal] 的 props（\* 已有 props 无法重写）    |
-| beforeCrop     | `function`           | -            | 弹窗打开前调用，若返回 `false` 或 reject，弹框将不会打开 |
+| beforeCrop     | `function`           | -            | 上传按钮回调，若返回 `false` 或 `reject`，弹窗将不会打开 |
 
 ## FAQ
 
