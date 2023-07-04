@@ -305,22 +305,25 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
           maskClosable={false}
           destroyOnClose
         >
-          <EasyCrop
-            ref={easyCropRef}
-            cropperRef={cropperRef}
-            zoomSlider={zoomSlider}
-            rotationSlider={rotationSlider}
-            aspectSlider={aspectSlider}
-            showReset={showReset}
-            resetBtnText={resetBtnText}
-            modalImage={modalImage}
-            aspect={aspect}
-            minZoom={minZoom}
-            maxZoom={maxZoom}
-            cropShape={cropShape}
-            showGrid={showGrid}
-            cropperProps={cropperProps}
-          />
+          <div style={{display: 'flex'}}>
+            <div>тестовый блок</div>
+            <EasyCrop
+                ref={easyCropRef}
+                cropperRef={cropperRef}
+                zoomSlider={zoomSlider}
+                rotationSlider={rotationSlider}
+                aspectSlider={aspectSlider}
+                showReset={showReset}
+                resetBtnText={resetBtnText}
+                modalImage={modalImage}
+                aspect={aspect}
+                minZoom={minZoom}
+                maxZoom={maxZoom}
+                cropShape={cropShape}
+                showGrid={showGrid}
+                cropperProps={cropperProps}
+            />
+          </div>
         </AntModal>
       )}
     </>
