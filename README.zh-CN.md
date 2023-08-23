@@ -1,3 +1,12 @@
+<div align="center">
+<p><a href="https://kee.so/" target="_blank"><img src="https://i.imgur.com/x5SRUoo.png" alt="kee.so" /></a></p>
+
+Create now ➫ [🔗 kee.so](https://kee.so/)
+
+</div>
+
+---
+
 # antd-img-crop
 
 图片裁切工具，用于 Ant Design [Upload](https://ant.design/components/upload-cn/) 组件
@@ -91,9 +100,3 @@ import 'antd/es/slider/style';
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
 [Ant Design Modal]: https://ant.design/components/modal-cn#api
-
-## FUTAKE
-
-试试 [**FUTAKE**](https://sotake.com/futake) 小程序，你的灵感相册。🌈
-
-![](https://s3.bmp.ovh/imgs/2022/07/21/452dd47aeb790abd.png)

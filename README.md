@@ -1,3 +1,12 @@
+<div align="center">
+<p><a href="https://kee.so/" target="_blank"><img src="https://i.imgur.com/x5SRUoo.png" alt="kee.so" /></a></p>
+
+Create now ➫ [🔗 kee.so](https://kee.so/)
+
+</div>
+
+---
+
 # antd-img-crop
 
 An image cropper for Ant Design [Upload](https://ant.design/components/upload/)
@@ -91,13 +100,3 @@ import 'antd/es/slider/style';
 
 [react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
 [Ant Design Modal]: https://ant.design/components/modal#api
-
-## FUTAKE
-
-Try [**FUTAKE**](https://sotake.com/futake) in WeChat. A mini app for your inspiration moments. 🌈
-
-![](https://s3.bmp.ovh/imgs/2022/07/21/452dd47aeb790abd.png)
-
-```
-
-```
