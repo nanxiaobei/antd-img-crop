@@ -1,12 +1,14 @@
-import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
-import type CropperRef from 'react-easy-crop';
-import { version } from 'antd';
 import type { ModalProps } from 'antd';
+import { version } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { compareVersions } from 'compare-versions';
+import type { MouseEvent } from 'react';
+import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+import type CropperRef from 'react-easy-crop';
+import EasyCrop from './EasyCrop';
+import './ImgCrop.css';
 import { PREFIX, ROTATION_INITIAL } from './constants';
 import type {
   BeforeUpload,
@@ -14,8 +16,6 @@ import type {
   EasyCropRef,
   ImgCropProps,
 } from './types';
-import EasyCrop from './EasyCrop';
-import './ImgCrop.css';
 
 export type { ImgCropProps } from './types';
 
@@ -74,7 +74,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
 
   if ('onUploadFail' in props) {
     console.error(
-      `\`onUploadFail\` is removed, because the only way it is called, is when the file is rejected by beforeUpload`
+      `\`onUploadFail\` is removed, because the only way it is called, is when the file is rejected by beforeUpload`,
     );
   }
 
@@ -148,7 +148,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
           imgX,
           imgY,
           imgWidth,
-          imgHeight
+          imgHeight,
         );
 
         // crop rotated image
@@ -171,13 +171,13 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
           0,
           0,
           cropWidth,
-          cropHeight
+          cropHeight,
         );
       }
 
       return canvas;
     },
-    [fillColor, rotationSlider]
+    [fillColor, rotationSlider],
   );
 
   /**
@@ -254,7 +254,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
               }
             },
             type,
-            quality
+            quality,
           );
         };
       });

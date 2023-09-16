@@ -1,3 +1,5 @@
+import AntButton from 'antd/es/button';
+import AntSlider from 'antd/es/slider';
 import {
   forwardRef,
   memo,
@@ -8,8 +10,6 @@ import {
 } from 'react';
 import Cropper from 'react-easy-crop';
 import type { Area, Point } from 'react-easy-crop/types';
-import AntButton from 'antd/es/button';
-import AntSlider from 'antd/es/slider';
 import {
   ASPECT_MAX,
   ASPECT_MIN,
