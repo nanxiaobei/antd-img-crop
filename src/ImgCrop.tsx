@@ -219,7 +219,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
           easyCropRef.current!.onReset();
 
           resolve(AntUpload.LIST_IGNORE);
-          cb.current.onModalCancel?.();
+          cb.current.onModalCancel?.(resolve);
         };
 
         // on modal confirm

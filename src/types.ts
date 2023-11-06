@@ -46,7 +46,7 @@ export type ImgCropProps = {
   modalOk?: string;
   modalCancel?: string;
   onModalOk?: (value: BeforeUploadReturnType) => void;
-  onModalCancel?: () => void;
+  onModalCancel?: (resolve: (value: BeforeUploadReturnType) => void) => void;
   modalProps?: Omit<
     ModalProps,
     | 'className'
