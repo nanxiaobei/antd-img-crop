@@ -196,11 +196,11 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         if (typeof cb.current.beforeCrop === 'function') {
           try {
             const result = await cb.current.beforeCrop(file, fileList);
-            if (result !== true) {
-              return resolve(file);
+            if (result === false) {
+              return resolve(file as unknown as BeforeUploadReturnType);
             }
           } catch (err) {
-            return resolve(file);
+            return resolve(file as unknown as BeforeUploadReturnType);
           }
         }
 
