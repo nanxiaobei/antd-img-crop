@@ -2,9 +2,9 @@ import type { ModalProps } from 'antd';
 import { version } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import { compareVersions } from 'compare-versions';
-import type { MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import type CropperRef from 'react-easy-crop';
 import EasyCrop from './EasyCrop';
@@ -102,6 +102,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         naturalWidth: number;
         naturalHeight: number;
       };
+
       const imgSource = context.querySelector(`.${PREFIX}-media`) as ImgSource;
 
       const {
@@ -187,88 +188,115 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const onCancel = useRef<ModalProps['onCancel']>();
   const onOk = useRef<ModalProps['onOk']>();
 
-  const uploadComponent = useMemo(() => {
-    const upload = Array.isArray(children) ? children[0] : children;
-    const { beforeUpload, accept, ...restUploadProps } = upload.props;
+  const runRawBeforeUpload = useCallback(
+    async (
+      beforeUpload: BeforeUpload,
+      file: RcFile,
+      pass: (parsedFile: BeforeUploadReturnType) => void,
+      fail: (rejectErr: BeforeUploadReturnType) => void,
+    ) => {
+      if (typeof beforeUpload !== 'function') {
+        pass(file);
+        return;
+      }
 
-    const innerBeforeUpload: BeforeUpload = (file, fileList) => {
-      return new Promise(async (resolve) => {
-        if (typeof cb.current.beforeCrop === 'function') {
-          try {
-            const result = await cb.current.beforeCrop(file, fileList);
-            if (result === false) {
-              return resolve(file as unknown as BeforeUploadReturnType);
+      try {
+        // https://ant.design/components/upload-cn#api
+        // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx#L152-L178
+        const result = await beforeUpload(file, [file]);
+        pass(result !== true ? result : file);
+      } catch (err) {
+        fail(err as BeforeUploadReturnType);
+      }
+    },
+    [],
+  );
+
+  const getNewBeforeUpload = useCallback(
+    (beforeUpload: BeforeUpload) => {
+      return ((file, fileList) => {
+        return new Promise(async (resolve, reject) => {
+          if (typeof cb.current.beforeCrop === 'function') {
+            try {
+              const result = await cb.current.beforeCrop(file, fileList);
+              if (result === false) {
+                return runRawBeforeUpload(beforeUpload, file, resolve, reject);
+              }
+            } catch (err) {
+              return runRawBeforeUpload(beforeUpload, file, resolve, reject);
             }
-          } catch (err) {
-            return resolve(file as unknown as BeforeUploadReturnType);
           }
-        }
 
-        // get file result
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          if (typeof reader.result === 'string') {
-            setModalImage(reader.result); // open modal
-          }
+          // get file result
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            if (typeof reader.result === 'string') {
+              setModalImage(reader.result); // open modal
+            }
+          });
+          reader.readAsDataURL(file as unknown as Blob);
+
+          // on modal cancel
+          onCancel.current = () => {
+            setModalImage('');
+            easyCropRef.current!.onReset();
+
+            resolve(AntUpload.LIST_IGNORE);
+            cb.current.onModalCancel?.(resolve);
+          };
+
+          // on modal confirm
+          onOk.current = async (event: MouseEvent<HTMLElement>) => {
+            setModalImage('');
+            easyCropRef.current!.onReset();
+
+            const canvas = getCropCanvas(event.target as ShadowRoot);
+            const { type, name, uid } = file as UploadFile;
+
+            canvas.toBlob(
+              async (blob) => {
+                const newFile = new File([blob as BlobPart], name, { type });
+                Object.assign(newFile, { uid });
+
+                runRawBeforeUpload(
+                  beforeUpload,
+                  newFile as RcFile,
+                  (parsedFile) => {
+                    resolve(parsedFile);
+                    cb.current.onModalOk?.(parsedFile);
+                  },
+                  (rejectErr) => {
+                    reject(rejectErr);
+                    cb.current.onModalOk?.(rejectErr);
+                  },
+                );
+              },
+              type,
+              quality,
+            );
+          };
         });
-        reader.readAsDataURL(file as unknown as Blob);
+      }) as BeforeUpload;
+    },
+    [getCropCanvas, quality, runRawBeforeUpload],
+  );
 
-        // on modal cancel
-        onCancel.current = () => {
-          setModalImage('');
-          easyCropRef.current!.onReset();
+  const getNewUpload = useCallback(
+    (children: ReactNode) => {
+      const upload = Array.isArray(children) ? children[0] : children;
+      const { beforeUpload, accept, ...restUploadProps } = upload.props;
 
-          resolve(AntUpload.LIST_IGNORE);
-          cb.current.onModalCancel?.(resolve);
-        };
-
-        // on modal confirm
-        onOk.current = async (event: MouseEvent<HTMLElement>) => {
-          setModalImage('');
-          easyCropRef.current!.onReset();
-
-          const canvas = getCropCanvas(event.target as ShadowRoot);
-
-          const { type, name, uid } = file as UploadFile;
-          canvas.toBlob(
-            async (blob) => {
-              const newFile = new File([blob as BlobPart], name, { type });
-              Object.assign(newFile, { uid });
-
-              if (typeof beforeUpload !== 'function') {
-                resolve(newFile);
-                cb.current.onModalOk?.(newFile);
-                return;
-              }
-
-              try {
-                // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx#L128-L148
-                // https://ant.design/components/upload-cn#api
-                const result = await beforeUpload(newFile, [newFile]);
-                const value = result === true ? newFile : result;
-                resolve(value);
-                cb.current.onModalOk?.(value);
-              } catch (err) {
-                resolve(err as BeforeUploadReturnType);
-                cb.current.onModalOk?.(err as BeforeUploadReturnType);
-              }
-            },
-            type,
-            quality,
-          );
-        };
-      });
-    };
-
-    return {
-      ...upload,
-      props: {
-        ...restUploadProps,
-        accept: accept || 'image/*',
-        beforeUpload: innerBeforeUpload,
-      },
-    };
-  }, [children, getCropCanvas, quality]);
+      return {
+        ...upload,
+        props: {
+          ...restUploadProps,
+          accept: accept || 'image/*',
+          beforeUpload: getNewBeforeUpload(beforeUpload),
+        },
+      };
+    },
+    [getNewBeforeUpload],
+  );
 
   /**
    * modal
@@ -292,7 +320,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
 
   return (
     <>
-      {uploadComponent}
+      {getNewUpload(children)}
       {modalImage && (
         <AntModal
           {...modalProps}
