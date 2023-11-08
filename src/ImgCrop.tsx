@@ -195,8 +195,9 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
       pass: (parsedFile: BeforeUploadReturnType) => void,
       fail: (rejectErr: BeforeUploadReturnType) => void,
     ) => {
+      const rawFile = file as unknown as File;
       if (typeof beforeUpload !== 'function') {
-        pass(file);
+        pass(rawFile);
         return;
       }
 
@@ -204,7 +205,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         // https://ant.design/components/upload-cn#api
         // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx#L152-L178
         const result = await beforeUpload(file, [file]);
-        pass(result !== true ? result : file);
+        pass(result !== true ? result : rawFile);
       } catch (err) {
         fail(err as BeforeUploadReturnType);
       }
@@ -260,7 +261,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
 
                 runRawBeforeUpload(
                   beforeUpload,
-                  newFile as RcFile,
+                  newFile as unknown as RcFile,
                   (parsedFile) => {
                     resolve(parsedFile);
                     cb.current.onModalOk?.(parsedFile);
