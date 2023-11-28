@@ -217,25 +217,30 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     (beforeUpload: BeforeUpload) => {
       return ((file, fileList) => {
         return new Promise(async (resolve, reject) => {
+          let processFile = file;
+
           if (typeof cb.current.beforeCrop === 'function') {
             try {
               const result = await cb.current.beforeCrop(file, fileList);
               if (result === false) {
                 return runRawBeforeUpload(beforeUpload, file, resolve, reject);
               }
+              if (result !== true) {
+                processFile = result as unknown as RcFile;
+              }
             } catch (err) {
               return runRawBeforeUpload(beforeUpload, file, resolve, reject);
             }
           }
 
-          // get file result
+          // read file
           const reader = new FileReader();
           reader.addEventListener('load', () => {
             if (typeof reader.result === 'string') {
               setModalImage(reader.result); // open modal
             }
           });
-          reader.readAsDataURL(file as unknown as Blob);
+          reader.readAsDataURL(processFile as unknown as Blob);
 
           // on modal cancel
           onCancel.current = () => {
@@ -252,7 +257,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             easyCropRef.current!.onReset();
 
             const canvas = getCropCanvas(event.target as ShadowRoot);
-            const { type, name, uid } = file as UploadFile;
+            const { type, name, uid } = processFile as UploadFile;
 
             canvas.toBlob(
               async (blob) => {
