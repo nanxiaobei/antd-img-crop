@@ -205,7 +205,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         // https://ant.design/components/upload-cn#api
         // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx#L152-L178
         const result = await beforeUpload(file, [file]);
-        pass(result !== true ? result : rawFile);
+        pass((result !== true && result) || rawFile);
       } catch (err) {
         fail(err as BeforeUploadReturnType);
       }
@@ -226,7 +226,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
                 return runRawBeforeUpload(beforeUpload, file, resolve, reject);
               }
               if (result !== true) {
-                processFile = result as unknown as RcFile;
+                processFile = (result as unknown as RcFile) || file;
               }
             } catch (err) {
               return runRawBeforeUpload(beforeUpload, file, resolve, reject);
