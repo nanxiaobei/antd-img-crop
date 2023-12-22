@@ -1,5 +1,5 @@
 import type { ModalProps, UploadProps } from 'antd';
-import type { ForwardedRef, MutableRefObject } from 'react';
+import type { ForwardedRef, MutableRefObject, ReactNode } from 'react';
 import type { default as Cropper, CropperProps } from 'react-easy-crop';
 import type { Area } from 'react-easy-crop/types';
 
@@ -15,6 +15,10 @@ export type ImgCropProps = {
   aspectSlider?: boolean;
   showReset?: boolean;
   resetText?: string;
+  renderResetButton?: (
+    isResetActive: boolean,
+    onReset: () => void,
+  ) => ReactNode;
 
   aspect?: number;
   minZoom?: number;
@@ -90,4 +94,10 @@ export type EasyCropProps = {
     | 'showGrid'
   >
 > &
-  Pick<ImgCropProps, 'cropperProps'> & { resetBtnText: string };
+  Pick<ImgCropProps, 'cropperProps'> & {
+    resetBtnText: string;
+    renderResetButton?: (
+      isResetActive: boolean,
+      onReset: () => void,
+    ) => ReactNode;
+  };

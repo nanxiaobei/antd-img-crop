@@ -41,6 +41,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     aspectSlider = false,
     showReset = false,
     resetText,
+    renderResetButton,
 
     aspect = 1,
     minZoom = 1,
@@ -347,6 +348,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             aspectSlider={aspectSlider}
             showReset={showReset}
             resetBtnText={resetBtnText}
+            renderResetButton={renderResetButton}
             modalImage={modalImage}
             aspect={aspect}
             minZoom={minZoom}
