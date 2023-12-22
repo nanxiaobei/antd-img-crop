@@ -46,30 +46,31 @@ const Demo = () => (
 
 ## Props
 
-| Prop           | Type       | Default        | Description                                                                |
-| -------------- | ---------- | -------------- | -------------------------------------------------------------------------- |
-| quality        | `number`   | `0.4`          | Cropped image quality, `0` to `1`                                          |
-| fillColor      | `string`   | `'white'`      | Fill color for cropped image                                               |
-| zoomSlider     | `boolean`  | `true`         | Enable zoom adjustment                                                     |
-| rotationSlider | `boolean`  | `false`        | Enable rotation adjustment                                                 |
-| aspectSlider   | `boolean`  | `false`        | Enable aspect adjustment                                                   |
-| showReset      | `boolean`  | `false`        | Show reset button to reset zoom rotation aspect                            |
-| resetText      | `string`   | `Reset`        | Reset button text                                                          |
-| aspect         | `number`   | `1 / 1`        | Aspect of crop area , `width / height`                                     |
-| minZoom        | `number`   | `1`            | Minimum zoom factor                                                        |
-| maxZoom        | `number`   | `3`            | Maximum zoom factor                                                        |
-| cropShape      | `string`   | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                                  |
-| showGrid       | `boolean`  | `false`        | Show grid of crop area (third-lines)                                       |
-| cropperProps   | `object`   | -              | [react-easy-crop] props (\* existing props cannot be overridden)           |
-| modalClassName | `string`   | `''`           | Modal classname                                                            |
-| modalTitle     | `string`   | `'Edit image'` | Modal title                                                                |
-| modalWidth     | `number`   | `string`       | Modal width                                                                |
-| modalOk        | `string`   |                | Ok button text                                                             |
-| modalCancel    | `string`   |                | Cancel button text                                                         |
-| onModalOk      | `function` | -              | Ok button callback                                                         |
-| onModalCancel  | `function` | -              | Cancel button, modal mask, top right "x" callback                          |
-| modalProps     | `object`   |                | [Ant Design Modal] props (\* existing props cannot be overridden)          |
-| beforeCrop     | `function` | -              | Upload button callback, if return `false` or `reject`, modal will not open |
+| Prop              | Type       | Default        | Description                                                                |
+|-------------------| ---------- | -------------- |----------------------------------------------------------------------------|
+| quality           | `number`   | `0.4`          | Cropped image quality, `0` to `1`                                          |
+| fillColor         | `string`   | `'white'`      | Fill color for cropped image                                               |
+| zoomSlider        | `boolean`  | `true`         | Enable zoom adjustment                                                     |
+| rotationSlider    | `boolean`  | `false`        | Enable rotation adjustment                                                 |
+| aspectSlider      | `boolean`  | `false`        | Enable aspect adjustment                                                   |
+| showReset         | `boolean`  | `false`        | Show reset button to reset zoom rotation aspect                            |
+| resetText         | `string`   | `Reset`        | Reset button text                                                          |
+| aspect            | `number`   | `1 / 1`        | Aspect of crop area , `width / height`                                     |
+| minZoom           | `number`   | `1`            | Minimum zoom factor                                                        |
+| maxZoom           | `number`   | `3`            | Maximum zoom factor                                                        |
+| cropShape         | `string`   | `'rect'`       | Shape of crop area, `'rect'` or `'round'`                                  |
+| showGrid          | `boolean`  | `false`        | Show grid of crop area (third-lines)                                       |
+| cropperProps      | `object`   | -              | [react-easy-crop] props (\* existing props cannot be overridden)           |
+| modalClassName    | `string`   | `''`           | Modal classname                                                            |
+| modalTitle        | `string`   | `'Edit image'` | Modal title                                                                |
+| modalWidth        | `number`   | `string`       | Modal width                                                                |
+| modalOk           | `string`   |                | Ok button text                                                             |
+| modalCancel       | `string`   |                | Cancel button text                                                         |
+| onModalOk         | `function` | -              | Ok button callback                                                         |
+| onModalCancel     | `function` | -              | Cancel button, modal mask, top right "x" callback                          |
+| modalProps        | `object`   |                | [Ant Design Modal] props (\* existing props cannot be overridden)          |
+| beforeCrop        | `function` | -              | Upload button callback, if return `false` or `reject`, modal will not open |
+| renderResetButton | `function` | -              | Render function for reset button                                           |
 
 ## FAQ
 
