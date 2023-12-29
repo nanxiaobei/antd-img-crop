@@ -188,16 +188,22 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const onCancel = useRef<ModalProps['onCancel']>();
   const onOk = useRef<ModalProps['onOk']>();
 
-  const runRawBeforeUpload = useCallback(
-    async (
-      beforeUpload: BeforeUpload,
-      file: RcFile,
-      pass: (parsedFile: BeforeUploadReturnType) => void,
-      fail: (rejectErr: BeforeUploadReturnType) => void,
-    ) => {
+  const runBeforeUpload = useCallback(
+    async ({
+      beforeUpload,
+      file,
+      resolve,
+      reject,
+    }: {
+      beforeUpload: BeforeUpload;
+      file: RcFile;
+      resolve: (parsedFile: BeforeUploadReturnType) => void;
+      reject: (rejectErr: BeforeUploadReturnType) => void;
+    }) => {
       const rawFile = file as unknown as File;
+
       if (typeof beforeUpload !== 'function') {
-        pass(rawFile);
+        resolve(rawFile);
         return;
       }
 
@@ -205,9 +211,15 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         // https://ant.design/components/upload-cn#api
         // https://github.com/ant-design/ant-design/blob/master/components/upload/Upload.tsx#L152-L178
         const result = await beforeUpload(file, [file]);
-        pass((result !== true && result) || rawFile);
+
+        if (result === false) {
+          reject(file);
+          return;
+        }
+
+        resolve((result !== true && result) || rawFile);
       } catch (err) {
-        fail(err as BeforeUploadReturnType);
+        reject(err as BeforeUploadReturnType);
       }
     },
     [],
@@ -217,19 +229,19 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     (beforeUpload: BeforeUpload) => {
       return ((file, fileList) => {
         return new Promise(async (resolve, reject) => {
-          let processFile = file;
+          let processedFile = file;
 
           if (typeof cb.current.beforeCrop === 'function') {
             try {
               const result = await cb.current.beforeCrop(file, fileList);
               if (result === false) {
-                return runRawBeforeUpload(beforeUpload, file, resolve, reject);
+                return runBeforeUpload({ beforeUpload, file, resolve, reject });
               }
               if (result !== true) {
-                processFile = (result as unknown as RcFile) || file;
+                processedFile = (result as unknown as RcFile) || file;
               }
             } catch (err) {
-              return runRawBeforeUpload(beforeUpload, file, resolve, reject);
+              return runBeforeUpload({ beforeUpload, file, resolve, reject });
             }
           }
 
@@ -240,7 +252,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
               setModalImage(reader.result); // open modal
             }
           });
-          reader.readAsDataURL(processFile as unknown as Blob);
+          reader.readAsDataURL(processedFile as unknown as Blob);
 
           // on modal cancel
           onCancel.current = () => {
@@ -257,25 +269,25 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             easyCropRef.current!.onReset();
 
             const canvas = getCropCanvas(event.target as ShadowRoot);
-            const { type, name, uid } = processFile as UploadFile;
+            const { type, name, uid } = processedFile as UploadFile;
 
             canvas.toBlob(
               async (blob) => {
                 const newFile = new File([blob as BlobPart], name, { type });
                 Object.assign(newFile, { uid });
 
-                runRawBeforeUpload(
+                runBeforeUpload({
                   beforeUpload,
-                  newFile as unknown as RcFile,
-                  (parsedFile) => {
-                    resolve(parsedFile);
-                    cb.current.onModalOk?.(parsedFile);
+                  file: newFile as unknown as RcFile,
+                  resolve: (file) => {
+                    resolve(file);
+                    cb.current.onModalOk?.(file);
                   },
-                  (rejectErr) => {
-                    reject(rejectErr);
-                    cb.current.onModalOk?.(rejectErr);
+                  reject: (err) => {
+                    reject(err);
+                    cb.current.onModalOk?.(err);
                   },
-                );
+                });
               },
               type,
               quality,
@@ -284,7 +296,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         });
       }) as BeforeUpload;
     },
-    [getCropCanvas, quality, runRawBeforeUpload],
+    [getCropCanvas, quality, runBeforeUpload],
   );
 
   const getNewUpload = useCallback(
