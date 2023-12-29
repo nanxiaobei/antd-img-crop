@@ -213,7 +213,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         const result = await beforeUpload(file, [file]);
 
         if (result === false) {
-          reject(file);
+          reject(rawFile);
           return;
         }
 
