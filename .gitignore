@@ -3,4 +3,4 @@ dist
 
 example
 index.html
-vite.config.ts
+vite.config.mts
