@@ -213,11 +213,10 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         const result = await beforeUpload(file, [file]);
 
         if (result === false) {
-          reject(rawFile);
-          return;
+          resolve(false);
+        } else {
+          resolve((result !== true && result) || rawFile);
         }
-
-        resolve((result !== true && result) || rawFile);
       } catch (err) {
         reject(err as BeforeUploadReturnType);
       }
@@ -235,13 +234,13 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             try {
               const result = await cb.current.beforeCrop(file, fileList);
               if (result === false) {
-                return runBeforeUpload({ beforeUpload, file, resolve, reject });
+                return runBeforeUpload({ beforeUpload, file, resolve, reject }); // not open modal
               }
               if (result !== true) {
-                processedFile = (result as unknown as RcFile) || file;
+                processedFile = (result as unknown as RcFile) || file; // will open modal
               }
             } catch (err) {
-              return runBeforeUpload({ beforeUpload, file, resolve, reject });
+              return runBeforeUpload({ beforeUpload, file, resolve, reject }); // not open modal
             }
           }
 
@@ -259,8 +258,16 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             setModalImage('');
             easyCropRef.current!.onReset();
 
-            resolve(AntUpload.LIST_IGNORE);
-            cb.current.onModalCancel?.(resolve);
+            let hasResolveCalled = false;
+
+            cb.current.onModalCancel?.((LIST_IGNORE) => {
+              resolve(LIST_IGNORE);
+              hasResolveCalled = true;
+            });
+
+            if (!hasResolveCalled) {
+              resolve(AntUpload.LIST_IGNORE);
+            }
           };
 
           // on modal confirm
