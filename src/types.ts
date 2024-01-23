@@ -1,4 +1,4 @@
-import type { ModalProps, UploadProps } from 'antd';
+import type { ModalProps, UploadProps, ThemeConfig } from 'antd';
 import type { ForwardedRef, MutableRefObject } from 'react';
 import type { default as Cropper, CropperProps } from 'react-easy-crop';
 import type { Area } from 'react-easy-crop/types';
@@ -7,6 +7,7 @@ export type BeforeUpload = Exclude<UploadProps['beforeUpload'], undefined>;
 export type BeforeUploadReturnType = ReturnType<BeforeUpload>;
 
 export type ImgCropProps = {
+  theme?: ThemeConfig
   quality?: number;
   fillColor?: string;
 

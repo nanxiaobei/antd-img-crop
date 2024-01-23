@@ -2,6 +2,8 @@ import type { ModalProps } from 'antd';
 import { version } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
+import AntTheme from 'antd/es/theme';
+import AntConfigProvider from 'antd/es/config-provider';
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import { compareVersions } from 'compare-versions';
 import type { MouseEvent, ReactNode } from 'react';
@@ -31,6 +33,7 @@ const deprecate = (obj: Record<string, any>, old: string, now: string) => {
 
 const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const {
+    theme,
     quality = 0.4,
     fillColor = 'white',
 
@@ -347,34 +350,38 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     <>
       {getNewUpload(children)}
       {modalImage && (
-        <AntModal
-          {...modalProps}
-          {...modalBaseProps}
-          {...{ [openProp]: true }}
-          title={title}
-          onCancel={onCancel.current}
-          onOk={onOk.current}
-          wrapClassName={wrapClassName}
-          maskClosable={false}
-          destroyOnClose
+        <AntConfigProvider 
+          theme={theme ?? AntTheme.defaultConfig}
         >
-          <EasyCrop
-            ref={easyCropRef}
-            cropperRef={cropperRef}
-            zoomSlider={zoomSlider}
-            rotationSlider={rotationSlider}
-            aspectSlider={aspectSlider}
-            showReset={showReset}
-            resetBtnText={resetBtnText}
-            modalImage={modalImage}
-            aspect={aspect}
-            minZoom={minZoom}
-            maxZoom={maxZoom}
-            cropShape={cropShape}
-            showGrid={showGrid}
-            cropperProps={cropperProps}
-          />
-        </AntModal>
+          <AntModal
+            {...modalProps}
+            {...modalBaseProps}
+            {...{ [openProp]: true }}
+            title={title}
+            onCancel={onCancel.current}
+            onOk={onOk.current}
+            wrapClassName={wrapClassName}
+            maskClosable={false}
+            destroyOnClose
+          >
+            <EasyCrop
+              ref={easyCropRef}
+              cropperRef={cropperRef}
+              zoomSlider={zoomSlider}
+              rotationSlider={rotationSlider}
+              aspectSlider={aspectSlider}
+              showReset={showReset}
+              resetBtnText={resetBtnText}
+              modalImage={modalImage}
+              aspect={aspect}
+              minZoom={minZoom}
+              maxZoom={maxZoom}
+              cropShape={cropShape}
+              showGrid={showGrid}
+              cropperProps={cropperProps}
+            />
+          </AntModal>
+        </AntConfigProvider>
       )}
     </>
   );
