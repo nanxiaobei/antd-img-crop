@@ -98,5 +98,5 @@ import 'antd/es/slider/style';
 
 [MIT License](https://github.com/nanxiaobei/antd-img-crop/blob/main/LICENSE) (c) [nanxiaobei](https://lee.so/)
 
-[react-easy-crop]: https://github.com/ricardo-ch/react-easy-crop#props
+[react-easy-crop]: https://github.com/ValentinH/react-easy-crop#props
 [Ant Design Modal]: https://ant.design/components/modal#api
