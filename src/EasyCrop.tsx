@@ -112,7 +112,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         >
           <button
             className={buttonClass}
-            onClick={() => setZoom(zoom - ZOOM_STEP)}
+            onClick={() => setZoom(+(zoom - ZOOM_STEP).toFixed(1))}
             disabled={zoom - ZOOM_STEP < minZoom}
           >
             －
@@ -127,7 +127,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
           />
           <button
             className={buttonClass}
-            onClick={() => setZoom(zoom + ZOOM_STEP)}
+            onClick={() => setZoom(+(zoom + ZOOM_STEP).toFixed(1))}
             disabled={zoom + ZOOM_STEP > maxZoom}
           >
             ＋
@@ -170,7 +170,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         >
           <button
             className={buttonClass}
-            onClick={() => setAspect(aspect - ASPECT_STEP)}
+            onClick={() => setAspect(+(aspect - ASPECT_STEP).toFixed(2))}
             disabled={aspect - ASPECT_STEP < ASPECT_MIN}
           >
             ↕️
@@ -185,7 +185,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
           />
           <button
             className={buttonClass}
-            onClick={() => setAspect(aspect + ASPECT_STEP)}
+            onClick={() => setAspect(+(aspect + ASPECT_STEP).toFixed(2))}
             disabled={aspect + ASPECT_STEP > ASPECT_MAX}
           >
             ↔️
