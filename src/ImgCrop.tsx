@@ -1,9 +1,7 @@
 import type { ModalProps } from 'antd';
-import { version } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
-import { compareVersions } from 'compare-versions';
 import type { MouseEvent, ReactNode } from 'react';
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import type CropperRef from 'react-easy-crop';
@@ -19,25 +17,13 @@ import type {
 
 export type { ImgCropProps } from './types';
 
-const openProp = compareVersions(version, '4.23.0') === -1 ? 'visible' : 'open';
-
-const deprecate = (obj: Record<string, any>, old: string, now: string) => {
-  if (old in obj) {
-    console.error(`\`${old}\` is deprecated, please use \`${now}\` instead`);
-    return obj[old];
-  }
-  return obj[now];
-};
-
 const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   const {
     quality = 0.4,
     fillColor = 'white',
 
-    // @ts-ignore
-    zoomSlider: ZOOM_SLIDER = true,
-    // @ts-ignore
-    rotationSlider: ROTATION_SLIDER = false,
+    zoomSlider = true,
+    rotationSlider = false,
     aspectSlider = false,
     showReset = false,
     resetText,
@@ -45,10 +31,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     aspect = 1,
     minZoom = 1,
     maxZoom = 3,
-    // @ts-ignore
-    cropShape: CROP_SHAPE = 'rect',
-    // @ts-ignore
-    showGrid: SHOW_GRID = false,
+    cropShape = 'rect',
+    showGrid = false,
     cropperProps,
 
     modalClassName,
@@ -63,23 +47,6 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     beforeCrop,
     children,
   } = props;
-
-  /**
-   * init
-   */
-  const zoomSlider = deprecate(props, 'zoom', 'zoomSlider') || true;
-  const rotationSlider = deprecate(props, 'rotate', 'rotationSlider') || false;
-  const cropShape = deprecate(props, 'shape', 'cropShape') || 'rect';
-  const showGrid = deprecate(props, 'grid', 'showGrid') || false;
-
-  if ('onUploadFail' in props) {
-    console.error(
-      `\`onUploadFail\` is removed, because the only way it is called, is when the file is rejected by beforeUpload`,
-    );
-  }
-
-  deprecate(props, 'modalMaskTransitionName', 'modalProps.maskTransitionName');
-  deprecate(props, 'modalTransitionName', 'modalProps.transitionName');
 
   const cb = useRef<
     Pick<ImgCropProps, 'onModalOk' | 'onModalCancel' | 'beforeCrop'>
@@ -350,7 +317,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         <AntModal
           {...modalProps}
           {...modalBaseProps}
-          {...{ [openProp]: true }}
+          open
           title={title}
           onCancel={onCancel.current}
           onOk={onOk.current}
