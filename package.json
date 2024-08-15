@@ -32,12 +32,14 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
+    "gif.js": "^0.2.0",
     "react-easy-crop": "^5.0.8",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@types/gif.js": "^0.2.5",
     "@types/node": "^22.3.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
