@@ -14,6 +14,7 @@ import type {
   EasyCropRef,
   ImgCropProps,
 } from './types';
+import { cropGif } from './gif-support/gif-cropper';
 
 export type { ImgCropProps } from './types';
 
@@ -242,8 +243,40 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             setModalImage('');
             easyCropRef.current!.onReset();
 
-            const canvas = getCropCanvas(event.target as ShadowRoot);
             const { type, name, uid } = processedFile as UploadFile;
+
+            // gif动图裁剪
+            if (type === 'image/gif') {
+              cropGif({
+                file: processedFile,
+                target: event.target as ShadowRoot,
+                easyCrop: easyCropRef.current!,
+                fillColor,
+              }).then((blob) => {
+                const newFile = new File([blob as BlobPart], name, { type });
+                Object.assign(newFile, { uid });
+
+                runBeforeUpload({
+                  beforeUpload,
+                  file: newFile as unknown as RcFile,
+                  resolve: (file) => {
+                    resolve(file);
+                    cb.current.onModalOk?.(file);
+                  },
+                  reject: (err) => {
+                    reject(err);
+                    cb.current.onModalOk?.(err);
+                  },
+                });
+              })
+              .catch((err) => {
+                reject(err);
+                cb.current.onModalOk?.(err);
+              });
+              return;
+            }
+
+            const canvas = getCropCanvas(event.target as ShadowRoot);
 
             canvas.toBlob(
               async (blob) => {
