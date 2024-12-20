@@ -19,6 +19,8 @@ export type ImgCropProps = {
   aspect?: number;
   minZoom?: number;
   maxZoom?: number;
+  minAspect?: number;
+  maxAspect?: number;
   cropShape?: 'rect' | 'round';
   showGrid?: boolean;
   cropperProps?: Omit<
@@ -30,6 +32,8 @@ export type ImgCropProps = {
     | 'aspect'
     | 'minZoom'
     | 'maxZoom'
+    | 'minAspect'
+    | 'maxAspect'
     | 'zoomWithScroll'
     | 'cropShape'
     | 'showGrid'
@@ -86,6 +90,8 @@ export type EasyCropProps = {
     | 'aspect'
     | 'minZoom'
     | 'maxZoom'
+    | 'minAspect'
+    | 'maxAspect'
     | 'cropShape'
     | 'showGrid'
   >

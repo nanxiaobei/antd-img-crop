@@ -31,6 +31,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     aspect = 1,
     minZoom = 1,
     maxZoom = 3,
+    minAspect = 0.5,
+    maxAspect = 2,
     cropShape = 'rect',
     showGrid = false,
     cropperProps,
@@ -337,6 +339,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             aspect={aspect}
             minZoom={minZoom}
             maxZoom={maxZoom}
+            minAspect={minAspect}
+            maxAspect={maxAspect}
             cropShape={cropShape}
             showGrid={showGrid}
             cropperProps={cropperProps}

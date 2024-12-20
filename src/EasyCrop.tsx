@@ -11,8 +11,6 @@ import {
 import Cropper from 'react-easy-crop';
 import type { Area, Point } from 'react-easy-crop/types';
 import {
-  ASPECT_MAX,
-  ASPECT_MIN,
   ASPECT_STEP,
   PREFIX,
   ROTATION_INITIAL,
@@ -37,6 +35,8 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     aspect: ASPECT_INITIAL,
     minZoom,
     maxZoom,
+    minAspect,
+    maxAspect,
     cropShape,
     showGrid,
 
@@ -171,14 +171,14 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
           <button
             className={buttonClass}
             onClick={() => setAspect(+(aspect - ASPECT_STEP).toFixed(2))}
-            disabled={aspect - ASPECT_STEP < ASPECT_MIN}
+            disabled={aspect - ASPECT_STEP < minAspect}
           >
-            ↕️
+            ↕
           </button>
           <AntSlider
             className={sliderClass}
-            min={ASPECT_MIN}
-            max={ASPECT_MAX}
+            min={minAspect}
+            max={maxAspect}
             step={ASPECT_STEP}
             value={aspect}
             onChange={setAspect}
@@ -186,9 +186,9 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
           <button
             className={buttonClass}
             onClick={() => setAspect(+(aspect + ASPECT_STEP).toFixed(2))}
-            disabled={aspect + ASPECT_STEP > ASPECT_MAX}
+            disabled={aspect + ASPECT_STEP > maxAspect}
           >
-            ↔️
+            ↔
           </button>
         </section>
       )}

@@ -50,14 +50,16 @@ const Demo = () => (
 | -------------- | -------------------- | ------------ | ---------------------------------------------------------------- |
 | quality        | `number`             | `0.4`        | 裁切图片质量，`0` 到 `1` 之间                                    |
 | fillColor      | `string`             | `'white'`    | 裁切图像填充色                                                   |
-| zoomSlider     | `boolean`            | `true`       | 图片缩放控制                                                     |
-| rotationSlider | `boolean`            | `false`      | 图片旋转控制                                                     |
-| aspectSlider   | `boolean`            | `false`      | 裁切比率控制                                                     |
-| showReset      | `boolean`            | `false`      | 显示重置按钮，重置缩放旋转及比率                                 |
+| zoomSlider     | `boolean`            | `true`       | 允许缩放                                                         |
+| rotationSlider | `boolean`            | `false`      | 允许旋转                                                         |
+| aspectSlider   | `boolean`            | `false`      | 允许调整裁切比                                                   |
+| showReset      | `boolean`            | `false`      | 显示重置按钮，重置缩放 & 旋转 & 裁切比                           |
 | resetText      | `string`             | `重置`       | 重置按钮文字                                                     |
 | aspect         | `number`             | `1 / 1`      | 裁切区域宽高比，`width / height`                                 |
-| minZoom        | `number`             | `1`          | 最小缩放倍数                                                     |
-| maxZoom        | `number`             | `3`          | 最大缩放倍数                                                     |
+| minZoom        | `number`             | `1`          | 最小缩放                                                         |
+| maxZoom        | `number`             | `3`          | 最大缩放                                                         |
+| minAspect      | `number`             | `0.5`        | 最小裁切比                                                       |
+| maxAspect      | `number`             | `2`          | 最大裁切比                                                       |
 | cropShape      | `string`             | `'rect'`     | 裁切区域形状，`'rect'` 或 `'round'`                              |
 | showGrid       | `boolean`            | `false`      | 显示裁切区域网格（九宫格）                                       |
 | cropperProps   | `object`             | -            | [react-easy-crop] 的 props（\* 已有 props 无法重写）             |

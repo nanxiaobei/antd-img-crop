@@ -8,6 +8,4 @@ export const ROTATION_MIN = -180;
 export const ROTATION_MAX = 180;
 export const ROTATION_STEP = 1;
 
-export const ASPECT_MIN = 0.5;
-export const ASPECT_MAX = 2;
 export const ASPECT_STEP = 0.01;
