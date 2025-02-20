@@ -42,7 +42,8 @@ export type ImgCropProps = {
     | 'onRotationChange'
     | 'onCropComplete'
     | 'classes'
-  >;
+    | 'keyboardStep'
+  > & Partial<Pick<CropperProps, 'keyboardStep'>>;
 
   modalClassName?: string;
   modalTitle?: string;
