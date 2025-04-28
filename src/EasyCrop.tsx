@@ -4,6 +4,7 @@ import {
   forwardRef,
   memo,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -70,6 +71,10 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     cropPixelsRef,
     onReset,
   }));
+
+  useEffect(() => {
+    setAspect(ASPECT_INITIAL);
+  }, [ASPECT_INITIAL]);
 
   const wrapperClass =
     '[display:flex] [align-items:center] [width:60%] [margin-inline:auto]';
