@@ -1,5 +1,5 @@
 import type { ModalProps, UploadProps } from 'antd';
-import type { ForwardedRef, MutableRefObject } from 'react';
+import { ForwardedRef, JSX, MutableRefObject } from 'react';
 import type { default as Cropper, CropperProps } from 'react-easy-crop';
 import type { Area } from 'react-easy-crop/types';
 
@@ -43,7 +43,8 @@ export type ImgCropProps = {
     | 'onCropComplete'
     | 'classes'
     | 'keyboardStep'
-  > & Partial<Pick<CropperProps, 'keyboardStep'>>;
+  > &
+    Partial<Pick<CropperProps, 'keyboardStep'>>;
 
   modalClassName?: string;
   modalTitle?: string;

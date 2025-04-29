@@ -154,8 +154,8 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
    * upload
    */
   const [modalImage, setModalImage] = useState('');
-  const onCancel = useRef<ModalProps['onCancel']>();
-  const onOk = useRef<ModalProps['onOk']>();
+  const onCancel = useRef<ModalProps['onCancel']>(undefined);
+  const onOk = useRef<ModalProps['onOk']>(undefined);
 
   const runBeforeUpload = useCallback(
     async ({
