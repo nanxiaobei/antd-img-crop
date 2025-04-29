@@ -33,7 +33,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     resetBtnText,
 
     modalImage,
-    aspect: ASPECT_INITIAL,
+    aspect: initialAspect,
     minZoom,
     maxZoom,
     minAspect,
@@ -46,17 +46,17 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
 
   const [zoom, setZoom] = useState(ZOOM_INITIAL);
   const [rotation, setRotation] = useState(ROTATION_INITIAL);
-  const [aspect, setAspect] = useState(ASPECT_INITIAL);
+  const [aspect, setAspect] = useState(initialAspect);
 
   const isResetActive =
     zoom !== ZOOM_INITIAL ||
     rotation !== ROTATION_INITIAL ||
-    aspect !== ASPECT_INITIAL;
+    aspect !== initialAspect;
 
   const onReset = () => {
     setZoom(ZOOM_INITIAL);
     setRotation(ROTATION_INITIAL);
-    setAspect(ASPECT_INITIAL);
+    setAspect(initialAspect);
   };
 
   const [crop, onCropChange] = useState<Point>({ x: 0, y: 0 });
@@ -73,8 +73,8 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
   }));
 
   useEffect(() => {
-    setAspect(ASPECT_INITIAL);
-  }, [ASPECT_INITIAL]);
+    setAspect(initialAspect);
+  }, [initialAspect]);
 
   const wrapperClass =
     '[display:flex] [align-items:center] [width:60%] [margin-inline:auto]';
