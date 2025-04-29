@@ -32,7 +32,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     resetBtnText,
 
     modalImage,
-    aspect: ASPECT_INITIAL,
+    aspect: propAspect,
     minZoom,
     maxZoom,
     minAspect,
@@ -45,17 +45,23 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
 
   const [zoom, setZoom] = useState(ZOOM_INITIAL);
   const [rotation, setRotation] = useState(ROTATION_INITIAL);
-  const [aspect, setAspect] = useState(ASPECT_INITIAL);
+  const [aspect, setAspect] = useState(propAspect);
+
+  const prevPropAspect = useRef(propAspect);
+  if (prevPropAspect.current !== propAspect) {
+    prevPropAspect.current = propAspect;
+    setAspect(propAspect);
+  }
 
   const isResetActive =
     zoom !== ZOOM_INITIAL ||
     rotation !== ROTATION_INITIAL ||
-    aspect !== ASPECT_INITIAL;
+    aspect !== propAspect;
 
   const onReset = () => {
     setZoom(ZOOM_INITIAL);
     setRotation(ROTATION_INITIAL);
-    setAspect(ASPECT_INITIAL);
+    setAspect(propAspect);
   };
 
   const [crop, onCropChange] = useState<Point>({ x: 0, y: 0 });
@@ -195,7 +201,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
 
       {showReset && (zoomSlider || rotationSlider || aspectSlider) && (
         <AntButton
-          className="[bottom:20px] [position:absolute]"
+          className="[position:absolute] [bottom:20px]"
           style={isResetActive ? {} : { opacity: 0.3, pointerEvents: 'none' }}
           onClick={onReset}
         >
