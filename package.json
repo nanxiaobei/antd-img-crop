@@ -23,8 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript",
-    "u": "pnpm update --latest !eslint !react !react-dom !@types/react !@types/react-dom"
+    "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript"
   },
   "peerDependencies": {
     "antd": ">=4.0.0",
@@ -32,32 +31,35 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "react-easy-crop": "^5.2.0",
+    "react-easy-crop": "^5.4.1",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.8",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.25.1",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@types/node": "^22.10.2",
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
-    "@vitejs/plugin-react": "^4.3.4",
-    "antd": "^5.22.5",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "antd": "^5.24.9",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-config-react-app": "^7.0.1",
-    "postcss": "^8.4.49",
-    "prettier": "^3.4.2",
+    "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "prettier-plugin-tailwindcss": "^0.6.9",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "rollup": "4.29.0",
-    "rollup-plugin-dts": "^6.1.1",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "rollup": "4.40.1",
+    "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-postcss": "^4.0.2",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.5"
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3"
   }
 }
