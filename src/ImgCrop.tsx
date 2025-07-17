@@ -7,7 +7,7 @@ import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import type CropperRef from 'react-easy-crop';
 import EasyCrop from './EasyCrop';
 import './ImgCrop.css';
-import { PREFIX, ROTATION_INITIAL } from './constants';
+import { ASPECT_STEP, PREFIX, ROTATION_INITIAL, ROTATION_STEP, ZOOM_STEP } from './constants';
 import type {
   BeforeUpload,
   BeforeUploadReturnType,
@@ -33,6 +33,11 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
     maxZoom = 3,
     minAspect = 0.5,
     maxAspect = 2,
+
+    zoomStep = ZOOM_STEP,
+    rotationStep = ROTATION_STEP,
+    aspectStep = ASPECT_STEP,
+
     cropShape = 'rect',
     showGrid = false,
     cropperProps,
@@ -341,6 +346,9 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
             maxZoom={maxZoom}
             minAspect={minAspect}
             maxAspect={maxAspect}
+            zoomStep={zoomStep}
+            rotationStep={rotationStep}
+            aspectStep={aspectStep}
             cropShape={cropShape}
             showGrid={showGrid}
             cropperProps={cropperProps}

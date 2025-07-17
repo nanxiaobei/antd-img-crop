@@ -11,14 +11,11 @@ import {
 import Cropper from 'react-easy-crop';
 import type { Area, Point } from 'react-easy-crop/types';
 import {
-  ASPECT_STEP,
   PREFIX,
   ROTATION_INITIAL,
   ROTATION_MAX,
   ROTATION_MIN,
-  ROTATION_STEP,
   ZOOM_INITIAL,
-  ZOOM_STEP,
 } from './constants';
 import type { EasyCropProps, EasyCropRef } from './types';
 
@@ -37,6 +34,11 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     maxZoom,
     minAspect,
     maxAspect,
+
+    zoomStep,
+    rotationStep,
+    aspectStep,
+
     cropShape,
     showGrid,
 
@@ -118,8 +120,8 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         >
           <button
             className={buttonClass}
-            onClick={() => setZoom(+(zoom - ZOOM_STEP).toFixed(1))}
-            disabled={zoom - ZOOM_STEP < minZoom}
+            onClick={() => setZoom(+(zoom - zoomStep < minZoom ? minZoom : zoom - zoomStep).toFixed(1))}
+            disabled={zoom === minZoom}
           >
             －
           </button>
@@ -127,14 +129,14 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
             className={sliderClass}
             min={minZoom}
             max={maxZoom}
-            step={ZOOM_STEP}
+            step={zoomStep}
             value={zoom}
             onChange={setZoom}
           />
           <button
             className={buttonClass}
-            onClick={() => setZoom(+(zoom + ZOOM_STEP).toFixed(1))}
-            disabled={zoom + ZOOM_STEP > maxZoom}
+            onClick={() => setZoom(+(zoom + zoomStep > maxZoom ? maxZoom : zoom + zoomStep).toFixed(1))}
+            disabled={zoom === maxZoom}
           >
             ＋
           </button>
@@ -147,7 +149,7 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         >
           <button
             className={`${buttonClass} [font-size:16px]`}
-            onClick={() => setRotation(rotation - ROTATION_STEP)}
+            onClick={() => setRotation(rotation - rotationStep < ROTATION_MIN ? ROTATION_MIN : rotation - rotationStep)}
             disabled={rotation === ROTATION_MIN}
           >
             ↺
@@ -156,13 +158,13 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
             className={sliderClass}
             min={ROTATION_MIN}
             max={ROTATION_MAX}
-            step={ROTATION_STEP}
+            step={rotationStep}
             value={rotation}
             onChange={setRotation}
           />
           <button
             className={`${buttonClass} [font-size:16px]`}
-            onClick={() => setRotation(rotation + ROTATION_STEP)}
+            onClick={() => setRotation(rotation + rotationStep > ROTATION_MAX ? ROTATION_MAX : rotation + rotationStep)}
             disabled={rotation === ROTATION_MAX}
           >
             ↻
@@ -176,8 +178,8 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         >
           <button
             className={buttonClass}
-            onClick={() => setAspect(+(aspect - ASPECT_STEP).toFixed(2))}
-            disabled={aspect - ASPECT_STEP < minAspect}
+            onClick={() => setAspect(+(aspect - aspectStep < minAspect ? minAspect : aspect - aspectStep).toFixed(2))}
+            disabled={aspect === minAspect}
           >
             ↕
           </button>
@@ -185,14 +187,14 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
             className={sliderClass}
             min={minAspect}
             max={maxAspect}
-            step={ASPECT_STEP}
+            step={aspectStep}
             value={aspect}
             onChange={setAspect}
           />
           <button
             className={buttonClass}
-            onClick={() => setAspect(+(aspect + ASPECT_STEP).toFixed(2))}
-            disabled={aspect + ASPECT_STEP > maxAspect}
+            onClick={() => setAspect(+(aspect + aspectStep > maxAspect ? maxAspect : aspect + aspectStep).toFixed(2))}
+            disabled={aspect === maxAspect}
           >
             ↔
           </button>
