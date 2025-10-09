@@ -41,7 +41,7 @@
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-typescript": "^12.1.4",
     "@tailwindcss/postcss": "^4.1.14",
-    "@types/node": "^24.7.0",
+    "@types/node": "^24.7.1",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.1",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
