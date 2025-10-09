@@ -153,6 +153,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   /**
    * upload
    */
+  const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
   const onCancel = useRef<ModalProps['onCancel']>(undefined);
   const onOk = useRef<ModalProps['onOk']>(undefined);
@@ -217,13 +218,17 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
           const reader = new FileReader();
           reader.addEventListener('load', () => {
             if (typeof reader.result === 'string') {
-              setModalImage(reader.result); // open modal
+              setModalOpen(true);
+              setTimeout(() => {
+                setModalImage(reader.result as string);
+              }, 10);
             }
           });
           reader.readAsDataURL(processedFile as unknown as Blob);
 
           // on modal cancel
           onCancel.current = () => {
+            setModalOpen(false);
             setModalImage('');
             easyCropRef.current!.onReset();
 
@@ -241,6 +246,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
 
           // on modal confirm
           onOk.current = async (event: MouseEvent<HTMLElement>) => {
+            setModalOpen(false);
             setModalImage('');
             easyCropRef.current!.onReset();
 
@@ -315,38 +321,36 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
   return (
     <>
       {getNewUpload(children)}
-      {modalImage && (
-        <AntModal
-          {...modalProps}
-          {...modalBaseProps}
-          open
-          title={title}
-          onCancel={onCancel.current}
-          onOk={onOk.current}
-          wrapClassName={wrapClassName}
-          maskClosable={false}
-          destroyOnHidden
-        >
-          <EasyCrop
-            ref={easyCropRef}
-            cropperRef={cropperRef}
-            zoomSlider={zoomSlider}
-            rotationSlider={rotationSlider}
-            aspectSlider={aspectSlider}
-            showReset={showReset}
-            resetBtnText={resetBtnText}
-            modalImage={modalImage}
-            aspect={aspect}
-            minZoom={minZoom}
-            maxZoom={maxZoom}
-            minAspect={minAspect}
-            maxAspect={maxAspect}
-            cropShape={cropShape}
-            showGrid={showGrid}
-            cropperProps={cropperProps}
-          />
-        </AntModal>
-      )}
+      <AntModal
+        {...modalProps}
+        {...modalBaseProps}
+        open={modalOpen}
+        title={title}
+        onCancel={onCancel.current}
+        onOk={onOk.current}
+        wrapClassName={wrapClassName}
+        maskClosable={false}
+        destroyOnHidden
+      >
+        <EasyCrop
+          ref={easyCropRef}
+          cropperRef={cropperRef}
+          zoomSlider={zoomSlider}
+          rotationSlider={rotationSlider}
+          aspectSlider={aspectSlider}
+          showReset={showReset}
+          resetBtnText={resetBtnText}
+          modalImage={modalImage}
+          aspect={aspect}
+          minZoom={minZoom}
+          maxZoom={maxZoom}
+          minAspect={minAspect}
+          maxAspect={maxAspect}
+          cropShape={cropShape}
+          showGrid={showGrid}
+          cropperProps={cropperProps}
+        />
+      </AntModal>
     </>
   );
 });

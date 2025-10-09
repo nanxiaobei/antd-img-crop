@@ -43,9 +43,15 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     cropperProps,
   } = props;
 
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(ZOOM_INITIAL);
   const [rotation, setRotation] = useState(ROTATION_INITIAL);
   const [aspect, setAspect] = useState(propAspect);
+
+  const cropPixelsRef = useRef<Area>({ width: 0, height: 0, x: 0, y: 0 });
+  const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
+    cropPixelsRef.current = croppedAreaPixels;
+  }, []);
 
   const prevPropAspect = useRef(propAspect);
   if (prevPropAspect.current !== propAspect) {
@@ -63,13 +69,6 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
     setRotation(ROTATION_INITIAL);
     setAspect(propAspect);
   };
-
-  const [crop, onCropChange] = useState<Point>({ x: 0, y: 0 });
-  const cropPixelsRef = useRef<Area>({ width: 0, height: 0, x: 0, y: 0 });
-
-  const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
-    cropPixelsRef.current = croppedAreaPixels;
-  }, []);
 
   useImperativeHandle(ref, () => ({
     rotation,
@@ -92,17 +91,15 @@ const EasyCrop = forwardRef<EasyCropRef, EasyCropProps>((props, ref) => {
         ref={cropperRef}
         image={modalImage}
         crop={crop}
-        //
         zoom={zoom}
         rotation={rotation}
         aspect={aspect}
         minZoom={minZoom}
         maxZoom={maxZoom}
         zoomWithScroll={zoomSlider}
-        //
         cropShape={cropShape}
         showGrid={showGrid}
-        onCropChange={onCropChange}
+        onCropChange={setCrop}
         onZoomChange={setZoom}
         onRotationChange={setRotation}
         onCropComplete={onCropComplete}
