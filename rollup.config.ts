@@ -14,7 +14,17 @@ const esmOutput = { file: pkg.module, format: 'es' } as const;
 const dtsOutput = { file: pkg.types, format: 'es' } as const;
 
 const tsPlugin = typescript();
-const postcssPlugin = postcss({ minimize: true, inject: { insertAt: 'top' } });
+const postcssPlugin = postcss({
+  minimize: true,
+  inject: (cssVariableName) => `
+      const style = document.createElement('style');
+      const meta = document.querySelector('meta[name="csp-nonce"]')
+      const nonce = meta && meta.content;
+      nonce && style.setAttribute('nonce', nonce);
+      style.textContent = ${cssVariableName};
+      document.head.appendChild(style);
+    `,
+});
 const replacePlugin = replace({ preventAssignment: true, '/es/': '/lib/' });
 
 const cjsPlugins = [tsPlugin, postcssPlugin, replacePlugin];

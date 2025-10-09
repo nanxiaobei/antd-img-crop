@@ -15,7 +15,7 @@
     "strictPropertyInitialization": true,
 
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
 
     "outDir": "dist",
