@@ -66,7 +66,7 @@ export type ImgCropProps = {
     | 'visible'
     | 'wrapClassName'
     | 'maskClosable'
-    | 'destroyOnClose'
+    | 'destroyOnHidden'
   >;
 
   beforeCrop?: BeforeUpload;
