@@ -17,12 +17,14 @@ const tsPlugin = typescript();
 const postcssPlugin = postcss({
   minimize: true,
   inject: (cssVariableName) => `
+    (function() {
+      if (typeof document === 'undefined') return;
       const style = document.createElement('style');
-      const meta = document.querySelector('meta[name="csp-nonce"]')
-      const nonce = meta && meta.content;
-      nonce && style.setAttribute('nonce', nonce);
+      const meta = document.querySelector('meta[name="csp-nonce"]');
+      if (meta && meta.content) style.setAttribute('nonce', meta.content);
       style.textContent = ${cssVariableName};
       document.head.appendChild(style);
+    })();
     `,
 });
 const replacePlugin = replace({ preventAssignment: true, '/es/': '/lib/' });
