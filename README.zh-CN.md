@@ -19,6 +19,10 @@ your online **home screen**. ➫ [🔗 kee.so](https://kee.so/)
 
 [English](./README.md) | 简体中文
 
+## 示例
+
+[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/antd-img-crop-5x4j3r)
+
 ## 安装
 
 ```sh
@@ -41,8 +45,6 @@ const Demo = () => (
   </ImgCrop>
 );
 ```
-
-[![Edit antd-img-crop](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/antd-img-crop-5x4j3r)
 
 ## Props
 
