@@ -19,6 +19,13 @@
   "main": "dist/antd-img-crop.cjs.js",
   "module": "dist/antd-img-crop.esm.js",
   "types": "dist/antd-img-crop.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/antd-img-crop.d.ts",
+      "import": "./dist/antd-img-crop.esm.js",
+      "require": "./dist/antd-img-crop.cjs.js"
+    }
+  },
   "files": [
     "dist"
   ],
