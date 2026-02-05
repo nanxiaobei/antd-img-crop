@@ -16,9 +16,9 @@
   "homepage": "https://github.com/nanxiaobei/antd-img-crop",
   "repository": "github:nanxiaobei/antd-img-crop",
   "bugs": "https://github.com/nanxiaobei/antd-img-crop/issues",
-  "main": "dist/antd-img-crop.cjs.js",
-  "module": "dist/antd-img-crop.esm.js",
-  "types": "dist/antd-img-crop.d.ts",
+  "types": "./dist/antd-img-crop.d.ts",
+  "module": "./dist/antd-img-crop.esm.js",
+  "main": "./dist/antd-img-crop.cjs.js",
   "exports": {
     ".": {
       "types": "./dist/antd-img-crop.d.ts",
