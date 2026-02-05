@@ -30,7 +30,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript"
+    "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript --bundleConfigAsCjs"
   },
   "peerDependencies": {
     "antd": ">=4.0.0",
@@ -55,6 +55,7 @@
     "@vitejs/plugin-react": "^5.1.3",
     "antd": "^6.2.3",
     "autoprefixer": "^10.4.24",
+    "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-react-app": "^7.0.1",
