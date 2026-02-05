@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 import Cropper from 'react-easy-crop';
-import type { Area, Point } from 'react-easy-crop/types';
+import type { Area, Point } from 'react-easy-crop';
 import {
   ASPECT_STEP,
   PREFIX,

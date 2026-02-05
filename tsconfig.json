@@ -12,9 +12,10 @@
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "strictPropertyInitialization": true,
 
-    "module": "esnext",
+    "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
 
@@ -26,7 +27,8 @@
     "isolatedModules": true,
 
     "jsx": "react-jsx",
-    "lib": ["esnext", "dom"],
+    "jsxImportSource": "react",
+    "lib": ["esnext", "dom", "dom.iterable"],
     "target": "es6"
   },
   "exclude": ["node_modules", "dist"]
