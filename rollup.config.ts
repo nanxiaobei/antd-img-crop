@@ -1,3 +1,4 @@
+import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 import type { RollupOptions } from 'rollup';
@@ -11,9 +12,8 @@ const cjsOutput = { file: pkg.main, format: 'cjs', exports: 'auto' } as const;
 const esmOutput = { file: pkg.module, format: 'es' } as const;
 const dtsOutput = { file: pkg.types, format: 'es' } as const;
 
-const cjsTsPlugin = typescript({ compilerOptions: { module: 'nodenext' } });
-const esmTsPlugin = typescript({ compilerOptions: { module: 'esnext' } });
-
+const nodePlugin = nodeResolve();
+const tsPlugin = typescript({ compilerOptions: { module: 'esnext' } });
 const postcssPlugin = postcss({
   minimize: true,
   inject: (cssVariableName) => `
@@ -29,8 +29,8 @@ const postcssPlugin = postcss({
 });
 const replacePlugin = replace({ preventAssignment: true, '/es/': '/lib/' });
 
-const cjsPlugins = [cjsTsPlugin, postcssPlugin, replacePlugin];
-const esmPlugins = [esmTsPlugin, postcssPlugin];
+const cjsPlugins = [nodePlugin, tsPlugin, postcssPlugin, replacePlugin];
+const esmPlugins = [nodePlugin, tsPlugin, postcssPlugin];
 
 const external = [
   ...Object.keys({ ...pkg.dependencies, ...pkg.peerDependencies }),
