@@ -1,4 +1,5 @@
 import type { ModalProps } from 'antd';
+import { version } from 'antd';
 import AntModal from 'antd/es/modal';
 import AntUpload from 'antd/es/upload';
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
@@ -14,6 +15,20 @@ import type {
   EasyCropRef,
   ImgCropProps,
 } from './types';
+
+// v1 >= v2
+const isGeThan = (v1: string, v2: string): boolean => {
+  const arr1 = v1.split('.').map(Number);
+  const arr2 = v2.split('.').map(Number);
+  const len = Math.max(arr1.length, arr2.length);
+  for (let i = 0; i < len; i++) {
+    const a = arr1[i] ?? 0;
+    const b = arr2[i] ?? 0;
+    if (a > b) return true;
+    if (a < b) return false;
+  }
+  return true;
+};
 
 export type { ImgCropProps } from './types';
 
@@ -329,8 +344,10 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         onCancel={onCancel.current}
         onOk={onOk.current}
         wrapClassName={wrapClassName}
-        mask={{ closable: false }}
         destroyOnHidden
+        {...(isGeThan(version, '6.3.1')
+          ? { mask: { closable: false } }
+          : { maskClosable: true })}
       >
         <EasyCrop
           ref={easyCropRef}
