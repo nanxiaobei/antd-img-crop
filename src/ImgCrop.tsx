@@ -329,7 +329,7 @@ const ImgCrop = forwardRef<CropperRef, ImgCropProps>((props, cropperRef) => {
         onCancel={onCancel.current}
         onOk={onOk.current}
         wrapClassName={wrapClassName}
-        maskClosable={false}
+        mask={{ closable: false }}
         destroyOnHidden
       >
         <EasyCrop
