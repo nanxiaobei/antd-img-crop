@@ -30,6 +30,7 @@
     "dist"
   ],
   "scripts": {
+    "prebuild": "node scripts/prebuild.js",
     "build": "rm -rf dist && rollup -c --configPlugin @rollup/plugin-typescript --bundleConfigAsCjs"
   },
   "peerDependencies": {
